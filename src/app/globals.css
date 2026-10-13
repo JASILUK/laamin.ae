@@ -1,0 +1,65 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Brand palette taken from the LAAMIN company proposal. */
+@theme {
+  --color-navy-950: #021a33;
+  --color-navy-900: #042d55;
+  --color-navy-800: #0a3b6c;
+  --color-navy-700: #124a82;
+  --color-navy-300: #a9c6dd;
+  --color-brand-300: #7fcbec;
+  --color-brand-400: #2ba3d6;
+  --color-brand-500: #2ba3d6;
+  --color-brand-700: #0e6c9b;
+  --color-paper: #ffffff;
+  --color-mist: #f3f7fb;
+  --color-line: #dfe5ec;
+  --color-ink: #0d2238;
+  --color-muted: #4f5e6f;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+.font-display {
+  font-weight: 600;
+}
+
+::selection {
+  background: var(--color-brand-300);
+  color: var(--color-navy-950);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand-400);
+  outline-offset: 3px;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
