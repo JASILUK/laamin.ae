@@ -1,3 +1,4 @@
+
 @import "tailwindcss";
 
 /* ============================================================
@@ -9,7 +10,6 @@
   --font-display: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
 }
 
-/* LAAMIN brand palette */
 @theme {
   --color-navy-950: #021a33;
   --color-navy-900: #042d55;
@@ -62,12 +62,12 @@ summary::-webkit-details-marker {
 }
 
 /* ============================================================
-   COORDINATED MASKED REVEAL (Slide-Up)
+   MASKED REVEAL — SLIDE UP
    ============================================================ */
 
 .reveal-mask {
-  overflow: hidden;
   display: block;
+  overflow: hidden;
 }
 
 @keyframes mask-slide-up {
@@ -75,6 +75,7 @@ summary::-webkit-details-marker {
     opacity: 0;
     transform: translateY(110%);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -85,12 +86,10 @@ summary::-webkit-details-marker {
   animation: mask-slide-up 750ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Refined staggered delays for unified flow */
 .hero-reveal-1 {
   animation-delay: 80ms;
 }
 
-/* Headline and description grouped together for a smooth, single transition */
 .hero-reveal-2 {
   animation-delay: 200ms;
 }
@@ -104,6 +103,7 @@ summary::-webkit-details-marker {
     opacity: 0;
     transform: translateY(22px) scale(0.985);
   }
+
   to {
     opacity: 1;
     transform: translateY(0) scale(1);
@@ -115,51 +115,76 @@ summary::-webkit-details-marker {
 }
 
 /* ============================================================
-   HERO HEADLINE: STROKE-TO-FILL WIPE
+   LAAMIN HERO — WHITE + BLUE + COIN-LIKE SHIMMER
    ============================================================ */
 
 .hero-headline {
-  --wipe-delay: 220ms;
-  --wipe-duration: 1100ms;
-  --wipe-ease: cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
-  isolation: isolate; /* keeps the outline layer behind the text, inside the h1 */
+  display: block;
 }
 
-/* Layer 1: outlined copy of the headline, pulled from data-text */
-.hero-headline::before {
-  content: attr(data-text);
-  content: attr(data-text) / ""; /* hides the duplicate from screen readers where supported */
+/* Base text remains visible */
+.hero-headline-fill {
+  position: relative;
+  display: inline;
+}
+
+.title-shimmer-white {
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+}
+
+.title-shimmer-blue {
+  color: #2ba3d6;
+  -webkit-text-fill-color: #2ba3d6;
+}
+
+/*
+  A separate text overlay carries the moving reflection.
+  The original white and blue text stays visible underneath.
+*/
+.title-shimmer-sweep {
   position: absolute;
   inset: 0;
-  z-index: -1;
-  -webkit-text-fill-color: transparent;
-  -webkit-text-stroke: 1px rgb(255 255 255 / 0.32);
-  pointer-events: none;
-  user-select: none;
-  /* Release the outline once the fill has covered it, so no stroke fringe remains */
-  animation: hero-outline-release 200ms linear
-    calc(var(--wipe-delay) + var(--wipe-duration)) forwards;
-}
-
-/* Layer 2: the real solid text, wiped in from the left */
-.hero-headline-fill {
   display: block;
-  animation: hero-fill-wipe var(--wipe-duration) var(--wipe-ease) var(--wipe-delay) both;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+
+  background-image: linear-gradient(
+    125deg,
+    transparent 0%,
+    transparent 43%,
+    rgba(2, 26, 51, 0.12) 46%,
+    rgba(169, 198, 221, 0.75) 48%,
+    rgba(255, 255, 255, 0.98) 49.5%,
+    rgba(127, 203, 236, 0.9) 51%,
+    rgba(4, 45, 85, 0.3) 53%,
+    transparent 57%,
+    transparent 100%
+  );
+
+  background-size: 300% 300%;
+  background-position: 100% 100%;
+  background-repeat: no-repeat;
+
+  animation: laamin-coin-reflection 3s linear infinite;
+  will-change: background-position;
 }
 
-@keyframes hero-fill-wipe {
+@keyframes laamin-coin-reflection {
   from {
-    clip-path: inset(-0.15em 100% -0.15em 0);
+    background-position: 100% 100%;
   }
-  to {
-    clip-path: inset(-0.15em -0.1em -0.15em 0);
-  }
-}
 
-@keyframes hero-outline-release {
   to {
-    opacity: 0;
+    background-position: 0% 0%;
   }
 }
 
@@ -240,13 +265,6 @@ summary::-webkit-details-marker {
     scroll-behavior: auto;
   }
 
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
-
   .hero-reveal,
   .hero-panel-reveal {
     animation: none !important;
@@ -258,14 +276,21 @@ summary::-webkit-details-marker {
     overflow: visible;
   }
 
-  /* Headline: show the solid text immediately, no outline stage */
   .hero-headline-fill {
     animation: none !important;
     clip-path: none;
   }
 
-  .hero-headline::before {
+  .hero-headline-outline {
     display: none;
+  }
+
+  /*
+    Preserve the shimmer even when reduced motion is enabled.
+    Use a slower sweep instead of disabling it completely.
+  */
+  .title-shimmer-sweep {
+    animation-duration: 6s;
   }
 
   .btn-wipe::after,

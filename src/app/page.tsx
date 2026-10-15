@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback, useId, useRef } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
-  MapPin,
   Building2,
   FileText,
   BadgeCheck,
@@ -15,15 +14,13 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-import type { Metadata } from "next";
 import Link from "next/link";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion, type Variants } from "framer-motion";
 
 /* ============================================================
    DATA & CONFIGURATION (INCLUDING INTERNATIONAL JURISDICTIONS)
    ============================================================ */
 
-/* Single source for the hero headline (renders the text and feeds data-text) */
 const heroHeadline = {
   lead: "Business Support That",
   accent: "Moves You Forward.",
@@ -263,10 +260,11 @@ function ProcessStepsComponent({ steps }: { steps: typeof processSteps }) {
 }
 
 /* ============================================================
-   HERO SERVICE DEMONSTRATION (CINEMATIC MOTION THEME)
+   HERO SERVICE DEMONSTRATION — CINEMATIC SCENE PLAYER
    ============================================================ */
 
-const SCENE_DURATION_MS = 4800;
+const SCENE_DURATION_MS = 3500;
+const TICK_MS = 500;
 const MANUAL_HOLD_MS = 9000;
 const SCENE_EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -284,6 +282,84 @@ function formatPosition(position: number) {
   return `${String(position).padStart(2, "0")} / ${String(SCENE_COUNT).padStart(2, "0")}`;
 }
 
+const reveal = (delay: number): Variants => ({
+  hidden: { opacity: 0, y: 16, filter: "blur(6px)" },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.8, delay, ease: SCENE_EASE },
+  },
+});
+
+const iconReveal: Variants = {
+  hidden: { opacity: 0, scale: 0.5, rotate: -15 },
+  show: { opacity: 1, scale: 1, rotate: 0, transition: { type: "spring", stiffness: 220, damping: 20 } },
+};
+
+/* ----- MODERN LETTER-BY-LETTER TITLE REVEAL (3D flip-up) ----- */
+
+const letterStage: Variants = {
+  hidden: {},
+  show: { transition: { delayChildren: 0.18, staggerChildren: 0.02 } },
+};
+
+const letterFlip: Variants = {
+  hidden: { y: "115%", opacity: 0, rotateX: -55 },
+  show: {
+    y: "0%",
+    opacity: 1,
+    rotateX: 0,
+    transition: { duration: 0.65, ease: SCENE_EASE },
+  },
+};
+
+const descReveal = reveal(0.55);
+const footReveal = reveal(1.25);
+
+/* ----- CINEMATIC SCENE TRANSITIONS (video-cut feel) ----- */
+
+const panelVariants: Variants = {
+  enter: (dir: number) => ({
+    x: dir * 110,
+    opacity: 0,
+    scale: 0.97,
+    filter: "blur(12px)",
+    zIndex: 2,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+    filter: "blur(0px)",
+    zIndex: 2,
+    transition: { duration: 0.85, ease: SCENE_EASE },
+  },
+  exit: (dir: number) => ({
+    x: dir * -110,
+    opacity: 0,
+    scale: 0.97,
+    filter: "blur(12px)",
+    zIndex: 1,
+    transition: { duration: 0.65, ease: [0.32, 0, 0.67, 0] },
+  }),
+};
+
+const listStage: Variants = {
+  hidden: {},
+  show: { transition: { delayChildren: 0.75, staggerChildren: 0.11 } },
+};
+
+const listItem: Variants = {
+  hidden: { opacity: 0, x: -18, filter: "blur(4px)" },
+  show: { opacity: 1, x: 0, filter: "blur(0px)", transition: { duration: 0.65, ease: SCENE_EASE } },
+};
+
+const lineDraw: Variants = {
+  hidden: { scaleX: 0 },
+  show: { scaleX: 1, transition: { duration: 0.9, delay: 1.15, ease: SCENE_EASE } },
+};
+
 function SceneFrame({
   icon: Icon,
   title,
@@ -291,6 +367,7 @@ function SceneFrame({
   href,
   linkLabel,
   position,
+  reduce,
   children,
 }: {
   icon: LucideIcon;
@@ -299,46 +376,89 @@ function SceneFrame({
   href: string;
   linkLabel: string;
   position: number;
+  reduce: boolean;
   children: React.ReactNode;
 }) {
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: 12, scale: 0.98 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ duration: 0.5, ease: SCENE_EASE }}
-      className="flex h-full flex-col"
+    <motion.div
+      initial={reduce ? false : "hidden"}
+      animate="show"
+      className="flex h-full flex-col justify-between [perspective:800px]"
     >
-      <div className="flex items-center gap-3.5">
-        <motion.span 
-          whileHover={{ scale: 1.08, rotate: 3 }}
-          className="grid size-12 shrink-0 place-items-center rounded-xl border border-brand-400/40 bg-[#EAF6FC] text-brand-400 shadow-sm"
-        >
-          <Icon aria-hidden="true" className="size-6" strokeWidth={1.75} />
-        </motion.span>
-        <h3 className="font-display text-xl leading-tight text-[#042D55] sm:text-2xl">{title}</h3>
+      <div>
+        <div className="flex items-center gap-4">
+          <motion.span
+            variants={iconReveal}
+            className="relative grid size-12 shrink-0 place-items-center rounded-xl border border-brand-400/40 bg-brand-400/10 text-brand-300"
+          >
+            <Icon aria-hidden="true" className="size-6" strokeWidth={1.75} />
+            {!reduce && (
+              <motion.span
+                aria-hidden="true"
+                initial={{ opacity: 0.6, scale: 1 }}
+                animate={{ opacity: 0, scale: 1.8 }}
+                transition={{ duration: 1.4, delay: 0.4, ease: "easeOut" }}
+                className="absolute inset-0 rounded-xl border border-brand-400"
+              />
+            )}
+          </motion.span>
+
+          {/* Letter-by-letter masked reveal */}
+          <motion.h3
+            variants={letterStage}
+            className="font-display text-xl leading-tight text-white sm:text-2xl"
+            aria-label={title}
+          >
+            {title.split(" ").map((word, wi) => (
+              <span
+                key={`${word}-${wi}`}
+                aria-hidden="true"
+                className="mr-[0.26em] inline-block overflow-hidden pb-[0.14em] -mb-[0.14em] align-bottom [perspective:600px]"
+              >
+                {word.split("").map((ch, ci) => (
+                  <span key={ci} className="inline-block overflow-hidden pb-[0.1em] -mb-[0.1em] align-bottom">
+                    <motion.span variants={letterFlip} className="inline-block will-change-transform">
+                      {ch}
+                    </motion.span>
+                  </span>
+                ))}
+              </span>
+            ))}
+          </motion.h3>
+        </div>
+
+        <motion.p variants={descReveal} className="mt-4 max-w-md text-sm leading-relaxed text-navy-300">
+          {description}
+        </motion.p>
+
+        <div className="mt-5">{children}</div>
       </div>
 
-      <p className="mt-4 max-w-md text-sm leading-relaxed text-[#526174]">{description}</p>
-
-      <div className="mt-5">{children}</div>
-
-      <div className="mt-auto pt-6">
-        <div className="flex items-center justify-between border-t border-[#E2E8F0] pt-4">
-          <span className="text-xs tabular-nums text-[#526174]/70">{formatPosition(position)}</span>
+      <div className="pt-6">
+        <motion.span variants={lineDraw} aria-hidden="true" className="block h-px origin-left bg-white/15" />
+        <motion.div variants={footReveal} className="flex items-center justify-between pt-4">
+          <span className="text-xs tabular-nums text-navy-300/70">{formatPosition(position)}</span>
           <Link
             href={href}
-            className="group/link inline-flex items-center gap-1.5 py-1 text-sm font-semibold text-brand-400 transition-colors hover:text-[#042D55]"
+            className="group/link relative inline-flex items-center gap-1.5 overflow-hidden rounded px-3 py-1.5 text-sm font-semibold text-brand-300 transition-colors duration-300 hover:text-navy-950 focus-visible:text-navy-950"
           >
-            {linkLabel}
-            <ArrowRight aria-hidden="true" className="size-4 transition-transform duration-300 group-hover/link:translate-x-1.5" />
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 -z-10 origin-left scale-x-0 bg-brand-400 transition-transform duration-300 ease-out group-hover/link:scale-x-100 group-focus-visible/link:scale-x-100"
+            />
+            <span>{linkLabel}</span>
+            <ArrowRight
+              aria-hidden="true"
+              className="size-4 transition-transform duration-300 group-hover/link:translate-x-1"
+            />
           </Link>
-        </div>
+        </motion.div>
       </div>
     </motion.div>
   );
 }
 
-function OverviewScene({ onSelect }: { onSelect: (index: number) => void }) {
+function OverviewScene({ onSelect, reduce }: { onSelect: (index: number) => void; reduce: boolean }) {
   return (
     <SceneFrame
       icon={Briefcase}
@@ -347,179 +467,247 @@ function OverviewScene({ onSelect }: { onSelect: (index: number) => void }) {
       href="/services"
       linkLabel="Explore all services"
       position={1}
+      reduce={reduce}
     >
-      <ul className="grid grid-cols-2 gap-2.5">
+      <motion.ul variants={listStage} className="grid grid-cols-2 gap-2.5">
         {services.map((service, i) => {
           const ServiceIcon = service.icon;
           return (
-            <li key={service.slug}>
-              <motion.button
-                whileHover={{ scale: 1.02, y: -2 }}
-                whileTap={{ scale: 0.98 }}
+            <motion.li key={service.slug} variants={listItem}>
+              <button
                 type="button"
                 onClick={() => onSelect(i + 1)}
-                className="group flex w-full items-center gap-2.5 rounded-xl border border-[#E2E8F0] bg-white px-3.5 py-3 text-left shadow-sm transition-all hover:border-brand-400/60 hover:bg-[#F8FAFC] hover:shadow-md"
+                className="group relative isolate flex w-full items-center gap-2.5 overflow-hidden rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-3 text-left transition-[translate,scale,border-color] duration-300 hover:-translate-y-0.5 hover:border-brand-400/70 active:scale-[0.98]"
               >
-                <ServiceIcon aria-hidden="true" className="size-4 shrink-0 text-brand-400 transition-transform group-hover:scale-110" strokeWidth={1.75} />
-                <span className="text-xs font-semibold leading-tight text-[#042D55] sm:text-sm">{service.shortTitle}</span>
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-0 -z-10 origin-left scale-x-0 bg-brand-400 transition-transform duration-300 ease-out group-hover:scale-x-100 group-focus-visible:scale-x-100"
+                />
+                <ServiceIcon
+                  aria-hidden="true"
+                  className="size-4 shrink-0 text-brand-300 transition-colors duration-300 group-hover:text-navy-950 group-focus-visible:text-navy-950"
+                  strokeWidth={1.75}
+                />
+                <span className="text-xs font-semibold leading-tight text-white transition-colors duration-300 group-hover:text-navy-950 group-focus-visible:text-navy-950 sm:text-sm">
+                  {service.shortTitle}
+                </span>
                 <ArrowRight
                   aria-hidden="true"
-                  className="ml-auto size-3.5 shrink-0 text-[#526174] transition-transform group-hover:translate-x-1 group-hover:text-brand-400"
+                  className="ml-auto size-3.5 shrink-0 text-navy-300 transition-all duration-300 group-hover:translate-x-1 group-hover:text-navy-950 group-focus-visible:text-navy-950"
                 />
-              </motion.button>
-            </li>
+              </button>
+            </motion.li>
           );
         })}
-      </ul>
+      </motion.ul>
     </SceneFrame>
   );
 }
 
-function ServiceScene({ service, position }: { service: Service; position: number }) {
+function ServiceScene({ service, position, reduce }: { service: Service; position: number; reduce: boolean }) {
   return (
     <SceneFrame
       icon={service.icon}
       title={service.title}
       description={service.summary}
       href={`/services/${service.slug}`}
-      linkLabel={`View ${service.shortTitle} details`}
+      linkLabel={`View ${service.shortTitle}`}
       position={position}
+      reduce={reduce}
     >
-      <div className="rounded-xl border border-[#E2E8F0] bg-white p-4 shadow-sm">
-        <p className="text-xs font-semibold uppercase tracking-wider text-[#526174]">{service.listLabel}</p>
-        <ul className="mt-3 space-y-2.5">
-          {service.details.map((detail, idx) => (
-            <motion.li 
-              key={detail}
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: idx * 0.06, duration: 0.3 }}
-              className="flex items-center gap-3 text-sm text-[#042D55] font-medium"
-            >
-              <CheckCircle2 aria-hidden="true" className="size-4 shrink-0 text-brand-400" />
-              <span>{detail}</span>
-            </motion.li>
-          ))}
-        </ul>
-      </div>
+      <p className="mb-2 text-xs font-semibold text-navy-300/80">{service.listLabel}</p>
+      <motion.ul variants={listStage} className="space-y-2">
+        {service.details.map((detail) => (
+          <motion.li
+            key={detail}
+            variants={listItem}
+            className="group/row relative isolate flex items-center gap-3 overflow-hidden rounded-lg border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm font-medium text-white transition-colors duration-300 hover:border-brand-400/60"
+          >
+            <span
+              aria-hidden="true"
+              className="absolute inset-0 -z-10 origin-left scale-x-0 bg-brand-400/25 transition-transform duration-300 ease-out group-hover/row:scale-x-100 group-focus-visible/row:scale-x-100"
+            />
+            <CheckCircle2
+              aria-hidden="true"
+              className="size-4 shrink-0 text-brand-300 transition-transform duration-300 group-hover/row:scale-110"
+            />
+            <span>{detail}</span>
+          </motion.li>
+        ))}
+      </motion.ul>
     </SceneFrame>
   );
 }
 
+/* ============================================================
+   ROBUST AUTOPLAY ENGINE (self-healing, never permanently dies)
+   ============================================================ */
+
 function HeroServiceDemo() {
   const uid = useId();
-  const reduceMotion = useReducedMotion();
+  const shouldReduceMotion = useReducedMotion();
+  const reduce = Boolean(shouldReduceMotion);
 
   const [[index, direction], setPage] = useState<[number, number]>([0, 1]);
-  const [hovered, setHovered] = useState(false);
-  const [keyboardFocus, setKeyboardFocus] = useState(false);
-  const [held, setHeld] = useState(false);
-  const [pageHidden, setPageHidden] = useState(false);
+  const [ready, setReady] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  const holdTimer = useRef<number | null>(null);
+  // Refs only — never gating React state, so nothing can get stuck.
+  const lastChangeRef = useRef(Date.now());
+  const manualHoldRef = useRef(0);
+
+  const regionRef = useRef<HTMLDivElement | null>(null);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
-
-  const holdAutoplay = useCallback(() => {
-    setHeld(true);
-    if (holdTimer.current !== null) window.clearTimeout(holdTimer.current);
-    holdTimer.current = window.setTimeout(() => {
-      setHeld(false);
-      holdTimer.current = null;
-    }, MANUAL_HOLD_MS);
-  }, []);
-
-  const goTo = useCallback(
-    (next: number) => {
-      setPage((prev) => (prev[0] === next ? prev : [next, next > prev[0] ? 1 : -1]));
-      holdAutoplay();
-    },
-    [holdAutoplay],
-  );
+  const panelRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    return () => {
-      if (holdTimer.current !== null) window.clearTimeout(holdTimer.current);
-    };
+    setMounted(true);
+    lastChangeRef.current = Date.now();
+    const timer = window.setTimeout(() => setReady(true), reduce ? 0 : 500);
+    return () => window.clearTimeout(timer);
+  }, [reduce]);
+
+  const goTo = useCallback((next: number, manual = false) => {
+    setPage((prev) =>
+      prev[0] === next
+        ? prev
+        : [next, next > prev[0] ? 1 : -1]
+    );
+    lastChangeRef.current = Date.now();
+    if (manual) manualHoldRef.current = Date.now();
   }, []);
 
-  useEffect(() => {
-    const onVisibility = () => setPageHidden(document.hidden);
-    document.addEventListener("visibilitychange", onVisibility);
-    return () => document.removeEventListener("visibilitychange", onVisibility);
+  const advance = useCallback(() => {
+    setPage(([current]) => [(current + 1) % SCENE_COUNT, 1]);
+    lastChangeRef.current = Date.now();
   }, []);
 
-  const paused = Boolean(reduceMotion) || hovered || keyboardFocus || held || pageHidden;
+  /* ----- Bulletproof autoplay -----
+     One interval, started once. Every 500ms it checks LIVE state:
+     - is the mouse currently over the player? (:hover — cannot get stuck)
+     - is the tab currently hidden? (document.hidden — cannot get stuck)
+     - was there a manual click within the last 9s? (hold)
+     - has the current scene been on screen long enough?
+     If all clear -> advance. Self-heals from any edge case. */
   useEffect(() => {
-    if (paused) return;
-    const id = window.setTimeout(() => {
-      setPage(([current]) => [(current + 1) % SCENE_COUNT, 1]);
-    }, SCENE_DURATION_MS);
-    return () => window.clearTimeout(id);
-  }, [index, paused]);
+    if (!mounted || !ready) return;
 
-  const onTabKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, i: number) => {
+    const scheduler = window.setInterval(() => {
+      const hovering = regionRef.current?.matches(":hover") ?? false;
+      if (hovering || document.hidden) return;
+      if (Date.now() - manualHoldRef.current < MANUAL_HOLD_MS) return;
+      if (Date.now() - lastChangeRef.current >= SCENE_DURATION_MS) {
+        advance();
+      }
+    }, TICK_MS);
+
+    return () => window.clearInterval(scheduler);
+  }, [mounted, ready, advance]);
+
+  const onPanelPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== "mouse") return;
+    const el = panelRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    el.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+    el.style.setProperty("--my", `${e.clientY - rect.top}px`);
+  };
+
+  const onTabKeyDown = (
+    event: React.KeyboardEvent<HTMLButtonElement>,
+    i: number
+  ) => {
     let next = i;
-    if (event.key === "ArrowRight") next = (i + 1) % SCENE_COUNT;
-    else if (event.key === "ArrowLeft") next = (i - 1 + SCENE_COUNT) % SCENE_COUNT;
-    else if (event.key === "Home") next = 0;
-    else if (event.key === "End") next = SCENE_COUNT - 1;
-    else return;
+
+    if (event.key === "ArrowRight") {
+      next = (i + 1) % SCENE_COUNT;
+    } else if (event.key === "ArrowLeft") {
+      next = (i - 1 + SCENE_COUNT) % SCENE_COUNT;
+    } else if (event.key === "Home") {
+      next = 0;
+    } else if (event.key === "End") {
+      next = SCENE_COUNT - 1;
+    } else {
+      return;
+    }
+
     event.preventDefault();
-    goTo(next);
+    goTo(next, true);
     tabRefs.current[next]?.focus();
   };
 
-  const slide = reduceMotion ? 0 : 24;
-  const sceneVariants = {
-    enter: (dir: number) => ({ opacity: 0, x: dir * slide, scale: 0.98 }),
-    center: { opacity: 1, x: 0, scale: 1 },
-    exit: (dir: number) => ({ opacity: 0, x: dir * -slide, scale: 0.98 }),
-  };
-
-  const renderScene = (i: number) =>
-    i === 0 ? <OverviewScene onSelect={goTo} /> : <ServiceScene service={services[i - 1]} position={i + 1} />;
+  const renderScene = (i: number, ghost = false) =>
+    i === 0 ? (
+      <OverviewScene onSelect={(n) => goTo(n, true)} reduce={reduce || ghost} />
+    ) : (
+      <ServiceScene
+        service={services[i - 1]}
+        position={i + 1}
+        reduce={reduce || ghost}
+      />
+    );
 
   return (
     <div
+      ref={regionRef}
       role="region"
       aria-label="LAAMIN services overview"
       className="hero-panel-reveal relative"
-      onPointerEnter={(e) => {
-        if (e.pointerType === "mouse") setHovered(true);
-      }}
-      onPointerLeave={(e) => {
-        if (e.pointerType === "mouse") setHovered(false);
-      }}
-      onPointerDown={(e) => {
-        if (e.pointerType !== "mouse") holdAutoplay();
-      }}
-      onFocus={(e) => {
-        if (e.target.matches(":focus-visible")) setKeyboardFocus(true);
-      }}
-      onBlur={(e) => {
-        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setKeyboardFocus(false);
-      }}
     >
-      <motion.div 
-        whileHover={{ y: -4 }}
+      <motion.div
+        ref={panelRef}
+        whileHover={reduce ? undefined : { y: -4 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className="overflow-hidden rounded-2xl border border-[#E2E8F0] bg-[#FFFFFF] shadow-[0_20px_45px_-12px_rgba(4,45,85,0.18),0_6px_16px_-6px_rgba(4,45,85,0.08)]"
+        onPointerMove={onPanelPointerMove}
+        className="group/panel relative overflow-hidden rounded-2xl border border-white/10 bg-navy-950 shadow-[0_40px_90px_-30px_rgba(0,0,0,0.65)] ring-1 ring-brand-400/10"
       >
-        {/* Header */}
-        <div className="flex items-center gap-3 border-b border-[#E2E8F0] bg-[#F3F7FB] px-4 py-3.5">
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-brand-400/20 blur-3xl"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -bottom-32 -left-24 size-72 rounded-full bg-navy-700/40 blur-3xl"
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-25 opacity-0 transition-opacity duration-500 group-hover/panel:opacity-100"
+          style={{
+            background:
+              "radial-gradient(360px circle at var(--mx, 50%) var(--my, 0%), rgba(127,203,236,0.10), transparent 70%)",
+          }}
+        />
+
+        <div className="relative flex items-center gap-3 border-b border-white/10 bg-white/[0.04] px-4 py-3.5">
           <span aria-hidden="true" className="flex gap-1.5">
-            <span className="size-2.5 rounded-full bg-[#CBD5E1]" />
-            <span className="size-2.5 rounded-full bg-[#CBD5E1]" />
-            <span className="size-2.5 rounded-full bg-[#CBD5E1]" />
+            <span className="size-2.5 rounded-full bg-white/20" />
+            <span className="size-2.5 rounded-full bg-white/20" />
+            <span className="size-2.5 rounded-full bg-white/20" />
           </span>
-          <span className="text-xs font-semibold tracking-wide text-[#526174]">Service overview</span>
+
+          <span className="text-xs font-semibold tracking-wide text-navy-300">
+            Service overview
+          </span>
+
+          <span className="ml-auto flex items-center gap-2">
+            <span
+              aria-hidden="true"
+              className={`size-2 rounded-full ${
+                ready ? "animate-pulse bg-brand-400" : "bg-navy-300/60"
+              }`}
+            />
+          </span>
         </div>
 
-        {/* Scene selectors */}
-        <div role="tablist" aria-label="LAAMIN services" className="grid grid-cols-5 border-b border-[#E2E8F0] bg-white">
+        <div
+          role="tablist"
+          aria-label="LAAMIN services"
+          className="relative grid grid-cols-5 border-b border-white/10"
+        >
           {demoTabs.map((tab, i) => {
             const active = i === index;
             const TabIcon = tab.icon;
+
             return (
               <button
                 key={tab.id}
@@ -532,63 +720,127 @@ function HeroServiceDemo() {
                 aria-selected={active}
                 aria-controls={active ? `${uid}-panel-${i}` : undefined}
                 tabIndex={active ? 0 : -1}
-                onClick={() => goTo(i)}
+                onClick={() => goTo(i, true)}
                 onKeyDown={(e) => onTabKeyDown(e, i)}
-                className={`relative flex flex-col items-center gap-1.5 border-r border-[#E2E8F0] px-1 py-3.5 text-center text-[10px] font-semibold leading-tight transition-all last:border-r-0 focus-visible:outline-offset-[-2px] sm:text-xs ${
-                  active ? "bg-[#EAF6FC] text-[#042D55]" : "bg-white text-[#526174] hover:bg-[#F8FAFC] hover:text-[#042D55]"
+                className={`relative flex flex-col items-center gap-1.5 border-r border-white/10 px-1 py-3.5 text-center text-[10px] font-semibold leading-tight transition-colors duration-300 last:border-r-0 focus-visible:outline-offset-[-2px] sm:text-xs ${
+                  active
+                    ? "bg-brand-400/10 text-white"
+                    : "text-navy-300 hover:bg-white/5 hover:text-white"
                 }`}
               >
                 <TabIcon
                   aria-hidden="true"
-                  className={`size-4 transition-transform duration-300 ${active ? "text-brand-400 scale-110" : "text-[#526174]"}`}
+                  className={`size-4 transition-all duration-300 ${
+                    active ? "scale-110 text-brand-300" : "text-navy-300"
+                  }`}
                   strokeWidth={1.75}
                 />
+
                 <span>{tab.label}</span>
+
                 {active && (
                   <motion.span
                     layoutId={`${uid}-tab-indicator`}
                     aria-hidden="true"
-                    className="absolute inset-x-0 bottom-0 h-1 bg-brand-400"
-                    transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 450, damping: 32 }}
-                  />
+                    className="absolute inset-x-0 bottom-0 h-[3px] overflow-hidden bg-brand-400/25"
+                    transition={
+                      !mounted || reduce
+                        ? { duration: 0 }
+                        : { type: "spring", stiffness: 450, damping: 32 }
+                    }
+                  >
+                    {mounted && !reduce ? (
+                      <span
+                        key={index}
+                        className="scene-progress block h-full origin-left bg-brand-400"
+                        style={{
+                          animationDuration: `${SCENE_DURATION_MS}ms`,
+                          animationPlayState: ready ? "running" : "paused",
+                        }}
+                      />
+                    ) : (
+                      <span className="block h-full bg-brand-400" />
+                    )}
+                  </motion.span>
                 )}
               </button>
             );
           })}
         </div>
 
-        {/* Scenes Container - Fully White background with cinematic zoom motion */}
-        <div className="relative bg-[#FFFFFF] min-h-[310px] sm:min-h-[290px]">
-          <div aria-hidden="true" className="invisible grid">
+        <div className="relative min-h-[380px] sm:min-h-[350px]">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0"
+            style={{
+              backgroundImage:
+                "radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px)",
+              backgroundSize: "20px 20px",
+              maskImage:
+                "linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)",
+              WebkitMaskImage:
+                "linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)",
+            }}
+          />
+
+          {/* Ghost measuring layer (inert, invisible) */}
+          <div
+            aria-hidden="true"
+            ref={(el) => {
+              el?.setAttribute("inert", "");
+            }}
+            className="invisible pointer-events-none grid"
+          >
             {demoTabs.map((tab, i) => (
               <div key={tab.id} className="col-start-1 row-start-1 p-6 sm:p-7">
-                {renderScene(i)}
+                {renderScene(i, true)}
               </div>
             ))}
           </div>
 
-          <AnimatePresence initial={false} custom={direction}>
-            <motion.div
-              key={index}
-              id={`${uid}-panel-${index}`}
-              role="tabpanel"
-              aria-labelledby={`${uid}-tab-${index}`}
-              custom={direction}
-              variants={sceneVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ duration: reduceMotion ? 0.15 : 0.45, ease: SCENE_EASE }}
-              className="absolute inset-0 p-6 sm:p-7 bg-[#FFFFFF]"
-            >
-              {renderScene(index)}
-            </motion.div>
+          {/* Cinematic overlapping scene transitions */}
+          <AnimatePresence mode="popLayout" custom={reduce ? 0 : direction}>
+            {ready && (
+              <motion.div
+                key={index}
+                id={`${uid}-panel-${index}`}
+                role="tabpanel"
+                aria-labelledby={`${uid}-tab-${index}`}
+                custom={reduce ? 0 : direction}
+                variants={panelVariants}
+                initial="enter"
+                animate="center"
+                exit="exit"
+                className="absolute inset-0 flex flex-col justify-between p-6 sm:p-7"
+              >
+                {renderScene(index)}
+              </motion.div>
+            )}
           </AnimatePresence>
+
+          {/* Light sweep across scene change */}
+          {ready && !reduce && (
+            <motion.span
+              key={`sweep-${index}`}
+              aria-hidden="true"
+              initial={{ x: "-110%" }}
+              animate={{ x: "110%" }}
+              transition={{
+                duration: 1.1,
+                delay: 0.15,
+                ease: SCENE_EASE,
+              }}
+              className="pointer-events-none absolute inset-0 z-20 bg-gradient-to-r from-transparent via-brand-300/15 to-transparent"
+            />
+          )}
         </div>
       </motion.div>
     </div>
   );
 }
+
+
+
 
 /* ============================================================
    MAIN HOMEPAGE COMPONENT
@@ -597,13 +849,11 @@ function HeroServiceDemo() {
 export default function HomePage() {
   return (
     <>
-      {/* Hero Section */}
       <section className="relative overflow-hidden bg-navy-900 text-white">
         <BrandArcs className="inset-0 size-full text-brand-400/30" />
 
-        <Container className="relative grid items-center gap-12 pb-14 pt-8 sm:pt-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12 lg:pb-20 lg:pt-16">
-          
-          {/* Left Content (Masked Slide-Up & Stroke-to-Fill Headline) */}
+
+<Container className="relative grid items-start gap-10 pb-14 pt-8 sm:pt-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12 lg:pb-20 lg:pt-12">
           <div>
             <div className="reveal-mask">
               <div className="hero-reveal hero-reveal-1">
@@ -611,17 +861,31 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="reveal-mask mt-6">
-              <h1
-                className="hero-headline hero-reveal hero-reveal-2 font-display text-[2.5rem] leading-[1.08] tracking-tight text-balance sm:text-6xl lg:text-[4.25rem]"
-                data-text={headlineText}
-              >
-                <span className="hero-headline-fill">
-                  {heroHeadline.lead}{" "}
-                  <span className="text-brand-400">{heroHeadline.accent}</span>
-                </span>
-              </h1>
-            </div>
+
+
+<div className="reveal-mask mt-6">
+  <h1
+    className="hero-headline hero-reveal hero-reveal-2 font-display text-[2.5rem] leading-[1.08] tracking-tight text-balance sm:text-6xl lg:text-[4.25rem]"
+  >
+  <span className="hero-headline-fill">
+  <span className="title-shimmer-white">
+    {heroHeadline.lead}
+  </span>
+  {" "}
+  <span className="title-shimmer-blue">
+    {heroHeadline.accent}
+  </span>
+</span>
+
+<span aria-hidden="true" className="title-shimmer-sweep">
+  {headlineText}
+</span>
+
+  </h1>
+</div>
+
+
+
 
             <div className="reveal-mask mt-6">
               <p className="hero-reveal hero-reveal-3 max-w-xl text-lg leading-relaxed text-navy-300">
@@ -643,12 +907,9 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Right-Side Service Demonstration (five scenes) */}
           <HeroServiceDemo />
-
         </Container>
 
-        {/* Hero Facts Footer Strip */}
         <div className="relative border-t border-white/10">
           <Container>
             <dl className="grid divide-y divide-white/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
@@ -667,7 +928,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Company Introduction */}
       <section className="py-20 lg:py-28 bg-white text-ink">
         <Container className="grid gap-12 lg:grid-cols-2 lg:gap-20">
           <div>
@@ -704,7 +964,6 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* Main Services Grid */}
       <section className="border-y border-line bg-mist py-20 lg:py-28 text-ink">
         <Container>
           <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
@@ -756,7 +1015,6 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* International Jurisdictions Feature Section */}
       <section className="py-20 bg-navy-950 text-white border-t border-white/10">
         <Container>
           <div className="max-w-3xl">
@@ -784,7 +1042,6 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* Why Choose LAAMIN */}
       <section className="py-20 lg:py-28 bg-white text-ink">
         <Container className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
           <SectionHeading
@@ -809,7 +1066,6 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* Monthly Plans Preview */}
       <section className="relative overflow-hidden bg-navy-900 py-20 text-white lg:py-28">
         <BrandArcs className="inset-0 size-full text-brand-400/20" />
 
@@ -854,7 +1110,6 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* How It Works */}
       <section className="py-20 lg:py-28 bg-white text-ink">
         <Container>
           <SectionHeading eyebrow="How it works" title="From first contact to agreed service" />
@@ -864,7 +1119,6 @@ export default function HomePage() {
         </Container>
       </section>
 
-      {/* FAQs */}
       <section className="border-t border-line bg-mist py-20 lg:py-28 text-ink">
         <Container className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
           <SectionHeading
