@@ -879,8 +879,8 @@ function FlagStack() {
 
 function HeroFactsStrip() {
   return (
-    <div className="relative border-t border-white/10">
-      <Container>
+<div className="relative z-10 border-t border-transparent">     
+   <Container>
         <ul className="grid divide-y divide-white/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
           {heroFacts.map((fact) => {
             const Icon = fact.icon;
@@ -929,23 +929,114 @@ function HeroFactsStrip() {
   );
 }
 
-
 function HeroCutter() {
+  const reduce = useReducedMotion();
+
+  const drift = (from: string, to: string, duration: number) =>
+    reduce
+      ? {}
+      : {
+          initial: { x: from },
+          animate: { x: to },
+          transition: {
+            duration,
+            repeat: Infinity,
+            repeatType: "mirror" as const,
+            ease: "easeInOut" as const,
+          },
+        };
+
   return (
-    <div aria-hidden="true" className="relative h-8 bg-navy-900 sm:h-14">
-      <svg
-        viewBox="0 0 1440 56"
-        preserveAspectRatio="none"
-        className="absolute inset-x-0 bottom-0 block h-full w-full text-white"
-      >
-        <path d="M0 56 V46 Q720 -14 1440 46 V56 Z" fill="currentColor" />
-      </svg>
+    <div
+      aria-hidden="true"
+      className="pointer-events-none relative z-0 -mt-10 h-44 overflow-hidden sm:-mt-14 sm:h-60 lg:-mt-20 lg:h-72"
+    >
+      {/* 1. Base: transparent top (hero shows through), eases into the boundary haze #e3f1fa */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background: `linear-gradient(to bottom,
+            rgba(4,45,85,0) 0%,
+            rgba(30,110,170,0.10) 8%,
+            rgba(43,140,195,0.24) 20%,
+            rgba(70,165,215,0.38) 34%,
+            rgba(110,195,232,0.52) 48%,
+            rgba(160,215,240,0.68) 62%,
+            rgba(200,228,246,0.86) 78%,
+            #e3f1fa 100%)`,
+        }}
+      />
+
+      {/* 2. Fog A */}
+      <motion.div
+        className="absolute inset-y-0 -left-[30%] w-[160%] transform-gpu will-change-transform"
+        style={{
+          background: [
+            "radial-gradient(ellipse 38% 55% at 22% 52%, rgba(127,203,236,0.55), transparent 70%)",
+            "radial-gradient(ellipse 34% 48% at 58% 62%, rgba(43,163,214,0.38), transparent 72%)",
+            "radial-gradient(ellipse 30% 50% at 86% 48%, rgba(127,203,236,0.45), transparent 70%)",
+          ].join(","),
+        }}
+        {...drift("-4%", "4%", 26)}
+      />
+
+      {/* 3. Fog B */}
+      <motion.div
+        className="absolute inset-y-0 -left-[30%] w-[160%] transform-gpu will-change-transform"
+        style={{
+          background: [
+            "radial-gradient(ellipse 36% 42% at 14% 70%, rgba(176,222,244,0.60), transparent 72%)",
+            "radial-gradient(ellipse 40% 46% at 46% 74%, rgba(150,210,240,0.50), transparent 74%)",
+            "radial-gradient(ellipse 34% 44% at 78% 72%, rgba(176,222,244,0.55), transparent 72%)",
+          ].join(","),
+        }}
+        {...drift("4%", "-4%", 32)}
+      />
+
+      {/* 4. Grain, faded at both edges */}
+      <div
+        className="absolute inset-0 opacity-[0.06] mix-blend-soft-light"
+        style={{
+          backgroundImage:
+            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")",
+          maskImage:
+            "linear-gradient(to bottom, transparent 0%, black 30%, black 65%, transparent 100%)",
+          WebkitMaskImage:
+            "linear-gradient(to bottom, transparent 0%, black 30%, black 65%, transparent 100%)",
+        }}
+      />
+
+      {/* 5. Flat boundary colour at the very bottom, so the edge is one uniform tint (NOT white) */}
+      <div
+        className="absolute inset-x-0 -bottom-0.5 h-1/4"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(227,241,250,0) 0%, #e3f1fa 100%)",
+        }}
+      />
     </div>
   );
 }
 
 
-
+function FogSpill() {
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-x-0 -top-px h-40 sm:h-52"
+      style={{
+        // starts at exactly the cutter's bottom colour, then eases to transparent
+        background: `linear-gradient(to bottom,
+          #e3f1fa 0%,
+          rgba(227,241,250,0.82) 18%,
+          rgba(227,241,250,0.58) 38%,
+          rgba(227,241,250,0.34) 58%,
+          rgba(227,241,250,0.14) 78%,
+          rgba(227,241,250,0) 100%)`,
+      }}
+    />
+  );
+}
 /* ============================================================
    MAIN HOMEPAGE COMPONENT
    ============================================================ */
@@ -1016,14 +1107,16 @@ export default function HomePage() {
         </Container>
 
         <HeroFactsStrip />
-        <HeroCutter />
 
 
+              <HeroCutter />
       </section>
 
-      <section className="py-20 lg:py-28 bg-white text-ink">
-        <Container className="grid gap-12 lg:grid-cols-2 lg:gap-20">
-          <div>
+
+<section className="relative -mt-px py-20 lg:py-28 bg-white text-ink">
+  <FogSpill />
+  <Container className="relative grid gap-12 lg:grid-cols-2 lg:gap-20">
+              <div>
             <Eyebrow>About LAAMIN</Eyebrow>
             <p className="mt-6 font-display text-2xl leading-[1.3] tracking-tight text-navy-900 sm:text-[2rem]">
               LAAMIN BUSINESS SET UP SERVICES L.L.C is a Dubai-based provider of business support and administrative services.
