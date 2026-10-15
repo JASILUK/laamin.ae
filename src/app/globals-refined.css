@@ -1,0 +1,292 @@
+@import "tailwindcss";
+
+/* ============================================================
+   THEME & FONTS
+   ============================================================ */
+
+@theme inline {
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-heading), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* LAAMIN brand palette */
+@theme {
+  --color-navy-950: #021a33;
+  --color-navy-900: #042d55;
+  --color-navy-800: #0a3b6c;
+  --color-navy-700: #124a82;
+  --color-navy-300: #a9c6dd;
+
+  --color-brand-300: #7fcbec;
+  --color-brand-400: #2ba3d6;
+  --color-brand-500: #2ba3d6;
+  --color-brand-700: #0e6c9b;
+
+  --color-paper: #ffffff;
+  --color-mist: #f3f7fb;
+  --color-line: #dfe5ec;
+  --color-ink: #0d2238;
+  --color-muted: #4f5e6f;
+}
+
+/* ============================================================
+   GLOBAL STYLES
+   ============================================================ */
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+.font-display {
+  font-weight: 600;
+}
+
+::selection {
+  background: var(--color-brand-300);
+  color: var(--color-navy-950);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand-400);
+  outline-offset: 3px;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+/* ============================================================
+   COORDINATED MASKED REVEAL (Slide-Up)
+   ============================================================ */
+
+.reveal-mask {
+  overflow: hidden;
+  display: block;
+}
+
+@keyframes mask-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(110%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hero-reveal {
+  animation: mask-slide-up 750ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Refined staggered delays for unified flow */
+.hero-reveal-1 {
+  animation-delay: 80ms;
+}
+
+/* Headline and description grouped together for a smooth, single transition */
+.hero-reveal-2 {
+  animation-delay: 200ms;
+}
+
+.hero-reveal-3 {
+  animation-delay: 320ms;
+}
+
+@keyframes hero-panel-fade {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.hero-panel-reveal {
+  animation: hero-panel-fade 800ms cubic-bezier(0.16, 1, 0.3, 1) 220ms both;
+}
+
+/* ============================================================
+   HERO HEADLINE: STROKE-TO-FILL WIPE
+   ============================================================ */
+
+.hero-headline {
+  --wipe-delay: 220ms;
+  --wipe-duration: 1100ms;
+  --wipe-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  isolation: isolate; /* keeps the outline layer behind the text, inside the h1 */
+}
+
+/* Layer 1: outlined copy of the headline, pulled from data-text */
+.hero-headline::before {
+  content: attr(data-text);
+  content: attr(data-text) / ""; /* hides the duplicate from screen readers where supported */
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 1px rgb(255 255 255 / 0.32);
+  pointer-events: none;
+  user-select: none;
+  /* Release the outline once the fill has covered it, so no stroke fringe remains */
+  animation: hero-outline-release 200ms linear
+    calc(var(--wipe-delay) + var(--wipe-duration)) forwards;
+}
+
+/* Layer 2: the real solid text, wiped in from the left */
+.hero-headline-fill {
+  display: block;
+  animation: hero-fill-wipe var(--wipe-duration) var(--wipe-ease) var(--wipe-delay) both;
+}
+
+@keyframes hero-fill-wipe {
+  from {
+    clip-path: inset(-0.15em 100% -0.15em 0);
+  }
+  to {
+    clip-path: inset(-0.15em -0.1em -0.15em 0);
+  }
+}
+
+@keyframes hero-outline-release {
+  to {
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   DIRECTIONAL BUTTON WIPE
+   ============================================================ */
+
+.btn-wipe {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.btn-wipe::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-color: var(--wipe-bg, #ffffff);
+  pointer-events: none;
+  transform: translateX(-101%);
+  transition: transform 520ms cubic-bezier(0.215, 0.61, 0.355, 1);
+  will-change: transform;
+}
+
+.btn-wipe:hover::after,
+.btn-wipe:focus-visible::after {
+  transform: translateX(0);
+}
+
+.btn-wipe-content {
+  position: relative;
+  z-index: 1;
+  transition: color 520ms cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.btn-wipe:hover .btn-wipe-content,
+.btn-wipe:focus-visible .btn-wipe-content {
+  color: var(--wipe-fg, var(--color-navy-900));
+}
+
+/* Right to left */
+.btn-wipe-l::after {
+  transform: translateX(101%);
+}
+
+.btn-wipe-l:hover::after,
+.btn-wipe-l:focus-visible::after {
+  transform: translateX(0);
+}
+
+/* Bottom to top */
+.btn-wipe-u::after {
+  transform: translateY(101%);
+}
+
+.btn-wipe-u:hover::after,
+.btn-wipe-u:focus-visible::after {
+  transform: translateY(0);
+}
+
+/* Top to bottom */
+.btn-wipe-d::after {
+  transform: translateY(-101%);
+}
+
+.btn-wipe-d:hover::after,
+.btn-wipe-d:focus-visible::after {
+  transform: translateY(0);
+}
+
+/* ============================================================
+   REDUCED MOTION ACCESSIBILITY
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .hero-reveal,
+  .hero-panel-reveal {
+    animation: none !important;
+    opacity: 1;
+    transform: none;
+  }
+
+  .reveal-mask {
+    overflow: visible;
+  }
+
+  /* Headline: show the solid text immediately, no outline stage */
+  .hero-headline-fill {
+    animation: none !important;
+    clip-path: none;
+  }
+
+  .hero-headline::before {
+    display: none;
+  }
+
+  .btn-wipe::after,
+  .btn-wipe-content {
+    transition-duration: 300ms !important;
+  }
+}
+
+/* LAAMIN hero service presentation: restrained surface, no neon halo. */
+.laamin-demo {
+  color-scheme: dark;
+  background: linear-gradient(155deg, #042d55 0%, #021a33 58%, #03172c 100%);
+  box-shadow: 0 24px 64px rgb(2 16 32 / 24%), 0 1px 0 rgb(127 203 236 / 8%) inset;
+}
+
+@media (max-width: 639px) {
+  .laamin-demo { border-radius: 0.75rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .laamin-demo *, .laamin-demo *::before, .laamin-demo *::after {
+    scroll-behavior: auto !important;
+  }
+}
