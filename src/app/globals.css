@@ -338,3 +338,26 @@ summary::-webkit-details-marker {
     overflow: hidden;
   }
 }
+
+
+
+@keyframes scene-progress {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+.scene-progress {
+  animation-name: scene-progress;
+  animation-timing-function: linear;
+  animation-fill-mode: both;
+}
+
+
+.laamin-caret-blink {
+  animation: laamin-caret-blink 0.9s steps(1) infinite;
+}
+
+@keyframes laamin-caret-blink {
+  0%, 55% { opacity: 1; }
+  56%, 100% { opacity: 0; }
+}

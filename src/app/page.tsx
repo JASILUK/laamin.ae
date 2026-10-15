@@ -17,7 +17,17 @@ import {
 } from "lucide-react";
 
 import Link from "next/link";
-import { motion, AnimatePresence, useReducedMotion, type Variants } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useInView,
+  useReducedMotion,
+  useScroll,
+  MotionConfig ,
+  useTransform,
+  type MotionValue,
+  type Variants,
+} from "framer-motion";
 import  {BrandArcs}  from "@/components/brand-arcs";
 /* ============================================================
    DATA & CONFIGURATION (INCLUDING INTERNATIONAL JURISDICTIONS)
@@ -398,7 +408,7 @@ function SceneFrame({
         <div className="flex items-center gap-4">
           <motion.span
             variants={iconReveal}
-            className="relative grid size-12 shrink-0 place-items-center rounded-xl border border-brand-400/40 bg-brand-400/10 text-brand-300"
+            className="relative grid size-12 shrink-0 place-items-center rounded-xl border border-brand-700/20 bg-white text-brand-700 shadow-sm shadow-navy-900/10"
           >
             <Icon aria-hidden="true" className="size-6" strokeWidth={1.75} />
             {!reduce && (
@@ -415,7 +425,7 @@ function SceneFrame({
           {/* Letter-by-letter masked reveal */}
           <motion.h3
             variants={letterStage}
-            className="font-display text-xl leading-tight text-white sm:text-2xl"
+            className="font-display text-xl leading-tight text-navy-900 sm:text-2xl"
             aria-label={title}
           >
             {title.split(" ").map((word, wi) => (
@@ -436,7 +446,7 @@ function SceneFrame({
           </motion.h3>
         </div>
 
-        <motion.p variants={descReveal} className="mt-4 max-w-md text-sm leading-relaxed text-navy-300">
+        <motion.p variants={descReveal} className="mt-4 max-w-md text-sm leading-relaxed text-muted">
           {description}
         </motion.p>
 
@@ -444,16 +454,16 @@ function SceneFrame({
       </div>
 
       <div className="pt-6">
-        <motion.span variants={lineDraw} aria-hidden="true" className="block h-px origin-left bg-white/15" />
+        <motion.span variants={lineDraw} aria-hidden="true" className="block h-px origin-left bg-navy-900/15" />
         <motion.div variants={footReveal} className="flex items-center justify-between pt-4">
-          <span className="text-xs tabular-nums text-navy-300/70">{formatPosition(position)}</span>
+          <span className="text-xs tabular-nums text-muted">{formatPosition(position)}</span>
           <Link
             href={href}
-            className="group/link relative inline-flex items-center gap-1.5 overflow-hidden rounded px-3 py-1.5 text-sm font-semibold text-brand-300 transition-colors duration-300 hover:text-navy-950 focus-visible:text-navy-950"
+            className="group/link relative isolate inline-flex items-center gap-1.5 overflow-hidden rounded px-3 py-1.5 text-sm font-semibold text-brand-700 transition-colors duration-300 hover:text-white focus-visible:text-white"
           >
             <span
               aria-hidden="true"
-              className="absolute inset-0 -z-10 origin-left scale-x-0 bg-brand-400 transition-transform duration-300 ease-out group-hover/link:scale-x-100 group-focus-visible/link:scale-x-100"
+              className="absolute inset-0 -z-10 origin-left scale-x-0 bg-navy-900 transition-transform duration-300 ease-out group-hover/link:scale-x-100 group-focus-visible/link:scale-x-100"
             />
             <span>{linkLabel}</span>
             <ArrowRight
@@ -486,23 +496,23 @@ function OverviewScene({ onSelect, reduce }: { onSelect: (index: number) => void
               <button
                 type="button"
                 onClick={() => onSelect(i + 1)}
-                className="group relative isolate flex w-full items-center gap-2.5 overflow-hidden rounded-xl border border-white/10 bg-white/[0.04] px-3.5 py-3 text-left transition-[translate,scale,border-color] duration-300 hover:-translate-y-0.5 hover:border-brand-400/70 active:scale-[0.98]"
+                className="group relative isolate flex w-full items-center gap-2.5 overflow-hidden rounded-xl border border-navy-900/10 bg-white/70 px-3.5 py-3 text-left shadow-sm shadow-navy-900/5 transition-[translate,scale,border-color] duration-300 hover:-translate-y-0.5 hover:border-navy-900 active:scale-[0.98]"
               >
                 <span
                   aria-hidden="true"
-                  className="absolute inset-0 -z-10 origin-left scale-x-0 bg-brand-400 transition-transform duration-300 ease-out group-hover:scale-x-100 group-focus-visible:scale-x-100"
+                  className="absolute inset-0 -z-10 origin-left scale-x-0 bg-navy-900 transition-transform duration-300 ease-out group-hover:scale-x-100 group-focus-visible:scale-x-100"
                 />
                 <ServiceIcon
                   aria-hidden="true"
-                  className="size-4 shrink-0 text-brand-300 transition-colors duration-300 group-hover:text-navy-950 group-focus-visible:text-navy-950"
+                  className="size-4 shrink-0 text-brand-700 transition-colors duration-300 group-hover:text-brand-300 group-focus-visible:text-brand-300"
                   strokeWidth={1.75}
                 />
-                <span className="text-xs font-semibold leading-tight text-white transition-colors duration-300 group-hover:text-navy-950 group-focus-visible:text-navy-950 sm:text-sm">
+                <span className="text-xs font-semibold leading-tight text-navy-900 transition-colors duration-300 group-hover:text-white group-focus-visible:text-white sm:text-sm">
                   {service.shortTitle}
                 </span>
                 <ArrowRight
                   aria-hidden="true"
-                  className="ml-auto size-3.5 shrink-0 text-navy-300 transition-all duration-300 group-hover:translate-x-1 group-hover:text-navy-950 group-focus-visible:text-navy-950"
+                  className="ml-auto size-3.5 shrink-0 text-muted transition-all duration-300 group-hover:translate-x-1 group-hover:text-white group-focus-visible:text-white"
                 />
               </button>
             </motion.li>
@@ -524,21 +534,21 @@ function ServiceScene({ service, position, reduce }: { service: Service; positio
       position={position}
       reduce={reduce}
     >
-      <p className="mb-2 text-xs font-semibold text-navy-300/80">{service.listLabel}</p>
+      <p className="mb-2 text-xs font-semibold text-muted">{service.listLabel}</p>
       <motion.ul variants={listStage} className="space-y-2">
         {service.details.map((detail) => (
           <motion.li
             key={detail}
             variants={listItem}
-            className="group/row relative isolate flex items-center gap-3 overflow-hidden rounded-lg border border-white/10 bg-white/[0.04] px-3.5 py-2.5 text-sm font-medium text-white transition-colors duration-300 hover:border-brand-400/60"
+            className="group/row relative isolate flex items-center gap-3 overflow-hidden rounded-lg border border-navy-900/10 bg-white/70 px-3.5 py-2.5 text-sm font-medium text-navy-900 shadow-sm shadow-navy-900/5 transition-colors duration-300 hover:border-brand-700/40"
           >
             <span
               aria-hidden="true"
-              className="absolute inset-0 -z-10 origin-left scale-x-0 bg-brand-400/25 transition-transform duration-300 ease-out group-hover/row:scale-x-100 group-focus-visible/row:scale-x-100"
+              className="absolute inset-0 -z-10 origin-left scale-x-0 bg-brand-400/15 transition-transform duration-300 ease-out group-hover/row:scale-x-100 group-focus-visible/row:scale-x-100"
             />
             <CheckCircle2
               aria-hidden="true"
-              className="size-4 shrink-0 text-brand-300 transition-transform duration-300 group-hover/row:scale-110"
+              className="size-4 shrink-0 text-brand-700 transition-transform duration-300 group-hover/row:scale-110"
             />
             <span>{detail}</span>
           </motion.li>
@@ -554,14 +564,14 @@ function ServiceScene({ service, position, reduce }: { service: Service; positio
 
 function HeroServiceDemo() {
   const uid = useId();
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useSafeReducedMotion() ;
   const reduce = Boolean(shouldReduceMotion);
 
   const [[index, direction], setPage] = useState<[number, number]>([0, 1]);
   const [ready, setReady] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  // Refs only — never gating React state, so nothing can get stuck.
+  // Refs only: never gating React state, so nothing can get stuck.
   const lastChangeRef = useRef(Date.now());
   const manualHoldRef = useRef(0);
 
@@ -577,11 +587,7 @@ function HeroServiceDemo() {
   }, [reduce]);
 
   const goTo = useCallback((next: number, manual = false) => {
-    setPage((prev) =>
-      prev[0] === next
-        ? prev
-        : [next, next > prev[0] ? 1 : -1]
-    );
+    setPage((prev) => (prev[0] === next ? prev : [next, next > prev[0] ? 1 : -1]));
     lastChangeRef.current = Date.now();
     if (manual) manualHoldRef.current = Date.now();
   }, []);
@@ -591,13 +597,8 @@ function HeroServiceDemo() {
     lastChangeRef.current = Date.now();
   }, []);
 
-  /* ----- Bulletproof autoplay -----
-     One interval, started once. Every 500ms it checks LIVE state:
-     - is the mouse currently over the player? (:hover — cannot get stuck)
-     - is the tab currently hidden? (document.hidden — cannot get stuck)
-     - was there a manual click within the last 9s? (hold)
-     - has the current scene been on screen long enough?
-     If all clear -> advance. Self-heals from any edge case. */
+  /* One interval, started once. Every 500ms it checks LIVE state:
+     hover, hidden tab, recent manual click, and scene time on screen. */
   useEffect(() => {
     if (!mounted || !ready) return;
 
@@ -622,10 +623,7 @@ function HeroServiceDemo() {
     el.style.setProperty("--my", `${e.clientY - rect.top}px`);
   };
 
-  const onTabKeyDown = (
-    event: React.KeyboardEvent<HTMLButtonElement>,
-    i: number
-  ) => {
+  const onTabKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, i: number) => {
     let next = i;
 
     if (event.key === "ArrowRight") {
@@ -649,11 +647,7 @@ function HeroServiceDemo() {
     i === 0 ? (
       <OverviewScene onSelect={(n) => goTo(n, true)} reduce={reduce || ghost} />
     ) : (
-      <ServiceScene
-        service={services[i - 1]}
-        position={i + 1}
-        reduce={reduce || ghost}
-      />
+      <ServiceScene service={services[i - 1]} position={i + 1} reduce={reduce || ghost} />
     );
 
   return (
@@ -668,50 +662,60 @@ function HeroServiceDemo() {
         whileHover={reduce ? undefined : { y: -4 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
         onPointerMove={onPanelPointerMove}
-        className="group/panel relative overflow-hidden rounded-2xl border border-white/10 bg-navy-950 shadow-[0_40px_90px_-30px_rgba(0,0,0,0.65)] ring-1 ring-brand-400/10"
+        className="group/panel relative overflow-hidden rounded-2xl border border-white/70 shadow-[0_30px_70px_-30px_rgba(2,26,51,0.65)] ring-1 ring-navy-900/10"
       >
+        {/* frosted ice base: soft white to pale blue, never pure white or strong blue */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -right-24 -top-24 size-72 rounded-full bg-brand-400/20 blur-3xl"
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background: "linear-gradient(155deg, #fbfdff 0%, #eaf4fb 48%, #d6e9f7 100%)",
+          }}
+        />
+        {/* soft sky glows */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-20 -top-24 size-80 rounded-full bg-brand-300/35 blur-3xl"
         />
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute -bottom-32 -left-24 size-72 rounded-full bg-navy-700/40 blur-3xl"
+          className="pointer-events-none absolute -bottom-32 -left-24 size-72 rounded-full bg-brand-400/15 blur-3xl"
         />
+        {/* cursor spotlight */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 z-25 opacity-0 transition-opacity duration-500 group-hover/panel:opacity-100"
           style={{
             background:
-              "radial-gradient(360px circle at var(--mx, 50%) var(--my, 0%), rgba(127,203,236,0.10), transparent 70%)",
+              "radial-gradient(360px circle at var(--mx, 50%) var(--my, 0%), rgba(43,163,214,0.12), transparent 70%)",
           }}
         />
 
-        <div className="relative flex items-center gap-3 border-b border-white/10 bg-white/[0.04] px-4 py-3.5">
+        {/* header bar */}
+        <div className="relative flex items-center gap-3 border-b border-navy-900/10 bg-white/50 px-4 py-3.5">
           <span aria-hidden="true" className="flex gap-1.5">
-            <span className="size-2.5 rounded-full bg-white/20" />
-            <span className="size-2.5 rounded-full bg-white/20" />
-            <span className="size-2.5 rounded-full bg-white/20" />
+            <span className="size-2.5 rounded-full bg-navy-900/20" />
+            <span className="size-2.5 rounded-full bg-navy-900/20" />
+            <span className="size-2.5 rounded-full bg-navy-900/20" />
           </span>
 
-          <span className="text-xs font-semibold tracking-wide text-navy-300">
-            Service overview
-          </span>
+          <span className="text-xs font-semibold tracking-wide text-navy-800">Service overview</span>
 
           <span className="ml-auto flex items-center gap-2">
             <span
               aria-hidden="true"
               className={`size-2 rounded-full ${
-                ready ? "animate-pulse bg-brand-400" : "bg-navy-300/60"
+                ready ? "animate-pulse bg-brand-700" : "bg-navy-900/25"
               }`}
             />
           </span>
         </div>
 
+        {/* tabs */}
         <div
           role="tablist"
           aria-label="LAAMIN services"
-          className="relative grid grid-cols-5 border-b border-white/10"
+          className="relative grid grid-cols-5 border-b border-navy-900/10"
         >
           {demoTabs.map((tab, i) => {
             const active = i === index;
@@ -731,16 +735,16 @@ function HeroServiceDemo() {
                 tabIndex={active ? 0 : -1}
                 onClick={() => goTo(i, true)}
                 onKeyDown={(e) => onTabKeyDown(e, i)}
-                className={`relative flex flex-col items-center gap-1.5 border-r border-white/10 px-1 py-3.5 text-center text-[10px] font-semibold leading-tight transition-colors duration-300 last:border-r-0 focus-visible:outline-offset-[-2px] sm:text-xs ${
+                className={`relative flex flex-col items-center gap-1.5 border-r border-navy-900/10 px-1 py-3.5 text-center text-[10px] font-semibold leading-tight transition-colors duration-300 last:border-r-0 focus-visible:outline-offset-[-2px] sm:text-xs ${
                   active
-                    ? "bg-brand-400/10 text-white"
-                    : "text-navy-300 hover:bg-white/5 hover:text-white"
+                    ? "bg-white/80 text-navy-900"
+                    : "text-muted hover:bg-white/50 hover:text-navy-900"
                 }`}
               >
                 <TabIcon
                   aria-hidden="true"
                   className={`size-4 transition-all duration-300 ${
-                    active ? "scale-110 text-brand-300" : "text-navy-300"
+                    active ? "scale-110 text-brand-700" : "text-muted"
                   }`}
                   strokeWidth={1.75}
                 />
@@ -751,7 +755,7 @@ function HeroServiceDemo() {
                   <motion.span
                     layoutId={`${uid}-tab-indicator`}
                     aria-hidden="true"
-                    className="absolute inset-x-0 bottom-0 h-[3px] overflow-hidden bg-brand-400/25"
+                    className="absolute inset-x-0 bottom-0 h-[3px] overflow-hidden bg-navy-900/10"
                     transition={
                       !mounted || reduce
                         ? { duration: 0 }
@@ -761,14 +765,14 @@ function HeroServiceDemo() {
                     {mounted && !reduce ? (
                       <span
                         key={index}
-                        className="scene-progress block h-full origin-left bg-brand-400"
+                        className="scene-progress block h-full origin-left bg-brand-700"
                         style={{
                           animationDuration: `${SCENE_DURATION_MS}ms`,
                           animationPlayState: ready ? "running" : "paused",
                         }}
                       />
                     ) : (
-                      <span className="block h-full bg-brand-400" />
+                      <span className="block h-full bg-brand-700" />
                     )}
                   </motion.span>
                 )}
@@ -777,16 +781,15 @@ function HeroServiceDemo() {
           })}
         </div>
 
+        {/* scene area */}
         <div className="relative min-h-[380px] sm:min-h-[350px]">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute inset-0"
             style={{
-              backgroundImage:
-                "radial-gradient(rgba(255,255,255,0.07) 1px, transparent 1px)",
+              backgroundImage: "radial-gradient(rgba(4,45,85,0.08) 1px, transparent 1px)",
               backgroundSize: "20px 20px",
-              maskImage:
-                "linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)",
+              maskImage: "linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)",
               WebkitMaskImage:
                 "linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)",
             }}
@@ -834,12 +837,8 @@ function HeroServiceDemo() {
               aria-hidden="true"
               initial={{ x: "-110%" }}
               animate={{ x: "110%" }}
-              transition={{
-                duration: 1.1,
-                delay: 0.15,
-                ease: SCENE_EASE,
-              }}
-              className="pointer-events-none absolute inset-0 z-20 bg-gradient-to-r from-transparent via-brand-300/15 to-transparent"
+              transition={{ duration: 1.1, delay: 0.15, ease: SCENE_EASE }}
+              className="pointer-events-none absolute inset-0 z-20 bg-gradient-to-r from-transparent via-white/70 to-transparent"
             />
           )}
         </div>
@@ -847,8 +846,6 @@ function HeroServiceDemo() {
     </div>
   );
 }
-
-
 
 function FlagStack() {
   const label = reachFlags.map((f) => f.name).join(", ");
@@ -930,7 +927,7 @@ function HeroFactsStrip() {
 }
 
 function HeroCutter() {
-  const reduce = useReducedMotion();
+  const reduce = useSafeReducedMotion() ;
 
   const drift = (from: string, to: string, duration: number) =>
     reduce
@@ -1037,12 +1034,626 @@ function FogSpill() {
     />
   );
 }
+
+/* ============================================================
+   ABOUT → SERVICES SECTION DIVIDER
+   Clean arc cut: white (About) curves into navy-900 (Services).
+   Brand-arc linework only — no glow, no gradient wash.
+   ============================================================ */
+
+function AboutServicesDivider() {
+  return (
+    <div
+      aria-hidden="true"
+      className="relative -mb-px h-24 overflow-hidden bg-white sm:h-32 lg:h-40"
+    >
+      <svg
+        className="absolute inset-0 h-full w-full"
+        viewBox="0 0 1440 160"
+        preserveAspectRatio="none"
+        fill="none"
+      >
+        {/* White base — matches About section bg */}
+        <rect width="1440" height="160" fill="#ffffff" />
+
+        {/* Navy arc — signature cut into Services section */}
+        <path
+          d="M 0 160 L 0 108 Q 720 22 1440 108 L 1440 160 Z"
+          fill="#042d55"
+        />
+
+        {/* Nested brand arcs — echo of BrandArcs motif */}
+        <g stroke="#2ba3d6" fill="none" strokeLinecap="round">
+          <path
+            d="M -80 84 Q 720 -2 1520 84"
+            strokeOpacity="0.45"
+            strokeWidth="1.2"
+          />
+          <path
+            d="M -80 102 Q 720 16 1520 102"
+            strokeOpacity="0.26"
+            strokeWidth="1"
+          />
+          <path
+            d="M -80 120 Q 720 34 1520 120"
+            strokeOpacity="0.12"
+            strokeWidth="1"
+          />
+        </g>
+
+        {/* Dotted accent — matches dotted rings in AboutBackdrop */}
+        <path
+          d="M -80 72 Q 720 -14 1520 72"
+          stroke="#7fcbec"
+          strokeOpacity="0.5"
+          strokeWidth="1"
+          strokeDasharray="1 10"
+        />
+      </svg>
+    </div>
+  );
+}
+
+/* ============================================================
+   ABOUT SECTION
+   ============================================================ */
+
+const aboutContent = {
+  eyebrow: "About LAAMIN",
+  headlineLead: "Business Support That",
+  headlineAccent: "Moves You Forward.",
+  description:
+    "Dubai-based corporate support with global reach — setup, PRO, visas and documents handled under one roof.",
+  intro:
+    "LAAMIN BUSINESS SET UP SERVICES L.L.C. is a Dubai-based business support company providing administrative solutions to help businesses manage essential operational requirements. Our services include business setup and licensing, PRO services, visa processing, document clearing, and related employment and company administration support across the UAE.",
+  global:
+    "Beyond the UAE, we also support company formation and business licensing in the United States, Qatar, Singapore, Saudi Arabia, Oman, the Cayman Islands, and Panama.",
+};
+
+const aboutCountries = reachFlags.filter((f) => f.code !== "ae");
+
+const pillStage: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.07, delayChildren: 0.1 } },
+};
+
+const pillItem: Variants = {
+  hidden: { opacity: 0, y: 12, scale: 0.96 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: SCENE_EASE } },
+};
+
+/* ----- hydration-safe mount hook (never branch on useReducedMotion during SSR) ----- */
+
+function useMounted() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  return mounted;
+}
+
+/* Always false on the server AND the first client render, so hydration matches */
+function useSafeReducedMotion() {
+  const reduce = useReducedMotion() ;
+  const mounted = useMounted();
+  return mounted ? Boolean(reduce) : false;
+}
+
+/* ----- small motion helpers ----- */
+
+function Reveal({
+  children,
+  delay = 0,
+  y = 24,
+  className = "",
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  y?: number;
+  className?: string;
+}) {
+  const reduce = useSafeReducedMotion() ;
+  return (
+    <motion.div
+      className={className}
+initial={{ opacity: 0, y, filter: "blur(6px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.8, delay, ease: SCENE_EASE }}
+    >
+      {children}
+    </motion.div>
+  );
+}
+
+function MaskLine({
+  children,
+  delay = 0,
+  className = "",
+}: {
+  children: React.ReactNode;
+  delay?: number;
+  className?: string;
+}) {
+  const ref = useRef<HTMLSpanElement>(null);
+  // watch the visible wrapper, NOT the clipped text
+  const inView = useInView(ref, { once: true, margin: "0px 0px -80px 0px" });
+  const hidden = { y: "115%", skewY: 4, opacity: 0 };
+  const shown = { y: "0%", skewY: 0, opacity: 1 };
+
+  return (
+    <span ref={ref} className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
+      <motion.span
+        className={`block origin-bottom-left ${className}`}
+        initial={hidden}
+        animate={inView ? shown : hidden}
+        transition={{ duration: 0.95, delay, ease: SCENE_EASE }}
+      >
+        {children}
+      </motion.span>
+    </span>
+  );
+}
+
+function DrawLine({ delay = 0, className = "" }: { delay?: number; className?: string }) {
+  const reduce = useSafeReducedMotion() ;
+  return (
+    <motion.span
+      aria-hidden="true"
+      className={`block origin-left ${className}`}
+initial={{ scaleX: 0 }}
+      whileInView={{ scaleX: 1 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 1, delay, ease: SCENE_EASE }}
+    />
+  );
+}
+
+/* ----- scroll-linked word reveal: opacity rises as you read ----- */
+
+/* ============================================================
+   SCROLL-LINKED TEXT REVEAL — MAIN + SMALL DESCRIPTIONS
+   • MAIN  → word by word: fades in (+ rises and un-blurs when motion is allowed)
+   • SMALL → letter by letter: fades in as scroll progresses
+   • Reduced motion → opacity-only fade (still visible, no movement)
+   ============================================================ */
+
+function RevealWord({
+  word,
+  start,
+  end,
+  progress,
+  minOpacity,
+  calm,
+}: {
+  word: string;
+  start: number;
+  end: number;
+  progress: MotionValue<number>;
+  minOpacity: number;
+  calm: boolean;
+}) {
+  const s = Math.max(0, Math.min(start, 0.995));
+  const e = Math.max(s + 0.005, Math.min(end, 1));
+
+  const opacity = useTransform(progress, [s, e], [minOpacity, 1]);
+  const y = useTransform(progress, [s, e], [16, 0]);
+  const filter = useTransform(progress, [s, e], ["blur(4px)", "blur(0px)"]);
+
+  return (
+    <motion.span
+      style={calm ? { opacity } : { opacity, y, filter }}
+      className="mr-[0.28em] inline-block"
+    >
+      {word}
+    </motion.span>
+  );
+}
+
+function RevealLetter({
+  char,
+  start,
+  end,
+  progress,
+  minOpacity,
+}: {
+  char: string;
+  start: number;
+  end: number;
+  progress: MotionValue<number>;
+  minOpacity: number;
+}) {
+  const s = Math.max(0, Math.min(start, 0.995));
+  const e = Math.max(s + 0.005, Math.min(end, 1));
+  const opacity = useTransform(progress, [s, e], [minOpacity, 1]);
+
+  return (
+    <motion.span style={{ opacity }} className="inline-block">
+      {char}
+    </motion.span>
+  );
+}
+
+type ScrollTextProps = { text: string; className?: string; minOpacity?: number };
+
+/* ---------- MAIN description (right side) ---------- */
+
+function ScrollRevealText(props: ScrollTextProps) {
+  const reduce = useReducedMotion();
+  const mounted = useMounted();
+  // server + first client render: plain text (no hydration mismatch)
+  if (!mounted) return <p className={props.className}>{props.text}</p>;
+  return <ScrollRevealTextLive {...props} calm={Boolean(reduce)} />;
+}
+
+function ScrollRevealTextLive({
+  text,
+  className = "",
+  minOpacity = 0.15,
+  calm,
+}: ScrollTextProps & { calm: boolean }) {
+  const ref = useRef<HTMLParagraphElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 0.85", "end 0.6"],
+  });
+
+  const words = text.split(/\s+/).filter(Boolean);
+  const total = words.length;
+
+  return (
+    <p ref={ref} className={className}>
+      <span className="sr-only">{text}</span>
+      <span aria-hidden="true">
+        {words.map((word, i) => {
+          const start = total > 1 ? (i / total) * 0.85 : 0;
+          return (
+            <RevealWord
+              key={`${word}-${i}`}
+              word={word}
+              start={start}
+              end={start + 0.15}
+              progress={scrollYProgress}
+              minOpacity={minOpacity}
+              calm={calm}
+            />
+          );
+        })}
+      </span>
+    </p>
+  );
+}
+
+/* ---------- second paragraph (right side): typing driven by scroll ---------- */
+
+function ScrollTypeText(props: ScrollTextProps) {
+  const reduce = useReducedMotion();
+  const mounted = useMounted();
+  // typing is motion, so reduced-motion users get the full text
+  if (!mounted || reduce) return <p className={props.className}>{props.text}</p>;
+  return <ScrollTypeTextLive {...props} />;
+}
+
+function ScrollTypeTextLive({ text, className = "" }: ScrollTextProps) {
+  const ref = useRef<HTMLParagraphElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 0.9", "end 0.6"],
+  });
+  const typed = useTransform(scrollYProgress, (v) =>
+    text.slice(0, Math.round(v * text.length))
+  );
+  const caretOpacity = useTransform(scrollYProgress, [0, 0.03, 0.96, 1], [0, 1, 1, 0]);
+
+  return (
+    <p ref={ref} className={className}>
+      <span className="sr-only">{text}</span>
+      <span aria-hidden="true">
+        <motion.span>{typed}</motion.span>
+        <motion.span
+          style={{ opacity: caretOpacity }}
+          className="laamin-caret-blink ml-0.5 inline-block h-[1.05em] w-[2px] translate-y-[0.18em] bg-brand-700 align-baseline"
+        />
+      </span>
+    </p>
+  );
+}
+
+/* ---------- SMALL description (left side): letter by letter ---------- */
+
+function ScrollLetterText(props: ScrollTextProps) {
+  const mounted = useMounted();
+  // opacity-only, so it is safe to run even with reduced motion
+  if (!mounted) return <p className={props.className}>{props.text}</p>;
+  return <ScrollLetterTextLive {...props} />;
+}
+
+function ScrollLetterTextLive({
+  text,
+  className = "",
+  minOpacity = 0.1,
+}: ScrollTextProps) {
+  const ref = useRef<HTMLParagraphElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 0.95", "start 0.5"],
+  });
+
+  const words = text.split(" ");
+  const totalChars = text.replace(/\s+/g, "").length;
+  let charIndex = 0;
+
+  return (
+    <p ref={ref} className={className}>
+      <span className="sr-only">{text}</span>
+      <span aria-hidden="true">
+        {words.map((word, wi) => (
+          <span key={`${word}-${wi}`} className="inline-block whitespace-nowrap">
+            {word.split("").map((char, ci) => {
+              const start = totalChars > 1 ? (charIndex / totalChars) * 0.85 : 0;
+              charIndex += 1;
+              return (
+                <RevealLetter
+                  key={ci}
+                  char={char}
+                  start={start}
+                  end={start + 0.15}
+                  progress={scrollYProgress}
+                  minOpacity={minOpacity}
+                />
+              );
+            })}
+            {wi < words.length - 1 ? "\u00A0" : ""}
+          </span>
+        ))}
+      </span>
+    </p>
+  );
+}
+/* ----- scroll-fade description: opacity + blur eases in on scroll ----- */
+
+function ScrollFadeText({
+  text,
+  className = "",
+}: {
+  text: string;
+  className?: string;
+}) {
+  const ref = useRef<HTMLParagraphElement>(null);
+  const reduce = useSafeReducedMotion() ;
+  const mounted = useMounted();
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 0.95", "start 0.65"],
+  });
+  const opacity = useTransform(scrollYProgress, [0, 1], [0.15, 1]);
+  const y = useTransform(scrollYProgress, [0, 1], [14, 0]);
+  const blur = useTransform(scrollYProgress, [0, 1], ["4px", "0px"]);
+
+  if (!mounted || reduce) return <p className={className}>{text}</p>;
+
+  return (
+    <motion.p ref={ref} style={{ opacity, y, filter: blur }} className={className}>
+      {text}
+    </motion.p>
+  );
+}
+
+/* ----- background: blueprint grid + concentric rings with light parallax ----- */
+
+function AboutBackdrop() {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = useSafeReducedMotion() ;
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const ringsY = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [-60, 60]);
+  const gridY = useTransform(scrollYProgress, [0, 1], reduce ? [0, 0] : [0, -40]);
+
+  const vFade =
+    "linear-gradient(to bottom, transparent 0, black 200px, black calc(100% - 140px), transparent 100%)";
+
+  return (
+    <div
+      ref={ref}
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+      style={{ maskImage: vFade, WebkitMaskImage: vFade }}
+    >
+      {/* soft sky light */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 50% 60% at 85% 30%, rgba(127,203,236,0.18), transparent 70%)",
+        }}
+      />
+
+      {/* blueprint grid */}
+      <motion.div
+        className="absolute inset-x-0 -inset-y-10"
+        style={{
+          y: gridY,
+          backgroundImage:
+            "linear-gradient(rgba(4,45,85,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(4,45,85,0.05) 1px, transparent 1px)",
+          backgroundSize: "64px 64px",
+          maskImage:
+            "radial-gradient(ellipse 80% 70% at 75% 40%, black 10%, transparent 75%)",
+          WebkitMaskImage:
+            "radial-gradient(ellipse 80% 70% at 75% 40%, black 10%, transparent 75%)",
+        }}
+      />
+
+      {/* concentric rings */}
+      <motion.svg
+        style={{ y: ringsY }}
+        viewBox="0 0 1200 900"
+        preserveAspectRatio="xMaxYMid slice"
+        fill="none"
+        className="absolute inset-0 h-full w-full text-brand-700"
+      >
+        <g stroke="currentColor" strokeWidth="1" strokeOpacity="0.16">
+          <circle cx="1080" cy="380" r="150" />
+          <circle cx="1080" cy="380" r="240" />
+          <circle cx="1080" cy="380" r="330" />
+          <circle cx="1080" cy="380" r="420" />
+          <circle cx="1080" cy="380" r="510" />
+        </g>
+        <circle
+          cx="1080"
+          cy="380"
+          r="285"
+          stroke="currentColor"
+          strokeOpacity="0.3"
+          strokeWidth="1.2"
+          strokeDasharray="1 12"
+        />
+        <circle
+          cx="1080"
+          cy="380"
+          r="465"
+          stroke="currentColor"
+          strokeOpacity="0.22"
+          strokeWidth="1.2"
+          strokeDasharray="1 16"
+        />
+        <g fill="currentColor" fillOpacity="0.35">
+          <circle cx="1080" cy="95" r="3" />
+          <circle cx="1410" cy="380" r="3" />
+          <circle cx="796" cy="602" r="3" />
+        </g>
+
+        {/* lower-left counterweight */}
+        <g stroke="currentColor" strokeWidth="1" strokeOpacity="0.12">
+          <circle cx="0" cy="820" r="200" />
+          <circle cx="0" cy="820" r="300" />
+          <circle cx="0" cy="820" r="400" />
+        </g>
+      </motion.svg>
+    </div>
+  );
+}
+
+/* ----- the section ----- */
+
+function AboutSection() {
+  return (
+    <section className="relative -mt-px bg-white py-20 text-ink lg:py-28">
+      <AboutBackdrop />
+      <FogSpill />
+
+      <Container className="relative z-10">
+        <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
+          {/* left: sticky headline */}
+          <div className="lg:sticky lg:top-32 lg:self-start">
+            <div className="flex items-center gap-3">
+              <DrawLine className="h-px w-8 bg-brand-700" />
+              <Eyebrow>{aboutContent.eyebrow}</Eyebrow>
+            </div>
+
+            <h2 className="mt-6 font-display text-4xl leading-[1.08] tracking-tight text-navy-900 sm:text-5xl lg:text-[3.4rem]">
+              <MaskLine delay={0.05}>{aboutContent.headlineLead}</MaskLine>
+              <MaskLine delay={0.18}>
+                <span className="bg-gradient-to-r from-brand-700 to-brand-400 bg-clip-text text-transparent">
+                  {aboutContent.headlineAccent}
+                </span>
+              </MaskLine>
+            </h2>
+
+            {/* small description: revealed letter by letter on scroll */}
+            <ScrollLetterText
+              text={aboutContent.description}
+              className="mt-6 max-w-sm text-base leading-relaxed text-muted"
+            />
+
+            <DrawLine delay={0.5} className="mt-8 h-0.5 w-16 bg-brand-400" />
+          </div>
+
+          {/* right: scroll-driven copy (low opacity, rises as you scroll) */}
+          <div className="space-y-8">
+            <ScrollRevealText
+              text={aboutContent.intro}
+              className="font-display text-2xl leading-[1.4] tracking-tight text-navy-900 sm:text-[1.7rem]"
+              minOpacity={0.14}
+            />
+
+            <ScrollTypeText
+              text={aboutContent.global}
+              className="min-h-[4.5em] text-lg leading-relaxed text-muted sm:min-h-[3.5em]"
+            />
+
+            <motion.ul
+              aria-label="International jurisdictions"
+              variants={pillStage}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: "-60px" }}
+              className="flex flex-wrap gap-2.5"
+            >
+              {aboutCountries.map((country) => (
+                <motion.li
+                  key={country.code}
+                  variants={pillItem}
+                  className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1.5 text-sm font-medium text-navy-900 shadow-sm shadow-navy-900/5"
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={`https://flagcdn.com/w40/${country.code}.png`}
+                    srcSet={`https://flagcdn.com/w80/${country.code}.png 2x`}
+                    alt=""
+                    width={16}
+                    height={16}
+                    loading="lazy"
+                    className="size-4 rounded-full object-cover"
+                  />
+                  {country.name}
+                </motion.li>
+              ))}
+            </motion.ul>
+          </div>
+        </div>
+
+        {/* CTA row: buttons left, line in the middle, About link bottom-right */}
+        <Reveal delay={0.1} className="mt-14 flex flex-col gap-6 sm:flex-row sm:items-center">
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <ButtonLink href="/services" variant="accent">
+              Explore Our Services
+              <ArrowRight aria-hidden="true" className="size-4" />
+            </ButtonLink>
+            <ButtonLink href="/contact" variant="outline">
+              Contact Enquiry
+            </ButtonLink>
+          </div>
+
+          <DrawLine delay={0.4} className="hidden h-px flex-1 bg-line sm:block" />
+
+          <Link
+            href="/about"
+            className="group/about inline-flex items-center gap-2 self-start text-sm font-semibold text-navy-900 transition-colors hover:text-brand-700 sm:self-auto"
+          >
+            <span className="border-b border-navy-900/30 pb-0.5 transition-colors group-hover/about:border-brand-700">
+              About detail page
+            </span>
+            <span
+              aria-hidden="true"
+              className="grid size-8 place-items-center rounded-full border border-line transition-all duration-300 group-hover/about:border-brand-700 group-hover/about:bg-brand-700 group-hover/about:text-white"
+            >
+              <ArrowUpRight className="size-4" />
+            </span>
+          </Link>
+        </Reveal>
+      </Container>
+    </section>
+  );
+}
+
 /* ============================================================
    MAIN HOMEPAGE COMPONENT
    ============================================================ */
 
 export default function HomePage() {
   return (
+        <MotionConfig reducedMotion="user">
+
     <>
       <section className="relative overflow-hidden bg-navy-900 text-white">
 
@@ -1113,93 +1724,74 @@ export default function HomePage() {
       </section>
 
 
-<section className="relative -mt-px py-20 lg:py-28 bg-white text-ink">
-  <FogSpill />
-  <Container className="relative grid gap-12 lg:grid-cols-2 lg:gap-20">
-              <div>
-            <Eyebrow>About LAAMIN</Eyebrow>
-            <p className="mt-6 font-display text-2xl leading-[1.3] tracking-tight text-navy-900 sm:text-[2rem]">
-              LAAMIN BUSINESS SET UP SERVICES L.L.C is a Dubai-based provider of business support and administrative services.
-            </p>
-          </div>
+      <AboutSection />
 
-          <div>
-            <p className="text-lg leading-relaxed text-muted">
-              We help companies manage the paperwork, applications and follow-up that come with operating in the UAE and internationally, so requirements are handled in an organised way and you always know where things stand.
-            </p>
 
-            <ul className="mt-8 border-t border-line">
-              {focusAreas.map((area, index) => (
-                <li key={area} className="flex items-baseline gap-5 border-b border-line py-4">
-                  <span aria-hidden="true" className="font-display text-sm text-brand-700">
-                    0{index + 1}
-                  </span>
-                  <span className="font-medium text-navy-900">{area}</span>
-                </li>
-              ))}
-            </ul>
+<AboutServicesDivider />
 
+<section className="relative overflow-hidden bg-navy-900 py-20 text-white lg:py-28">
+  <BrandArcs className="inset-0 size-full text-brand-400/15" />
+
+  <Container className="relative">
+    <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+      <SectionHeading
+        light
+        eyebrow="Our services"
+        title="Four areas of business support"
+        description="Each service is available on its own or as part of a monthly plan."
+      />
+      <ButtonLink
+        href="/services"
+        variant="outline-light"
+        className="self-start lg:self-auto"
+      >
+        All Services
+      </ButtonLink>
+    </div>
+
+    <ul className="mt-14 grid gap-px border border-white/12 bg-white/12 sm:grid-cols-2">
+      {services.map((service, index) => {
+        const SIcon = service.icon;
+        return (
+          <li key={service.slug}>
             <Link
-              href="/about"
-              className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-navy-900 underline decoration-brand-500 decoration-2 underline-offset-8 hover:text-brand-700"
+              href={`/services/${service.slug}`}
+              className="group flex h-full flex-col bg-navy-900 p-8 transition-colors hover:bg-navy-800 sm:p-10"
             >
-              More about LAAMIN
-              <ArrowRight aria-hidden="true" className="size-4" />
+              <div className="flex items-start justify-between">
+                <span className="grid size-14 place-items-center border border-brand-400/30 bg-brand-400/10 text-brand-300 transition-colors duration-300 group-hover:border-brand-400/60 group-hover:bg-brand-400/20 group-hover:text-brand-400">
+                  <SIcon aria-hidden="true" className="size-6" strokeWidth={1.5} />
+                </span>
+                <span
+                  aria-hidden="true"
+                  className="font-display text-lg text-brand-400/80 transition-colors group-hover:text-brand-300"
+                >
+                  0{index + 1}
+                </span>
+              </div>
+
+              <h3 className="mt-8 font-display text-2xl tracking-tight text-white">
+                {service.title}
+              </h3>
+
+              <p className="mt-3 max-w-md flex-1 leading-relaxed text-navy-300">
+                {service.short}
+              </p>
+
+              <span className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-brand-300 transition-colors group-hover:text-brand-400">
+                View service
+                <ArrowRight
+                  aria-hidden="true"
+                  className="size-4 transition-transform group-hover:translate-x-1"
+                />
+              </span>
             </Link>
-          </div>
-        </Container>
-      </section>
-
-      <section className="border-y border-line bg-mist py-20 lg:py-28 text-ink">
-        <Container>
-          <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
-            <SectionHeading
-              eyebrow="Our services"
-              title="Four areas of business support"
-              description="Each service is available on its own or as part of a monthly plan."
-            />
-            <ButtonLink href="/services" variant="outline" className="self-start lg:self-auto">
-              All Services
-            </ButtonLink>
-          </div>
-
-          <ul className="mt-14 grid gap-px border border-line bg-line sm:grid-cols-2">
-            {services.map((service, index) => {
-              const SIcon = service.icon;
-              return (
-                <li key={service.slug}>
-                  <Link
-                    href={`/services/${service.slug}`}
-                    className="group flex h-full flex-col bg-paper p-8 transition-colors hover:bg-white sm:p-10"
-                  >
-                    <div className="flex items-start justify-between">
-                      <span className="grid size-14 place-items-center bg-navy-900 text-brand-300">
-                        <SIcon aria-hidden="true" className="size-6" strokeWidth={1.5} />
-                      </span>
-                      <span aria-hidden="true" className="font-display text-lg text-brand-700">
-                        0{index + 1}
-                      </span>
-                    </div>
-
-                    <h3 className="mt-8 font-display text-2xl tracking-tight text-navy-900">
-                      {service.title}
-                    </h3>
-
-                    <p className="mt-3 max-w-md flex-1 leading-relaxed text-muted">
-                      {service.short}
-                    </p>
-
-                    <span className="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-navy-900 group-hover:text-brand-700">
-                      View service
-                      <ArrowRight aria-hidden="true" className="size-4 transition-transform group-hover:translate-x-1" />
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </Container>
-      </section>
+          </li>
+        );
+      })}
+    </ul>
+  </Container>
+</section>
 
       <section className="py-20 bg-navy-950 text-white border-t border-white/10">
         <Container>
@@ -1319,5 +1911,7 @@ export default function HomePage() {
 
       <ContactCta />
     </>
+        </MotionConfig>
+
   );
 }
