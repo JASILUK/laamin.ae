@@ -361,3 +361,19 @@ summary::-webkit-details-marker {
   0%, 55% { opacity: 1; }
   56%, 100% { opacity: 0; }
 }
+
+/* ============================================================
+   SERVICES STACK — STICKY TOP OFFSETS
+   Mobile default: 4rem + 14px per card
+   Desktop >=1024px: 6rem + 26px per card
+   ============================================================ */
+
+.stack-item {
+  top: var(--stack-top);
+}
+
+@media (min-width: 1024px) {
+  .stack-item {
+    top: var(--stack-top-lg);
+  }
+}
