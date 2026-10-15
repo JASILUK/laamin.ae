@@ -298,3 +298,43 @@ summary::-webkit-details-marker {
     transition-duration: 300ms !important;
   }
 }
+
+
+
+/* ============================================================
+   LAAMIN — OPTION 1: CLEAN GRADIENT + ARCHITECTURAL ARCS
+   ============================================================ */
+
+.hero-bg-arcs {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(
+      ellipse at 78% 18%,
+      rgba(43, 163, 214, 0.13) 0%,
+      rgba(43, 163, 214, 0.04) 28%,
+      transparent 52%
+    ),
+    linear-gradient(
+      135deg,
+      #021a33 0%,
+      #042d55 52%,
+      #021a33 100%
+    );
+}
+
+/* Keep decorative SVG linework behind the hero content */
+.hero-bg-arcs > svg {
+  z-index: 0;
+}
+
+/* Avoid accidental horizontal overflow on smaller screens */
+.hero-bg-arcs {
+  overflow: clip;
+}
+
+@supports not (overflow: clip) {
+  .hero-bg-arcs {
+    overflow: hidden;
+  }
+}

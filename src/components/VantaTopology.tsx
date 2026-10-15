@@ -52,8 +52,8 @@ export default function VantaTopology() {
           scaleMobile: 0.8,
 
           // LAAMIN brand colours
-          color: 0x2ba3d6,
-          backgroundColor: 0x021a33,
+          color: 0x124a82,
+backgroundColor: 0x021a33,
         });
       } catch (error) {
         console.error("Vanta Topology initialization failed:", error);
@@ -73,7 +73,6 @@ export default function VantaTopology() {
     <div
       ref={containerRef}
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
-    />
+className="pointer-events-none absolute inset-0 z-0 overflow-hidden"    />
   );
 }

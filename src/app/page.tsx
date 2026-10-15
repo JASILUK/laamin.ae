@@ -11,12 +11,14 @@ import {
   CheckCircle2,
   Globe,
   Briefcase,
+  MapPin,
+  Wallet,
   type LucideIcon,
 } from "lucide-react";
 
 import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion, type Variants } from "framer-motion";
-
+import  {BrandArcs}  from "@/components/brand-arcs";
 /* ============================================================
    DATA & CONFIGURATION (INCLUDING INTERNATIONAL JURISDICTIONS)
    ============================================================ */
@@ -99,12 +101,28 @@ const focusAreas = [
   "Document services",
 ];
 
-const heroFacts = [
-  { label: "Office", value: "City Centre Deira, Dubai" },
-  { label: "Global Reach", value: "UAE, US, SG, KSA, QA, OM, KY, PA" },
-  { label: "Monthly plans", value: "Six plans from AED 800" },
+const heroFacts: {
+  id: string;
+  label: string;
+  value: string;
+  icon: LucideIcon;
+  href?: string;
+}[] = [
+  { id: "office", label: "Office", value: "City Centre Deira, Dubai", icon: MapPin },
+  { id: "reach", label: "Global Reach", value: "UAE, US, SG, KSA, QA, OM, KY, PA", icon: Globe },
+  { id: "plans", label: "Monthly plans", value: "Six plans from AED 800", icon: Wallet, href: "/plans" },
 ];
 
+const reachFlags = [
+  { code: "ae", name: "United Arab Emirates" },
+  { code: "us", name: "United States" },
+  { code: "sg", name: "Singapore" },
+  { code: "sa", name: "Saudi Arabia" },
+  { code: "qa", name: "Qatar" },
+  { code: "om", name: "Oman" },
+  { code: "ky", name: "Cayman Islands" },
+  { code: "pa", name: "Panama" },
+];
 const homeFaqs = [
   {
     q: "Can LAAMIN handle international company formations alongside UAE setup?",
@@ -203,15 +221,6 @@ function ButtonLink({
   );
 }
 
-function BrandArcs({ className = "" }: { className?: string }) {
-  return (
-    <svg className={`pointer-events-none absolute opacity-20 ${className}`} fill="none" viewBox="0 0 800 800" aria-hidden="true">
-      <circle cx="400" cy="400" r="300" stroke="currentColor" strokeWidth="1" strokeDasharray="6 6" />
-      <circle cx="400" cy="400" r="500" stroke="currentColor" strokeWidth="1" />
-      <circle cx="400" cy="400" r="700" stroke="currentColor" strokeWidth="0.5" />
-    </svg>
-  );
-}
 
 function ContactCta() {
   return (
@@ -841,6 +850,101 @@ function HeroServiceDemo() {
 
 
 
+function FlagStack() {
+  const label = reachFlags.map((f) => f.name).join(", ");
+  return (
+    <div className="flex items-center gap-3">
+      <span role="img" aria-label={label} className="flex -space-x-2">
+        {reachFlags.map((flag) => (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            key={flag.code}
+            src={`https://flagcdn.com/w40/${flag.code}.png`}
+            srcSet={`https://flagcdn.com/w80/${flag.code}.png 2x`}
+            alt=""
+            title={flag.name}
+            width={24}
+            height={24}
+            loading="lazy"
+            className="relative size-6 rounded-full object-cover ring-2 ring-navy-900 transition-transform duration-200 hover:z-10 hover:-translate-y-0.5"
+          />
+        ))}
+      </span>
+      <span className="text-sm text-navy-300">{reachFlags.length} countries</span>
+      {/* keeps the original codes for screen readers / SEO */}
+      <span className="sr-only">UAE, US, SG, KSA, QA, OM, KY, PA</span>
+    </div>
+  );
+}
+
+function HeroFactsStrip() {
+  return (
+    <div className="relative border-t border-white/10">
+      <Container>
+        <ul className="grid divide-y divide-white/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+          {heroFacts.map((fact) => {
+            const Icon = fact.icon;
+            return (
+              <li
+                key={fact.id}
+                className="group relative flex items-center gap-4 py-4 sm:px-8 sm:first:pl-0 sm:last:pr-0"
+              >
+                <span
+                  aria-hidden="true"
+                  className="grid size-10 shrink-0 place-items-center rounded-lg border border-white/10 bg-white/[0.04] text-brand-300 transition-colors duration-300 group-hover:border-brand-400/50 group-hover:bg-brand-400/10"
+                >
+                  <Icon className="size-[18px]" strokeWidth={1.75} />
+                </span>
+
+                <div className="min-w-0">
+                  <span className="block text-[11px] font-semibold uppercase tracking-[0.2em] text-brand-400">
+                    {fact.label}
+                  </span>
+
+                  <div className="mt-1 text-sm text-white sm:text-base">
+                    {fact.id === "reach" ? (
+                      <FlagStack />
+                    ) : fact.href ? (
+                      <Link
+                        href={fact.href}
+                        className="inline-flex items-center gap-1.5 after:absolute after:inset-0 hover:text-brand-300"
+                      >
+                        {fact.value}
+                        <ArrowUpRight
+                          aria-hidden="true"
+                          className="size-4 text-navy-300 transition-all duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-brand-300"
+                        />
+                      </Link>
+                    ) : (
+                      fact.value
+                    )}
+                  </div>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </Container>
+    </div>
+  );
+}
+
+
+function HeroCutter() {
+  return (
+    <div aria-hidden="true" className="relative h-8 bg-navy-900 sm:h-14">
+      <svg
+        viewBox="0 0 1440 56"
+        preserveAspectRatio="none"
+        className="absolute inset-x-0 bottom-0 block h-full w-full text-white"
+      >
+        <path d="M0 56 V46 Q720 -14 1440 46 V56 Z" fill="currentColor" />
+      </svg>
+    </div>
+  );
+}
+
+
 
 /* ============================================================
    MAIN HOMEPAGE COMPONENT
@@ -850,6 +954,7 @@ export default function HomePage() {
   return (
     <>
       <section className="relative overflow-hidden bg-navy-900 text-white">
+
         <BrandArcs className="inset-0 size-full text-brand-400/30" />
 
 
@@ -910,22 +1015,10 @@ export default function HomePage() {
           <HeroServiceDemo />
         </Container>
 
-        <div className="relative border-t border-white/10">
-          <Container>
-            <dl className="grid divide-y divide-white/10 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
-              {heroFacts.map((fact) => (
-                <div key={fact.label} className="py-6 sm:px-8 sm:first:pl-0">
-                  <dt className="text-xs font-semibold uppercase tracking-[0.2em] text-brand-400">
-                    {fact.label}
-                  </dt>
-                  <dd className="mt-2 text-base text-white">
-                    {fact.value}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </Container>
-        </div>
+        <HeroFactsStrip />
+        <HeroCutter />
+
+
       </section>
 
       <section className="py-20 lg:py-28 bg-white text-ink">
