@@ -1574,9 +1574,10 @@ function AboutSection() {
             </h2>
 
             {/* small description: revealed letter by letter on scroll */}
+            {/* small description: revealed letter by letter on scroll */}
             <ScrollLetterText
               text={aboutContent.description}
-              className="mt-6 max-w-sm text-base leading-relaxed text-muted"
+              className="mt-6 max-w-sm text-base leading-relaxed text-muted min-h-[6em]"
             />
 
             <DrawLine delay={0.5} className="mt-8 h-0.5 w-16 bg-brand-400" />
@@ -1595,34 +1596,34 @@ function AboutSection() {
               className="min-h-[4.5em] text-lg leading-relaxed text-muted sm:min-h-[3.5em]"
             />
 
-            <motion.ul
-              aria-label="International jurisdictions"
-              variants={pillStage}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: "-60px" }}
-              className="flex flex-wrap gap-2.5"
-            >
-              {aboutCountries.map((country) => (
-                <motion.li
-                  key={country.code}
-                  variants={pillItem}
-                  className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1.5 text-sm font-medium text-navy-900 shadow-sm shadow-navy-900/5"
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={`https://flagcdn.com/w40/${country.code}.png`}
-                    srcSet={`https://flagcdn.com/w80/${country.code}.png 2x`}
-                    alt=""
-                    width={16}
-                    height={16}
-                    loading="lazy"
-                    className="size-4 rounded-full object-cover"
-                  />
-                  {country.name}
-                </motion.li>
-              ))}
-            </motion.ul>
+          <motion.ul
+            aria-label="International jurisdictions"
+            variants={pillStage}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true, margin: "-60px" }}
+            className="grid grid-cols-2 gap-2.5 sm:flex sm:flex-wrap min-h-[8rem] sm:min-h-0"
+          >
+            {aboutCountries.map((country) => (
+              <motion.li
+                key={country.code}
+                variants={pillItem}
+                className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1.5 text-sm font-medium text-navy-900 shadow-sm shadow-navy-900/5"
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`https://flagcdn.com/w40/${country.code}.png`}
+                  srcSet={`https://flagcdn.com/w80/${country.code}.png 2x`}
+                  alt=""
+                  width={16}
+                  height={16}
+                  loading="lazy"
+                  className="size-4 rounded-full object-cover"
+                />
+                {country.name}
+              </motion.li>
+            ))}
+          </motion.ul>
           </div>
         </div>
 
