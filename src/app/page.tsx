@@ -42,6 +42,8 @@ const heroHeadline = {
 };
 const headlineText = `${heroHeadline.lead} ${heroHeadline.accent}`;
 
+
+
 type Service = {
   slug: string;
   title: string;
@@ -58,43 +60,73 @@ const services: Service[] = [
     slug: "business-setup-services",
     title: "Business Setup Services",
     shortTitle: "Business Setup",
-    short: "Complete mainland, freezone, and international corporate structuring across UAE, US, Qatar, Singapore, Saudi, Oman, Cayman & Panama.",
-    summary: "Company formation and licensing support in the UAE and key international jurisdictions.",
+    short:
+      "Start and structure your business with support for company formation and licensing in the UAE and selected international jurisdictions.",
+    summary:
+      "From choosing a suitable business structure to navigating formation and licensing procedures, we help simplify the administrative steps involved in establishing your business.",
     icon: Building2,
-    listLabel: "Jurisdictions",
-    details: ["UAE (Mainland & Freezone)", "US (Delaware / Wyoming LLC)", "Singapore, KSA, Qatar & Oman", "Cayman & Panama Offshore"],
+    listLabel: "Company formation support",
+    details: [
+      "UAE Mainland Company Setup",
+      "UAE Free Zone Company Setup",
+      "US Company Formation",
+      "International Formation in Selected Jurisdictions",
+    ],
   },
   {
     slug: "pro-services",
     title: "PRO Services",
     shortTitle: "PRO Services",
-    short: "Hassle-free government liaison, document attestation, ministry approvals, and regulatory compliance management.",
-    summary: "Support with government liaison, document attestation, ministry approvals and regulatory compliance management.",
+    short:
+      "Practical administrative support for government-related procedures, document attestation, approvals, and business compliance requirements in the UAE.",
+    summary:
+      "We help businesses navigate essential administrative procedures through document coordination, relevant applications, and support with applicable government processes.",
     icon: ShieldCheck,
-    listLabel: "Services include",
-    details: ["Ejari & Tenancy Registration", "Labor & Immigration File", "Notary & Attestation"],
+    listLabel: "PRO support includes",
+    details: [
+      "Labour and Immigration File Support",
+      "Document Attestation and Notary Coordination",
+      "Ejari and Tenancy Registration Assistance",
+      "Applicable Government Approvals",
+    ],
   },
   {
     slug: "visa-processing",
     title: "Visa Processing",
     shortTitle: "Visa Processing",
-    short: "End-to-end residence visas, employment permits, dependent sponsorships, medical fitness, and Emirates ID coordination.",
-    summary: "Support with residence visas, employment permits, dependent sponsorships, medical fitness and Emirates ID coordination.",
+    short:
+      "Visa application assistance for individuals, families, and businesses, including residence, employment, Family Visa, and Golden Visa support.",
+    summary:
+      "We assist with applicable visa procedures and related administrative requirements, helping applicants understand the process and coordinate the necessary documentation.",
     icon: BadgeCheck,
-    listLabel: "Services include",
-    details: ["Entry Permit Issuance", "Medical Fitness Typing", "Emirates ID Biometrics"],
+    listLabel: "Visa assistance includes",
+    details: [
+      "Residence Visa Assistance",
+      "Employment Visa and Permit Coordination",
+      "Family Visa and Dependent Sponsorship",
+      "Golden Visa Application Assistance",
+      "Medical Fitness and Emirates ID Coordination",
+    ],
   },
   {
     slug: "document-clearing",
     title: "Document Clearing",
     shortTitle: "Document Clearing",
-    short: "Paperwork clearance and coordination across UAE federal and local departments.",
-    summary: "Paperwork clearance and coordination with UAE federal and local departments.",
+    short:
+      "Document processing and submission coordination to help individuals and businesses navigate applicable UAE administrative procedures.",
+    summary:
+      "We support the preparation, coordination, and submission of relevant documents for applicable procedures involving UAE government departments and authorities.",
     icon: FileText,
-    listLabel: "Departments covered",
-    details: ["Department of Economy", "Ministry of Foreign Affairs", "Municipal Approvals"],
+    listLabel: "Document coordination includes",
+    details: [
+      "Department of Economy Procedures",
+      "Ministry of Foreign Affairs Attestation",
+      "Municipal Documentation and Approvals",
+      "Government Document Submission Support",
+    ],
   },
 ];
+
 
 const internationalJurisdictions = [
   { country: "United States (US)", type: "Delaware / Wyoming LLC", timeline: "3-5 Days" },
@@ -1100,17 +1132,19 @@ function AboutServicesDivider() {
    ABOUT SECTION
    ============================================================ */
 
-const aboutContent = {
-  eyebrow: "About LAAMIN",
-  headlineLead: "Business Support That",
-  headlineAccent: "Moves You Forward.",
-  description:
-    "Dubai-based corporate support with global reach — setup, PRO, visas and documents handled under one roof.",
-  intro:
-    "LAAMIN BUSINESS SET UP SERVICES L.L.C. is a Dubai-based business support company providing administrative solutions to help businesses manage essential operational requirements. Our services include business setup and licensing, PRO services, visa processing, document clearing, and related employment and company administration support across the UAE.",
-  global:
-    "Beyond the UAE, we also support company formation and business licensing in the United States, Qatar, Singapore, Saudi Arabia, Oman, the Cayman Islands, and Panama.",
-};
+   const aboutContent = {
+    eyebrow: "About LAAMIN",
+    headlineLead: "Business Support That",
+    headlineAccent: "Moves You Forward.",
+    description:
+      "Dubai-based business support for company formation, PRO services, visa processing, and document clearing, with international company formation support.",
+  
+    intro:
+      "LAAMIN BUSINESS SET UP SERVICES L.L.C. is a Dubai-based business support company helping businesses and individuals navigate company formation, licensing, and essential administrative procedures. Our services include business setup and licensing, PRO services, visa processing, document clearing, Family Visa assistance, Golden Visa assistance, and related company administration support across the UAE.",
+  
+    global:
+      "Beyond the UAE, we support company formation and business licensing in the United States, Qatar, Singapore, Saudi Arabia, Oman, the Cayman Islands, and Panama.",
+  };
 
 const aboutCountries = reachFlags.filter((f) => f.code !== "ae");
 
@@ -1766,8 +1800,7 @@ function ServiceEditorialCard({ service, index }: { service: Service; index: num
         <circle cx="160" cy="160" r="105" stroke="currentColor" strokeWidth="1.2" strokeDasharray="1 8" />
       </svg>
 
-      <div className="relative grid items-center gap-8 p-6 sm:p-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 lg:p-12">
-        {/* text column */}
+      <div className="relative grid items-center gap-5 p-5 sm:gap-8 sm:p-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14 lg:p-12">        {/* text column */}
         <motion.div variants={insideStage} className="order-2 lg:order-1">
           <motion.div variants={insideItem} className="flex items-center gap-3">
             <span className="grid size-10 place-items-center rounded-full bg-navy-900 font-display text-sm text-brand-300">
@@ -1780,19 +1813,17 @@ function ServiceEditorialCard({ service, index }: { service: Service; index: num
           </motion.div>
 
           <motion.h3
-            variants={insideItem}
-            className="mt-6 font-display text-3xl leading-[1.1] tracking-tight text-navy-900 sm:text-4xl"
-          >
+  variants={insideItem}
+  className="mt-4 font-display text-2xl leading-[1.1] tracking-tight text-navy-900 sm:mt-6 sm:text-4xl"
+>
             {service.title}
           </motion.h3>
 
-          <motion.p variants={insideItem} className="mt-4 max-w-md text-base leading-relaxed text-muted">
-            {service.short}
+          <motion.p variants={insideItem} className="mt-3 max-w-md text-sm leading-relaxed text-muted sm:mt-4 sm:text-base">            {service.short}
           </motion.p>
 
           {/* detail chips */}
-          <motion.ul variants={insideItem} className="mt-6 flex flex-wrap gap-2">
-            {service.details.slice(0, 3).map((d) => (
+          <motion.ul variants={insideItem} className="mt-4 flex flex-wrap gap-1.5 sm:mt-6 sm:gap-2">            {service.details.slice(0, 3).map((d) => (
               <li
                 key={d}
                 className="inline-flex items-center gap-1.5 rounded-full border border-navy-900/10 bg-white/80 px-3 py-1 text-xs font-medium text-navy-900"
@@ -1803,8 +1834,8 @@ function ServiceEditorialCard({ service, index }: { service: Service; index: num
             ))}
           </motion.ul>
 
-          <motion.div variants={insideItem} className="mt-8">
-            <Link
+          <motion.div variants={insideItem} className="mt-5 sm:mt-8">      
+                  <Link
               href={href}
               className="group/cta inline-flex items-center gap-3 text-sm font-semibold text-navy-900 transition-colors hover:text-brand-700"
             >
@@ -1820,8 +1851,7 @@ function ServiceEditorialCard({ service, index }: { service: Service; index: num
 
         {/* illustration column */}
         <motion.div variants={insideMedia} className="order-1 lg:order-2">
-          <div className="relative aspect-[4/3] w-full max-w-xs overflow-hidden rounded-2xl border border-line/70 bg-gradient-to-br from-mist to-white sm:max-w-sm lg:max-w-none">
-            <div
+        <div className="relative mx-auto aspect-[4/3] w-full max-w-[170px] overflow-hidden rounded-2xl border border-line/70 bg-gradient-to-br from-mist to-white sm:max-w-xs lg:max-w-none">            <div
               aria-hidden="true"
               className="pointer-events-none absolute inset-0"
               style={{
@@ -1849,8 +1879,6 @@ function ServiceEditorialCard({ service, index }: { service: Service; index: num
   );
 }
 
-/* One stack item — sticky stack with soft lift shadow, no overlay.
-   Sticky applies on both mobile and desktop (top offsets defined in globals.css). */
 function StackItem({
   service,
   index,
@@ -1862,23 +1890,21 @@ function StackItem({
   index: number;
   total: number;
   progress: MotionValue<number>;
-  effects: boolean; // desktop && !reduced motion
+  effects: boolean;
 }) {
   const isLast = index === total - 1;
   const start = index / total;
 
-  // Gentle recede — bottom card ends at ~0.94
   const targetScale = isLast ? 1 : 1 - (total - 1 - index) * 0.022;
-
   const scale = useTransform(progress, [start, 1], [1, targetScale]);
 
   return (
     <li
-      className="stack-item sticky mb-6 last:mb-0 sm:mb-8 lg:mb-0 lg:pb-[14vh] lg:last:pb-0"
+    className={`stack-item sticky min-h-[120vh] sm:min-h-[135vh] lg:min-h-[150vh]`}
       style={
         {
-          "--stack-top": `calc(4rem + ${index * 14}px)`,
-          "--stack-top-lg": `calc(6rem + ${index * 26}px)`,
+          "--stack-top": `calc(2rem + ${index * 10}px)`,
+          "--stack-top-lg": `calc(5rem + ${index * 22}px)`,
           top: "var(--stack-top)",
           zIndex: index + 1,
         } as React.CSSProperties
@@ -1906,8 +1932,8 @@ function StickyServicesStack() {
   });
 
   return (
-    <ul ref={ref} className="mt-14 lg:mt-20">
-      {services.map((service, i) => (
+    <ul ref={ref} className="mt-14 -mb-[55vh] sm:-mb-[75vh] lg:-mb-[85vh] lg:mt-20">
+            {services.map((service, i) => (
         <StackItem
           key={service.slug}
           service={service}
@@ -1956,7 +1982,7 @@ function ServicesEditorialSection() {
 
         <StickyServicesStack />
 
-        <Reveal delay={0.1} className="mt-14 flex justify-start">
+        <Reveal delay={0.1} className="relative z-10 mt-30 flex justify-end">
           <ButtonLink href="/services" variant="outline-light">
             All Services
             <ArrowRight aria-hidden="true" className="size-4" />

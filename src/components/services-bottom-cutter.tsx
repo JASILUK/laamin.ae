@@ -12,17 +12,18 @@ export function ServicesBottomCutter({
   return (
     <div
       aria-hidden="true"
-      className={`pointer-events-none relative -mb-px overflow-hidden ${className}`}
+      className={`pointer-events-none relative -mb-px -mt-px overflow-hidden ${className}`}
       style={{ backgroundColor: baseColor }}
     >
       <svg
         viewBox="0 0 1440 120"
         preserveAspectRatio="none"
-        className="absolute inset-0 h-full w-full"
+        shapeRendering="geometricPrecision"
+        className="absolute inset-x-0 -bottom-px h-[calc(100%+2px)] w-full"
         fill="none"
       >
         {/* Diagonal cut: top-left corner → bottom-right corner */}
-        <polygon points="0,0 1440,120 1440,120 0,120" fill={panelColor} />
+        <polygon points="0,0 1440,120 1440,121 0,121" fill={panelColor} />
       </svg>
     </div>
   );
