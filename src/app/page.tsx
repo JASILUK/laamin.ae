@@ -247,10 +247,24 @@ const whyChooseContent = {
    REUSABLE UI COMPONENTS
    ============================================================ */
 
-function Container({ children, className = "" ,style,}: { children: React.ReactNode; className?: string }) {
-  return <div className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 ${className}`}>{children}</div>;
-}
-
+   function Container({
+    children,
+    className = "",
+    style,
+  }: {
+    children: React.ReactNode;
+    className?: string;
+    style?: React.CSSProperties;
+  }) {
+    return (
+      <div
+        className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 ${className}`}
+        style={style}
+      >
+        {children}
+      </div>
+    );
+  }
 function Eyebrow({ children, light = false }: { children: React.ReactNode; light?: boolean }) {
   return (
     <span className={`inline-block text-xs font-semibold uppercase tracking-[0.25em] ${light ? "text-brand-300" : "text-brand-700"}`}>
