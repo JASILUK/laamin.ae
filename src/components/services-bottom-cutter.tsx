@@ -1,30 +1,44 @@
-type ServicesBottomCutterProps = {
-  className?: string;
-  baseColor?: string;
-  panelColor?: string;
-};
+/* ============================================================
+   SERVICES → WHY CHOOSE US DIVIDER
+   Diagonal cut: navy-900 (Services) → white (Why Choose Us).
+   The base is painted in the LOWER section's color (white) and
+   the navy shape is drawn over it, extending past every edge of
+   the box. Both outer seams are therefore same-color on
+   same-color, and only the diagonal is a color change.
+   ============================================================ */
 
-export function ServicesBottomCutter({
-  className = "h-16 sm:h-20 lg:h-24",
-  baseColor = "#042d55",   // navy-900 — matches section above
-  panelColor = "#021a33",  // navy-950 — matches section below
-}: ServicesBottomCutterProps) {
-  return (
-    <div
-      aria-hidden="true"
-      className={`pointer-events-none relative -mb-px -mt-px overflow-hidden ${className}`}
-      style={{ backgroundColor: baseColor }}
-    >
-      <svg
-        viewBox="0 0 1440 120"
-        preserveAspectRatio="none"
-        shapeRendering="geometricPrecision"
-        className="absolute inset-x-0 -bottom-px h-[calc(100%+2px)] w-full"
-        fill="none"
+   type ServicesBottomCutterProps = {
+    className?: string;
+    baseColor?: string;  // navy-900 — Services section above
+    panelColor?: string; // white — Why Choose Us section below
+  };
+  
+  export function ServicesBottomCutter({
+    className = "h-16 sm:h-20 lg:h-24",
+    baseColor = "#042d55",
+    panelColor = "#ffffff",
+  }: ServicesBottomCutterProps) {
+    return (
+      <div
+        aria-hidden="true"
+        className={`pointer-events-none relative -mb-px -mt-px overflow-hidden ${className}`}
+        style={{ backgroundColor: panelColor }}
       >
-        {/* Diagonal cut: top-left corner → bottom-right corner */}
-        <polygon points="0,0 1440,120 1440,121 0,121" fill={panelColor} />
-      </svg>
-    </div>
-  );
-}
+        <svg
+          viewBox="0 0 1440 120"
+          preserveAspectRatio="none"
+          shapeRendering="geometricPrecision"
+          className="absolute inset-0 h-full w-full overflow-visible"
+          fill="none"
+        >
+          {/* Navy triangle above the diagonal (0,0 → 1440,120).
+              Extended 10 units beyond top/left/right on the same slope,
+              so the parent's overflow-hidden clips it cleanly. */}
+          <polygon
+            points="-10,-10 1450,-10 1450,120.83 -10,-0.83"
+            fill={baseColor}
+          />
+        </svg>
+      </div>
+    );
+  }
