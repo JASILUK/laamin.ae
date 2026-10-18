@@ -217,7 +217,7 @@ const whyChooseContent = {
       title: "Dedicated, Personal Support",
       text: "Business requirements can involve multiple documents, procedures, and decisions. We help you understand the relevant requirements and coordinate the administrative steps involved in your requested services.",
       image: {
-        src: "/images/why-laamin/personal-support.png",
+        src: "/images/why-laamin/personal-support.svg",
         alt: "Illustration representing dedicated personal business support",
       },
     },
@@ -226,7 +226,7 @@ const whyChooseContent = {
       title: "Clear Fees. Clear Expectations.",
       text: "We explain our professional service fees and distinguish them from applicable government fees and other third-party charges, helping you understand the costs involved before proceeding.",
       image: {
-        src: "/images/why-laamin/transparent-pricing.png",
+        src: "/images/why-laamin/transparent-pricing.svg",
         alt: "Illustration representing transparent professional fees",
       },
     },
@@ -235,7 +235,7 @@ const whyChooseContent = {
       title: "UAE Knowledge. International Reach.",
       text: "With a focus on UAE business support and assistance with company formation and licensing in selected international jurisdictions, we help businesses explore opportunities across borders.",
       image: {
-        src: "/images/why-laamin/global-reach.png",
+        src: "/images/why-laamin/global-reach.svg",
         alt: "Illustration representing UAE knowledge and international reach",
       },
     },
@@ -2152,7 +2152,6 @@ function ZoomLetterTitle() {
    ============================================================ */
 
 /* ----- backdrop: soft blue gradient blobs with parallax ----- */
-
 function WhyBackdrop() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -2164,8 +2163,8 @@ function WhyBackdrop() {
   const blobB = useTransform(scrollYProgress, [0, 1], [110, -110]);
   const blobC = useTransform(scrollYProgress, [0, 1], [-60, 90]);
   const blobD = useTransform(scrollYProgress, [0, 1], [70, -70]);
-  const rotA = useTransform(scrollYProgress, [0, 1], [0, 25]);
-  const rotB = useTransform(scrollYProgress, [0, 1], [0, -20]);
+  const rotA  = useTransform(scrollYProgress, [0, 1], [0, 25]);
+  const rotB  = useTransform(scrollYProgress, [0, 1], [0, -20]);
 
   return (
     <div
@@ -2173,33 +2172,27 @@ function WhyBackdrop() {
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 overflow-hidden"
     >
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 70% 60% at 50% 40%, rgba(127,203,236,0.10), transparent 70%)",
-        }}
-      />
+      {/* ✅ Removed the base radial gradient <div> here */}
+      
       <motion.div
         style={{ y: blobA, rotate: rotA }}
-        className="absolute -left-48 top-8 size-[520px] rounded-full bg-brand-300/30 blur-[120px] sm:size-[640px]"
+        className="absolute -left-48 top-8 size-[520px] rounded-full bg-brand-300/10 blur-[120px] sm:size-[640px]"
       />
       <motion.div
         style={{ y: blobB, rotate: rotB }}
-        className="absolute -right-52 top-1/4 size-[560px] rounded-full bg-brand-400/20 blur-[140px] sm:size-[720px]"
+        className="absolute -right-52 top-1/4 size-[560px] rounded-full bg-brand-400/10 blur-[140px] sm:size-[720px]"
       />
       <motion.div
         style={{ y: blobC }}
-        className="absolute -bottom-[10%] left-1/4 size-[480px] rounded-full bg-[#a7d6ef]/45 blur-[110px] sm:size-[600px]"
+        className="absolute -bottom-[10%] left-1/4 size-[480px] rounded-full bg-[#a7d6ef]/15 blur-[110px] sm:size-[600px]"
       />
       <motion.div
         style={{ y: blobD }}
-        className="absolute -bottom-40 right-1/4 size-[420px] rounded-full bg-brand-300/25 blur-[120px] sm:size-[520px]"
+        className="absolute -bottom-40 right-1/4 size-[420px] rounded-full bg-brand-300/10 blur-[120px] sm:size-[520px]"
       />
     </div>
   );
 }
-
 /* ----- fallback card (used only when reduce motion is on) ----- */
 
 function WhyCardVisual({
@@ -2587,18 +2580,17 @@ function WhyPinnedStage({ items }: { items: typeof whyChooseContent.items }) {
           justifyContent: "center",
           overflow: "hidden",
           isolation: "isolate",
+          
         }}
       >
         <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            inset: 0,
-            pointerEvents: "none",
-            background:
-              "radial-gradient(ellipse at 15% 25%, rgba(127,203,236,0.22) 0, transparent 38%), radial-gradient(ellipse at 90% 80%, rgba(43,163,214,0.14) 0, transparent 38%)",
-          }}
-        />
+  aria-hidden="true"
+  style={{
+    position: "absolute",
+    inset: 0,
+    pointerEvents: "none",
+      }}
+/>
 
        
 
@@ -2615,39 +2607,35 @@ function WhyPinnedStage({ items }: { items: typeof whyChooseContent.items }) {
         </div>
 
         <div className="relative z-20 mx-auto mt-5 flex w-full max-w-4xl items-center gap-3 text-[9px] font-semibold uppercase tracking-[0.16em] text-muted sm:mt-8 sm:gap-4 sm:text-[11px] sm:tracking-[0.2em]">
-          <span className="hidden shrink-0 sm:inline">Your UAE business partner</span>
-          <span className="relative block h-px flex-1 overflow-hidden bg-navy-900/15">
-            <motion.span
-              style={{ scaleX: barScale }}
-              className="absolute inset-0 block origin-left bg-brand-700"
-            />
-          </span>
-          <span className="shrink-0">Scroll to explore ↓</span>
-        </div>
+  <span className="hidden shrink-0 sm:inline">Your UAE business partner</span>
+  <span className="relative block h-px flex-1 overflow-hidden bg-navy-900/15">
+    <motion.span
+      style={{ scaleX: barScale }}
+      className="absolute inset-0 block origin-left bg-brand-700"
+    />
+  </span>
+  <span className="shrink-0">Scroll to explore ↓</span>
+</div>
       </div>
     </div>
   );
 }
 
-/* ----- section ----- */
-
 function WhyChooseSection() {
-  // ⚠️ TEMP: hardcoded false so the pinned stage ALWAYS renders while
-  // you verify the animation. Swap back to useSafeReducedMotion() after.
   const reduce = false;
   const items = whyChooseContent.items;
 
   return (
     <section
       aria-labelledby="why-heading"
-      className="relative isolate bg-white pt-20 text-ink lg:pt-28"
+      // ✅ Ensure this is bg-[#eaf4fb]
+      className="relative isolate bg-[#eaf4fb] pt-20 text-ink lg:pt-28"
       style={{ overflow: "visible" }}
     >
       <WhyBackdrop />
 
       <Container className="relative" style={{ overflow: "visible" }}>
         <WhyHeader />
-
         {reduce ? (
           <ol className="mx-auto mt-12 max-w-3xl space-y-6 pb-20">
             {items.map((item, index) => (
@@ -2782,49 +2770,55 @@ export default function HomePage() {
 
 <WhyChooseSection />
 
-      <section className="relative overflow-hidden bg-navy-900 py-20 text-white lg:py-28">
-        <BrandArcs className="inset-0 size-full text-brand-400/20" />
+      <section className="relative overflow-hidden bg-white py-20 text-ink lg:py-28">
+  {/* very subtle brand arcs — mostly white, tiny navy opacity */}
+  <BrandArcs className="inset-0 size-full text-brand-400/[0.06]" />
 
-        <Container className="relative">
-          <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
-            <SectionHeading
-              light
-              eyebrow="Monthly plans"
-              title="Six plans for different team sizes"
-              description="Monthly fees cover LAAMIN’s professional service charges. Government and third-party costs are billed separately at actual cost."
-            />
-            <ButtonLink href="/plans" variant="accent" className="self-start lg:self-auto">
-              View All Plans
-              <ArrowRight aria-hidden="true" className="size-4" />
-            </ButtonLink>
-          </div>
+  <Container className="relative">
+    <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+      <SectionHeading
+        eyebrow="Monthly plans"
+        title="Six plans for different team sizes"
+        description="Monthly fees cover LAAMIN’s professional service charges. Government and third-party costs are billed separately at actual cost."
+      />
+      <ButtonLink href="/plans" variant="accent" className="self-start lg:self-auto">
+        View All Plans
+        <ArrowRight aria-hidden="true" className="size-4" />
+      </ButtonLink>
+    </div>
 
-          <ul className="mt-14 grid gap-px border border-white/15 bg-white/15 sm:grid-cols-2 lg:grid-cols-3">
-            {plans.map((plan) => (
-              <li key={plan.id}>
-                <Link
-                  href={`/plans#${plan.id}`}
-                  className="group flex h-full flex-col bg-navy-900 p-7 transition-colors hover:bg-navy-800 sm:p-8"
-                >
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-sm font-semibold uppercase tracking-[0.22em] text-brand-400">
-                      {plan.name} Plan
-                    </h3>
-                    <ArrowUpRight aria-hidden="true" className="size-5 text-navy-300 transition-colors group-hover:text-brand-300" />
-                  </div>
+    {/* grid line removed: no gap-px / no border / no bg-white/15 — clean rounded cards on white */}
+    <ul className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {plans.map((plan) => (
+        <li key={plan.id}>
+          <Link
+            href={`/plans#${plan.id}`}
+            className="group flex h-full flex-col rounded-2xl border border-line bg-white p-7 transition-all duration-300 hover:-translate-y-0.5 hover:border-brand-400/60 hover:shadow-[0_20px_40px_-24px_rgba(2,26,51,0.35)] sm:p-8"
+          >
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-semibold uppercase tracking-[0.22em] text-brand-700">
+                {plan.name} Plan
+              </h3>
+              <ArrowUpRight
+                aria-hidden="true"
+                className="size-5 text-muted transition-colors group-hover:text-brand-700"
+              />
+            </div>
 
-                  <p className="mt-6 font-display text-3xl tracking-tight sm:text-4xl">
-                    AED {plan.price.toLocaleString()}
-                    <span className="ml-1 font-sans text-base text-navy-300">/month</span>
-                  </p>
+            <p className="mt-6 font-display text-3xl tracking-tight text-navy-900 sm:text-4xl">
+              AED {plan.price.toLocaleString()}
+              <span className="ml-1 font-sans text-base text-muted">/month</span>
+            </p>
 
-                  <p className="mt-3 text-sm text-navy-300">Team size: {plan.employees} employees</p>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </Container>
-      </section>
+            <p className="mt-3 text-sm text-muted">
+              Team size: {plan.employees} employees
+            </p>
+          </Link>
+        </li>
+      ))}
+    </ul>
+  </Container>
+</section>
 
       <section className="py-20 lg:py-28 bg-white text-ink">
         <Container>

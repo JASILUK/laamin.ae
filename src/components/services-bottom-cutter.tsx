@@ -16,12 +16,13 @@
   export function ServicesBottomCutter({
     className = "h-16 sm:h-20 lg:h-24",
     baseColor = "#042d55",
-    panelColor = "#ffffff",
+    panelColor = "#eaf4fb", // ice
   }: ServicesBottomCutterProps) {
     return (
       <div
         aria-hidden="true"
-        className={`pointer-events-none relative -mb-px -mt-px overflow-hidden ${className}`}
+        // ✅ Changed from "-mb-px -mt-px" to just "-mt-px"
+        className={`pointer-events-none relative -mt-px overflow-hidden ${className}`}
         style={{ backgroundColor: panelColor }}
       >
         <svg
@@ -31,9 +32,6 @@
           className="absolute inset-0 h-full w-full overflow-visible"
           fill="none"
         >
-          {/* Navy triangle above the diagonal (0,0 → 1440,120).
-              Extended 10 units beyond top/left/right on the same slope,
-              so the parent's overflow-hidden clips it cleanly. */}
           <polygon
             points="-10,-10 1450,-10 1450,120.83 -10,-0.83"
             fill={baseColor}
