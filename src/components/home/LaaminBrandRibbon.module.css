@@ -1,0 +1,118 @@
+/* Scoped styles for LaaminBrandRibbon. Colours come from Tailwind classes in the TSX. */
+
+.divider {
+    --angle: -8deg;
+    --rise: 7vw;
+    --band-h: 48px;
+    --item: 220;
+    --mark-h: 26px;
+    --word-h: 15px;
+    
+    /* 🌟 Smooth, visible speed */
+    --dur: 25s;           
+  
+    position: relative;
+    height: calc(var(--band-h) + (var(--rise) * 2) + 28px);
+    overflow: hidden;
+    pointer-events: none;
+  }
+  
+  @media (min-width: 640px) {
+    .divider {
+      --angle: -6deg;
+      --rise: 5.25vw;
+      --band-h: 58px;
+      --item: 300;
+      --mark-h: 30px;
+      --word-h: 18px;
+      
+      /* 🌟 Smooth, visible speed */
+      --dur: 28s;       
+    }
+  }
+  
+  /* Lower (white) background, cut along the ribbon's diagonal */
+  .lower {
+    position: absolute;
+    inset: 0;
+    clip-path: polygon(
+      0 calc(50% + var(--rise)),
+      100% calc(50% - var(--rise)),
+      100% 100%,
+      0 100%
+    );
+  }
+  
+  .band {
+    position: absolute;
+    left: -10%;
+    width: 120%;
+    top: 50%;
+    height: var(--band-h);
+    overflow: hidden;
+    transform: translateY(-50%) rotate(var(--angle));
+  }
+  
+  .track {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    height: 100%;
+    will-change: transform;
+    animation-name: laamin-ribbon-scroll;
+    animation-duration: var(--dur);
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+  }
+  
+  .group {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+  }
+  
+  .item {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    width: calc(var(--item) * 1px);
+  }
+  
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .mark {
+    height: var(--mark-h);
+    width: auto;
+    flex: 0 0 auto;
+    user-select: none;
+  }
+  
+  .word {
+    height: var(--word-h);
+    width: auto;
+    flex: 0 0 auto;
+    user-select: none;
+  }
+  
+  .sep {
+    flex: 0 0 auto;
+    width: 7px;
+    height: 7px;
+    transform: rotate(45deg);
+  }
+  
+  @keyframes laamin-ribbon-scroll {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(-50%, 0, 0); }
+  }
+  
+  /* 
+    Removed prefers-reduced-motion so the animation always runs 
+    and never freezes on Mac/Windows.
+  */
