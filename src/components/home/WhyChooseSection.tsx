@@ -300,8 +300,9 @@ function WhyScrollDescription({
   const isMobile = useIsMobile();
   const words = text.split(" ");
 
-  // Mobile: paragraph lifts up once, and the text fades in a few words at a
-  // time (opacity only, no blur). Few elements = smooth, but still a reveal.
+  // Mobile: block lifts up once, and the text fades in a few words at a time
+  // (opacity only, no blur). NOTE: the outer <p ref> is the same element on
+  // mobile and desktop, so useInView keeps observing the right node.
   if (isMobile) {
     const chunkSize = 4;
     const chunks: string[] = [];
@@ -310,15 +311,15 @@ function WhyScrollDescription({
     }
     const last = Math.max(chunks.length - 1, 1);
     return (
-      <motion.p
-        ref={ref}
-        className={className}
-        initial={{ opacity: 0, y: 14 }}
-        animate={inView ? { opacity: 1, y: 0 } : undefined}
-        transition={{ duration: 0.5, delay: 0.2, ease: SCENE_EASE }}
-      >
+      <p ref={ref} className={className}>
         <span className="sr-only">{text}</span>
-        <span aria-hidden="true">
+        <motion.span
+          aria-hidden="true"
+          className="block"
+          initial={{ opacity: 0, y: 14 }}
+          animate={inView ? { opacity: 1, y: 0 } : undefined}
+          transition={{ duration: 0.5, delay: 0.2, ease: SCENE_EASE }}
+        >
           {chunks.map((chunk, i) => (
             <motion.span
               key={i}
@@ -333,8 +334,8 @@ function WhyScrollDescription({
               {chunk}{" "}
             </motion.span>
           ))}
-        </span>
-      </motion.p>
+        </motion.span>
+      </p>
     );
   }
 
