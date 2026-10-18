@@ -412,7 +412,7 @@ function WhyPinnedCard({
       className="col-start-1 row-start-1 w-full origin-center will-change-transform"
     >
       <article
-        className={`relative grid h-[min(34rem,72svh)] min-h-[420px] grid-cols-1 grid-rows-[40%_60%] overflow-hidden rounded-3xl border shadow-[0_16px_36px_-22px_rgba(2,26,51,0.45)] md:min-h-[360px] md:grid-cols-2 md:grid-rows-1 ${
+        className={`relative grid h-[min(34rem,72svh)] min-h-[420px] grid-cols-1 grid-rows-[40%_60%] overflow-hidden rounded-3xl border shadow-[0_28px_90px_-30px_rgba(2,26,51,0.55)] md:min-h-[360px] md:grid-cols-2 md:grid-rows-1 ${
           dark
             ? "border-white/10 bg-navy-900 text-white"
             : "border-line bg-gradient-to-br from-white via-white to-[#e3f1fa] text-navy-900"
@@ -521,8 +521,8 @@ function WhyPinnedStage({ items }: { items: typeof whyChooseContent.items }) {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
+          overflow: "hidden",
           isolation: "isolate",
-          // overflow: "hidden" removed: it was clipping the card shadow
         }}
       >
         <div
@@ -568,13 +568,12 @@ export function WhyChooseSection() {
   return (
     <section
       aria-labelledby="why-heading"
-      className="relative isolate bg-[#eaf4fb] pt-20 pb-10 text-ink lg:pt-28 lg:pb-14"
-      // clip (not hidden) stops sideways scroll without breaking position: sticky
-      style={{ overflowX: "clip", overflowY: "visible" }}
+      className="relative isolate bg-[#eaf4fb] pt-20 text-ink lg:pt-28"
+      style={{ overflow: "visible" }}
     >
       <WhyBackdrop />
 
-      <Container className="relative">
+      <Container className="relative" style={{ overflow: "visible" }}>
         <WhyHeader />
         {reduce ? (
           <ol className="mx-auto mt-12 max-w-3xl space-y-6 pb-20">
