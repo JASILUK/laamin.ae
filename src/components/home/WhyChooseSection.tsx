@@ -1,5 +1,5 @@
 "use client";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import Image from "next/image";
 import {
   motion,
@@ -19,6 +19,21 @@ import { Reveal, DrawLine } from "@/components/ui/Reveal";
 import { useSafeReducedMotion } from "@/hooks/useSafeReducedMotion";
 import { SCENE_EASE } from "@/lib/constants";
 import { whyChooseContent } from "@/lib/data";
+
+/* ------------------------------------------------------------------ */
+/* Mobile detection                                                    */
+/* ------------------------------------------------------------------ */
+function useIsMobile(query = "(max-width: 767px)") {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const update = () => setMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, [query]);
+  return mobile;
+}
 
 const whyCardStage: Variants = {
   hidden: {},
@@ -116,16 +131,16 @@ function WhyBackdrop() {
 
   return (
     <div
-    ref={ref}
-    aria-hidden="true"
-    className="pointer-events-none absolute inset-0 overflow-hidden"
-    style={{
-      WebkitMaskImage:
-        "linear-gradient(to bottom, #000 0%, #000 60%, transparent 100%)",
-      maskImage:
-        "linear-gradient(to bottom, #000 0%, #000 60%, transparent 100%)",
-    }}
-  >
+      ref={ref}
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 overflow-hidden"
+      style={{
+        WebkitMaskImage:
+          "linear-gradient(to bottom, #000 0%, #000 60%, transparent 100%)",
+        maskImage:
+          "linear-gradient(to bottom, #000 0%, #000 60%, transparent 100%)",
+      }}
+    >
       <motion.div
         style={{ y: blobA, rotate: rotA }}
         className="absolute -left-48 top-8 size-[520px] rounded-full bg-brand-300/10 blur-[120px] sm:size-[640px]"
@@ -207,14 +222,14 @@ const whyTitleClass =
 function WhyScrollTitle() {
   const ref = useRef<HTMLHeadingElement>(null);
   const inView = useInView(ref, { once: true, margin: "0px 0px -10% 0px" });
-  const show = inView;
+  const isMobile = useIsMobile();
 
   const lines = [
     { text: whyChooseContent.titleLead, className: "block" },
     { text: whyChooseContent.titleAccent, className: "mt-1 block text-brand-700" },
   ];
   const full = lines.map((l) => l.text).join(" ");
-  let charIndex = 0;
+  let index = 0;
 
   return (
     <h2 ref={ref} className={whyTitleClass}>
@@ -222,32 +237,50 @@ function WhyScrollTitle() {
       <span aria-hidden="true">
         {lines.map((line, li) => (
           <span key={li} className={line.className}>
-            {line.text.split(" ").map((word, wi) => (
-              <span
-                key={`${word}-${wi}`}
-                className="mr-[0.26em] inline-block whitespace-nowrap last:mr-0"
-              >
-                {word.split("").map((ch, ci) => {
-                  const delay = 0.1 + charIndex * 0.028;
-                  charIndex += 1;
-                  return (
-                    <motion.span
-                      key={ci}
-                      initial={{ opacity: 0, y: "0.4em", filter: "blur(10px)" }}
-                      animate={
-                        show
-                          ? { opacity: 1, y: "0em", filter: "blur(0px)" }
-                          : { opacity: 0, y: "0.4em", filter: "blur(10px)" }
-                      }
-                      transition={{ duration: 0.7, delay, ease: SCENE_EASE }}
-                      className="inline-block will-change-transform"
-                    >
-                      {ch}
-                    </motion.span>
-                  );
-                })}
-              </span>
-            ))}
+            {line.text.split(" ").map((word, wi) => {
+              if (isMobile) {
+                // One animation per WORD, opacity + transform only (no blur)
+                const delay = 0.05 + index * 0.08;
+                index += 1;
+                return (
+                  <motion.span
+                    key={`${word}-${wi}`}
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={inView ? { opacity: 1, y: 0 } : undefined}
+                    transition={{ duration: 0.5, delay, ease: SCENE_EASE }}
+                    className="mr-[0.26em] inline-block whitespace-nowrap will-change-transform last:mr-0"
+                  >
+                    {word}
+                  </motion.span>
+                );
+              }
+              return (
+                <span
+                  key={`${word}-${wi}`}
+                  className="mr-[0.26em] inline-block whitespace-nowrap last:mr-0"
+                >
+                  {word.split("").map((ch, ci) => {
+                    const delay = 0.1 + index * 0.028;
+                    index += 1;
+                    return (
+                      <motion.span
+                        key={ci}
+                        initial={{ opacity: 0, y: "0.4em", filter: "blur(10px)" }}
+                        animate={
+                          inView
+                            ? { opacity: 1, y: "0em", filter: "blur(0px)" }
+                            : undefined
+                        }
+                        transition={{ duration: 0.7, delay, ease: SCENE_EASE }}
+                        className="inline-block will-change-transform"
+                      >
+                        {ch}
+                      </motion.span>
+                    );
+                  })}
+                </span>
+              );
+            })}
           </span>
         ))}
       </span>
@@ -264,9 +297,49 @@ function WhyScrollDescription({
 }) {
   const ref = useRef<HTMLParagraphElement>(null);
   const inView = useInView(ref, { once: true, margin: "0px 0px -5% 0px" });
-  const show = inView;
+  const isMobile = useIsMobile();
   const words = text.split(" ");
 
+  // Mobile: paragraph lifts up once, and the text fades in a few words at a
+  // time (opacity only, no blur). Few elements = smooth, but still a reveal.
+  if (isMobile) {
+    const chunkSize = 4;
+    const chunks: string[] = [];
+    for (let i = 0; i < words.length; i += chunkSize) {
+      chunks.push(words.slice(i, i + chunkSize).join(" "));
+    }
+    const last = Math.max(chunks.length - 1, 1);
+    return (
+      <motion.p
+        ref={ref}
+        className={className}
+        initial={{ opacity: 0, y: 14 }}
+        animate={inView ? { opacity: 1, y: 0 } : undefined}
+        transition={{ duration: 0.5, delay: 0.2, ease: SCENE_EASE }}
+      >
+        <span className="sr-only">{text}</span>
+        <span aria-hidden="true">
+          {chunks.map((chunk, i) => (
+            <motion.span
+              key={i}
+              initial={{ opacity: 0 }}
+              animate={inView ? { opacity: 1 } : undefined}
+              transition={{
+                duration: 0.5,
+                delay: 0.3 + (i / last) * 0.7,
+                ease: SCENE_EASE,
+              }}
+            >
+              {chunk}{" "}
+            </motion.span>
+          ))}
+        </span>
+      </motion.p>
+    );
+  }
+
+  // Desktop: total stagger is fixed (~0.9s) no matter how long the text is
+  const total = Math.max(words.length - 1, 1);
   return (
     <p ref={ref} className={className}>
       <span className="sr-only">{text}</span>
@@ -275,12 +348,12 @@ function WhyScrollDescription({
           <motion.span
             key={`${word}-${i}`}
             initial={{ opacity: 0, filter: "blur(6px)" }}
-            animate={
-              show
-                ? { opacity: 1, filter: "blur(0px)" }
-                : { opacity: 0, filter: "blur(6px)" }
-            }
-            transition={{ duration: 0.6, delay: 0.5 + i * 0.03, ease: SCENE_EASE }}
+            animate={inView ? { opacity: 1, filter: "blur(0px)" } : undefined}
+            transition={{
+              duration: 0.5,
+              delay: 0.4 + (i / total) * 0.9,
+              ease: SCENE_EASE,
+            }}
             className="mr-[0.26em] inline-block"
           >
             {word}
@@ -306,7 +379,7 @@ function WhyHeader() {
 
       <WhyScrollDescription
         text={whyChooseContent.description}
-        className="mt-6 min-h-[8em] max-w-2xl text-base leading-relaxed text-muted sm:min-h-[6em] sm:text-lg"
+        className="mt-6 max-w-2xl text-base leading-relaxed text-muted sm:text-lg"
       />
 
       <Reveal delay={0.1} className="mt-8">
@@ -342,11 +415,13 @@ function WhyPinnedCard({
   index,
   total,
   progress,
+  isMobile,
 }: {
   item: (typeof whyChooseContent.items)[number];
   index: number;
   total: number;
   progress: MotionValue<number>;
+  isMobile: boolean;
 }) {
   const isFirst = index === 0;
   const isLast = index === total - 1;
@@ -376,10 +451,11 @@ function WhyPinnedCard({
     ([e, x]: number[]) =>
       WHY_FROM_SCALE + e * (1 - WHY_FROM_SCALE) + x * WHY_EXIT_GROW
   );
-  const filter = useTransform(
-    [entrance, exit],
-    ([e, x]: number[]) =>
-      `blur(${((1 - e) * WHY_ENTER_BLUR + x * WHY_EXIT_BLUR).toFixed(2)}px)`
+  // Blur is very expensive on phone GPUs, so skip it on mobile
+  const filter = useTransform([entrance, exit], ([e, x]: number[]) =>
+    isMobile
+      ? "none"
+      : `blur(${((1 - e) * WHY_ENTER_BLUR + x * WHY_EXIT_BLUR).toFixed(2)}px)`
   );
   const visibility = useTransform(alpha, (a) => (a > 0.005 ? "visible" : "hidden"));
   const pointerEvents = useTransform(alpha, (a) => (a > 0.8 ? "auto" : "none"));
@@ -389,9 +465,8 @@ function WhyPinnedCard({
     [reveal, hide],
     ([r, h]: number[]) => 0.92 + r * 0.08 - h * 0.04
   );
-  const contentFilter = useTransform(
-    [reveal, hide],
-    ([r, h]: number[]) => `blur(${((1 - r) * 10 + h * 12).toFixed(2)}px)`
+  const contentFilter = useTransform([reveal, hide], ([r, h]: number[]) =>
+    isMobile ? "none" : `blur(${((1 - r) * 10 + h * 12).toFixed(2)}px)`
   );
   const contentStyle = {
     opacity: contentOpacity,
@@ -444,7 +519,9 @@ function WhyPinnedCard({
             className="relative z-10 h-auto max-h-[78%] w-auto max-w-[62%] object-contain drop-shadow-[0_18px_28px_rgba(2,26,51,0.25)]"
           />
           <span className="absolute bottom-[6%] left-[7%] z-10 text-[9px] font-semibold uppercase tracking-[0.18em] text-navy-800/70">
-            {number} — {item.title.split(" ").slice(0, 2).join(" ")}
+            {number}
+            <span className="hidden md:inline"> —</span>{" "}
+            {item.title.split(" ").slice(0, 2).join(" ")}
           </span>
         </motion.div>
 
@@ -487,16 +564,18 @@ function WhyPinnedCard({
 function WhyPinnedStage({ items }: { items: typeof whyChooseContent.items }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const total = items.length;
+  const isMobile = useIsMobile();
 
   const { scrollYProgress } = useScroll({
     target: trackRef,
     offset: ["start start", "end end"],
   });
 
+  // Stiffer spring so the pinned cards follow the finger without lag
   const progress = useSpring(scrollYProgress, {
-    stiffness: 260,
-    damping: 40,
-    mass: 0.3,
+    stiffness: 400,
+    damping: 50,
+    mass: 0.2,
   });
 
   const barScale = useTransform(progress, [0, 1], [0, 1]);
@@ -508,7 +587,7 @@ function WhyPinnedStage({ items }: { items: typeof whyChooseContent.items }) {
       ref={trackRef}
       style={{
         position: "relative",
-        height: `${(total + 1) * 100}vh`,
+        height: `${(total + 1) * 100}svh`,
         overflow: "visible",
       }}
     >
@@ -516,7 +595,7 @@ function WhyPinnedStage({ items }: { items: typeof whyChooseContent.items }) {
         style={{
           position: "sticky",
           top: 0,
-          height: "100vh",
+          height: "100svh",
           width: "100%",
           display: "flex",
           flexDirection: "column",
@@ -525,15 +604,6 @@ function WhyPinnedStage({ items }: { items: typeof whyChooseContent.items }) {
           isolation: "isolate",
         }}
       >
-        <div
-          aria-hidden="true"
-          style={{
-            position: "absolute",
-            inset: 0,
-            pointerEvents: "none",
-          }}
-        />
-
         <div className="relative z-10 mx-auto grid mt-15 w-full max-w-4xl grid-cols-1 [perspective:1200px]">
           {items.map((item, index) => (
             <WhyPinnedCard
@@ -542,6 +612,7 @@ function WhyPinnedStage({ items }: { items: typeof whyChooseContent.items }) {
               index={index}
               total={total}
               progress={progress}
+              isMobile={isMobile}
             />
           ))}
         </div>
@@ -564,6 +635,7 @@ function WhyPinnedStage({ items }: { items: typeof whyChooseContent.items }) {
 export function WhyChooseSection() {
   const reduce = false;
   const items = whyChooseContent.items;
+  const isMobile = useIsMobile();
 
   return (
     <section
@@ -571,7 +643,8 @@ export function WhyChooseSection() {
       className="relative isolate bg-[#eaf4fb] pt-20 text-ink lg:pt-28"
       style={{ overflow: "visible" }}
     >
-      <WhyBackdrop />
+      {/* Heavy blurred blobs are skipped on phones */}
+      {!isMobile && <WhyBackdrop />}
 
       <Container className="relative" style={{ overflow: "visible" }}>
         <WhyHeader />
