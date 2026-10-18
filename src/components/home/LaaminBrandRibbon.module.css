@@ -31,17 +31,7 @@
     }
   }
   
-  /* Lower (white) background, cut along the ribbon's diagonal */
-  .lower {
-    position: absolute;
-    inset: 0;
-    clip-path: polygon(
-      0 calc(50% + var(--rise)),
-      100% calc(50% - var(--rise)),
-      100% 100%,
-      0 100%
-    );
-  }
+
   
   .band {
     position: absolute;

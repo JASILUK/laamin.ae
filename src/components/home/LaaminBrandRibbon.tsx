@@ -46,16 +46,11 @@ function RibbonGroup({ hidden = false }: { hidden?: boolean }) {
 
 export function LaaminBrandRibbon() {
   return (
-    // 1. Top background is #eaf4fb (matches the WhyChooseSection above it)
-    <div aria-hidden="true" className={`${styles.divider} bg-[#eaf4fb]`}>
-      
-      {/* 2. Bottom background is White (matches the section below it) */}
-      <div className={`${styles.lower} bg-white`} />
-
-      {/* 3. The Ribbon Band is Dark Navy with white text/images */}
-      <div
-        className={`${styles.band} border-y border-brand-400/40 bg-navy-900 shadow-[0_10px_28px_rgba(10,25,47,0.25)]`}
-      >
+    <div
+      aria-hidden="true"
+      className={`${styles.divider} -my-px bg-gradient-to-b from-[#eaf4fb] to-white`}
+    >
+      <div className={`${styles.band} bg-navy-900`}>
         <div className={styles.track}>
           <RibbonGroup />
           <RibbonGroup hidden />

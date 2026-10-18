@@ -23,7 +23,9 @@ export default function HomePage() {
       <ServicesEditorialSection />
       <ServicesBottomCutter />
       <WhyChooseSection />
+
       <LaaminBrandRibbon />
+      
       <PlansSection />
       <ProcessSection />
       <FaqSection />
