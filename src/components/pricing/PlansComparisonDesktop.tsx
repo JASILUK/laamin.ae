@@ -18,7 +18,7 @@ type Props = { plans: Plan[] };
 
 export function PlansComparisonDesktop({ plans }: Props) {
   const usedCategories = ALL_CATEGORIES.filter((cat) =>
-    plans.some((plan) => plan.categories.some((c) => c.title === cat))
+    plans.some((plan) => plan.services.some((c) => c.title === cat))
   );
 
   return (
@@ -61,7 +61,7 @@ export function PlansComparisonDesktop({ plans }: Props) {
                 {category}
               </th>
               {plans.map((plan) => {
-                const cat = plan.categories.find((c) => c.title === category);
+                const cat = plan.services.find((c) => c.title === category);
                 const items = cat?.items ?? [];
                 return (
                   <td
