@@ -5,7 +5,7 @@ import { ContactCta } from "@/components/contact-cta";
 import { Container } from "@/components/container";
 import { FaqList } from "@/components/faq-list";
 import { PageHero } from "@/components/page-hero";
-import { PlanInclusions } from "@/components/plan-inclusions";
+import { PlanInclusions } from "@/components/pricing/plan-inclusions";
 import { PlansComparison } from "@/components/pricing/plans-comparison";
 import { PlansComparisonMobile } from "@/components/pricing/plans-comparison-mobile";
 import { SectionHeading } from "@/components/section-heading";
