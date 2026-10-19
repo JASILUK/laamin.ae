@@ -6,9 +6,16 @@ import { Container } from "@/components/container";
 import { FaqList } from "@/components/faq-list";
 import { PageHero } from "@/components/page-hero";
 import { PlanInclusions } from "@/components/plan-inclusions";
+import { PlansComparison } from "@/components/pricing/plans-comparison";
+import { PlansComparisonMobile } from "@/components/pricing/plans-comparison-mobile";
 import { SectionHeading } from "@/components/section-heading";
 import { planFaqs } from "@/data/faqs";
-import { agreementNotice, formatPrice, plans, pricingNotice } from "@/data/plans";
+import {
+  agreementNotice,
+  formatPrice,
+  plans,
+  pricingNotice,
+} from "@/data/plans";
 
 export const metadata: Metadata = {
   title: "Monthly Business Support Plans",
@@ -47,12 +54,17 @@ export default function PlansPage() {
             </div>
             <ul>
               {plans.map((plan) => (
-                <li key={plan.id} className="border-b border-line last:border-0">
+                <li
+                  key={plan.id}
+                  className="border-b border-line last:border-0"
+                >
                   <a
                     href={`#${plan.id}`}
                     className="group grid grid-cols-2 items-center gap-x-6 gap-y-1 px-6 py-5 transition-colors hover:bg-mist md:grid-cols-[1fr_1fr_1fr_auto] md:px-8"
                   >
-                    <span className="font-display text-2xl text-navy-900">{plan.name}</span>
+                    <span className="font-display text-2xl text-navy-900">
+                      {plan.name}
+                    </span>
                     <span className="row-start-2 text-sm text-muted md:row-start-auto md:text-base md:text-ink">
                       {plan.employees} employees
                     </span>
@@ -73,7 +85,10 @@ export default function PlansPage() {
           </div>
 
           <p className="mt-6 flex gap-3 text-sm leading-relaxed text-muted">
-            <Info aria-hidden="true" className="mt-0.5 size-4 shrink-0 text-brand-700" />
+            <Info
+              aria-hidden="true"
+              className="mt-0.5 size-4 shrink-0 text-brand-700"
+            />
             {agreementNotice}
           </p>
         </Container>
@@ -99,11 +114,19 @@ export default function PlansPage() {
                   </h2>
                   <p className="mt-6 font-display text-4xl tracking-tight">
                     {formatPrice(plan.price)}
-                    <span className="ml-1 font-sans text-base text-navy-300">/month</span>
+                    <span className="ml-1 font-sans text-base text-navy-300">
+                      /month
+                    </span>
                   </p>
                   <p className="mt-5 flex items-center gap-2.5 border-t border-white/15 pt-5 text-sm text-navy-300">
-                    <Users aria-hidden="true" className="size-4 text-brand-400" />
-                    Employee range: <span className="font-semibold text-white">{plan.employees}</span>
+                    <Users
+                      aria-hidden="true"
+                      className="size-4 text-brand-400"
+                    />
+                    Employee range:{" "}
+                    <span className="font-semibold text-white">
+                      {plan.employees}
+                    </span>
                   </p>
                   <ButtonLink
                     href={`/contact?plan=${plan.id}`}
@@ -114,17 +137,44 @@ export default function PlansPage() {
                     Enquire About This Plan
                   </ButtonLink>
                 </div>
-                <p className="mt-5 leading-relaxed text-muted">{plan.summary}</p>
+                <p className="mt-5 leading-relaxed text-muted">
+                  {plan.summary}
+                </p>
               </div>
 
               <div>
                 <h3 className="border-b border-navy-900 pb-4 text-xs font-semibold uppercase tracking-[0.22em] text-navy-900">
                   Services in the {plan.name} Plan
                 </h3>
-                <PlanInclusions planName={plan.name} services={plan.services} />
+                <PlanInclusions
+                  planName={plan.name}
+                  services={plan.services}
+                />
               </div>
             </article>
           ))}
+        </Container>
+      </section>
+
+      {/* Detailed service comparison */}
+      <section className="border-b border-line bg-white py-20 lg:py-28">
+        <Container>
+          <SectionHeading
+            eyebrow="Detailed comparison"
+            title="Compare the services in each plan"
+            description="Service categories are grouped so you can see what each plan covers without opening every plan."
+          />
+          <div className="mt-12">
+            <PlansComparison />
+            <PlansComparisonMobile />
+          </div>
+          <p className="mt-6 flex gap-3 text-sm leading-relaxed text-muted">
+            <Info
+              aria-hidden="true"
+              className="mt-0.5 size-4 shrink-0 text-brand-700"
+            />
+            {agreementNotice}
+          </p>
         </Container>
       </section>
 
@@ -143,7 +193,9 @@ export default function PlansPage() {
             </div>
             <div>
               <p className="text-lg leading-relaxed text-ink">{pricingNotice}</p>
-              <p className="mt-5 leading-relaxed text-muted">{agreementNotice}</p>
+              <p className="mt-5 leading-relaxed text-muted">
+                {agreementNotice}
+              </p>
             </div>
           </div>
         </Container>
