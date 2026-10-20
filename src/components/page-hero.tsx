@@ -11,16 +11,33 @@ export function PageHero({
   description,
   crumbs,
   children,
+  backgroundImage,
 }: {
   title: string;
   description: string;
   crumbs: Crumb[];
   children?: ReactNode;
+  backgroundImage?: string;
 }) {
   return (
-    <section className="relative overflow-hidden bg-navy-900 text-white">
-      <BrandArcs className="inset-0 size-full text-brand-400/25" />
-      <Container className="relative py-16 sm:py-20 lg:py-24">
+    <section data-hero className="relative overflow-hidden bg-navy-900 text-white">
+      {/* Background: Image or BrandArcs */}
+      {backgroundImage ? (
+        <div className="absolute inset-0 z-0">
+          <img
+            src={backgroundImage}
+            alt=""
+            className="h-full w-full object-cover object-center"
+            loading="eager"
+            decoding="async"
+          />
+          <div className="absolute inset-0 bg-navy-900/85" />
+        </div>
+      ) : (
+        <BrandArcs className="inset-0 size-full text-brand-400/25" />
+      )}
+
+      <Container className="relative z-10 py-16 sm:py-20 lg:py-24">
         <nav aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] text-navy-300">
             <li>

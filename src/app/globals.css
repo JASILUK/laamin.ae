@@ -377,3 +377,63 @@ summary::-webkit-details-marker {
     top: var(--stack-top-lg);
   }
 }
+
+
+/* ============================================================
+   CLIENT REVIEWS — HORIZONTAL MARQUEE
+   Paste at the end of globals.css
+   ============================================================ */
+
+/* Edges fade out into the page background (white) */
+.reviews-mask {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 10%,
+    #000 90%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 10%,
+    #000 90%,
+    transparent 100%
+  );
+}
+
+.reviews-track {
+  display: flex;
+  width: max-content;
+  animation-duration: var(--reviews-dur, 70s);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+/* Row 1: right → left */
+.reviews-track-left {
+  animation-name: reviews-scroll-left;
+}
+
+/* Row 2: left → right */
+.reviews-track-right {
+  animation-name: reviews-scroll-right;
+}
+
+@keyframes reviews-scroll-left {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+@keyframes reviews-scroll-right {
+  from { transform: translate3d(-50%, 0, 0); }
+  to   { transform: translate3d(0, 0, 0); }
+}
+
+/* Reduced motion: keep it moving, just 3x slower (never frozen) */
+@media (prefers-reduced-motion: reduce) {
+  .reviews-track {
+    animation-duration: calc(var(--reviews-dur, 70s) * 3);
+  }
+}

@@ -143,7 +143,10 @@ export function EnquiryForm() {
 
   if (status === "success") {
     return (
-      <div role="status" className="border border-line bg-white p-8 sm:p-10">
+      <div
+        role="status"
+        className="rounded-3xl border border-line bg-white p-8 shadow-[0_24px_70px_-45px_rgba(4,45,85,0.55)] sm:p-10"
+      >
         <CircleCheck aria-hidden="true" className="size-10 text-emerald-700" />
         <h3 className="mt-5 font-display text-3xl text-navy-900">Thank you — enquiry sent</h3>
         <p className="mt-3 max-w-md leading-relaxed text-muted">
@@ -162,7 +165,11 @@ export function EnquiryForm() {
   }
 
   return (
-    <form noValidate onSubmit={handleSubmit} className="border border-line bg-white p-6 sm:p-10">
+    <form
+      noValidate
+      onSubmit={handleSubmit}
+      className="relative overflow-hidden rounded-3xl border border-line bg-white p-6 shadow-[0_24px_70px_-45px_rgba(4,45,85,0.55)] sm:p-8"
+    >
       <div className="grid gap-6 sm:grid-cols-2">
         <Field id="enquiry-fullName" label="Full name" error={errors.fullName}>
           <input
@@ -287,14 +294,20 @@ export function EnquiryForm() {
             />
             <label htmlFor="enquiry-privacy" className="text-sm leading-relaxed text-muted">
               I have read the{" "}
-              <Link href="/privacy-policy" className="font-semibold text-navy-900 underline underline-offset-4">
+              <Link
+                href="/privacy-policy"
+                className="font-semibold text-navy-900 underline underline-offset-4"
+              >
                 Privacy Policy
               </Link>{" "}
               and agree to LAAMIN using these details to respond to my enquiry.
             </label>
           </div>
           {errors.privacy && (
-            <p id="enquiry-privacy-error" className="mt-2 flex items-center gap-1.5 text-sm text-red-700">
+            <p
+              id="enquiry-privacy-error"
+              className="mt-2 flex items-center gap-1.5 text-sm text-red-700"
+            >
               <CircleAlert aria-hidden="true" className="size-4 shrink-0" />
               {errors.privacy}
             </p>
@@ -303,7 +316,10 @@ export function EnquiryForm() {
       </div>
 
       {status === "error" && (
-        <p role="alert" className="mt-6 flex gap-3 border border-red-200 bg-red-50 p-4 text-sm leading-relaxed text-red-800">
+        <p
+          role="alert"
+          className="mt-6 flex gap-3 border border-red-200 bg-red-50 p-4 text-sm leading-relaxed text-red-800"
+        >
           <CircleAlert aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
           {submitError}
         </p>
