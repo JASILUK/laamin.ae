@@ -101,7 +101,9 @@ export default function ContactPage() {
         title="Let's talk about your business."
         description="Tell us about your requirements. We will discuss the appropriate service or plan and confirm the scope and fees with you."
         crumbs={[{ label: "Contact" }]}
-        backgroundImage="/images/contactcta/contactctabg.jpg"
+        backgroundImage="/images/contact/contact-hero.jpg"
+        overlay="light"
+
       >
         <div className="mt-6 flex flex-wrap items-center gap-3">
           <a

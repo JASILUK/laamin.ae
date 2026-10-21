@@ -138,6 +138,8 @@ export function AboutPageContent() {
           description="A Dubai-based business support and administrative services provider, working with companies in Dubai and across the UAE."
           crumbs={[{ label: "About" }]}
           backgroundImage="/images/contactcta/contactctabg.jpg"
+          overlay="light"
+
         >
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
             <ButtonLink

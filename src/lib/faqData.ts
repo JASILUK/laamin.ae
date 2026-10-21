@@ -250,6 +250,51 @@ export type FAQItem = {
       ],
     },
   
+    services: {
+      eyebrow: "SERVICES FAQS",
+      heading: "Choosing the Right Service",
+      description:
+        "Answers to common questions about how LAAMIN's business setup, PRO, visa and document services work.",
+      items: [
+        {
+          id: "services-overview",
+          question: "Which services does LAAMIN offer?",
+          answer:
+            "LAAMIN coordinates business setup and company formation, PRO and government services, visa and immigration support, and document clearing and attestation for businesses and individuals in Dubai and across the UAE.",
+        },
+        {
+          id: "services-individual",
+          question: "Can I request a single service without a monthly plan?",
+          answer:
+            "Yes. Services can be requested individually or through an applicable monthly plan. The scope, professional fees, and any government or third-party charges are confirmed before engagement.",
+        },
+        {
+          id: "services-not-sure",
+          question: "What if I'm not sure which service I need?",
+          answer:
+            "Tell us about your requirements and we will review your enquiry, then clarify the relevant service options, scope, and fees before proceeding.",
+        },
+        {
+          id: "services-fees",
+          question: "Are government fees included in the service fee?",
+          answer:
+            "No. Professional fees cover LAAMIN's service. Government charges, third-party costs, and applicable VAT are separate and confirmed in advance.",
+        },
+        {
+          id: "services-guarantee",
+          question: "Does LAAMIN guarantee approvals or processing times?",
+          answer:
+            "No. Approvals and processing times are determined by the relevant authorities. We coordinate documentation, submissions, and follow-ups on your behalf.",
+        },
+        {
+          id: "services-specialist",
+          question: "Do you handle Family Visa and Golden Visa enquiries?",
+          answer:
+            "Yes, subject to review of each case. Both have dedicated pages under Visa & Immigration, and availability is confirmed after we review your enquiry.",
+        },
+      ],
+    },
+
     plans: {
       eyebrow: "MONTHLY PLANS FAQS",
       heading: "Choosing the Right Service Plan",
@@ -390,6 +435,7 @@ export type FAQItem = {
     "pro-services",
     "visa-processing",
     "document-clearing",
+    "services",
     "plans",
     "about",
     "contact",

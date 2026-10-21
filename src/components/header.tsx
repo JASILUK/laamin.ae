@@ -15,6 +15,7 @@ const REDUCED_MOTION_THRESHOLD = 24;
 export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [overlay, setOverlay] = useState(false); // true when the page hero has a background image
   const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -29,6 +30,9 @@ export function Header() {
   useEffect(() => {
     const el = headerRef.current;
     if (!el) return;
+
+    // Detect whether the current page hero sits behind the navbar
+    setOverlay(!!document.querySelector("[data-hero-overlay]"));
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let frame = 0;
@@ -85,14 +89,18 @@ export function Header() {
 
   return (
     <>
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-[5.25rem] bg-navy-900"
-      />
+      {!overlay && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 h-[5.25rem] bg-navy-900"
+        />
+      )}
 
       <header
         ref={headerRef}
-        className="pointer-events-none sticky top-0 z-50 h-[5.25rem] [--p:0]"
+        className={`pointer-events-none sticky top-0 z-50 h-[5.25rem] [--p:0] ${
+          overlay ? "-mb-[5.25rem]" : ""
+        }`}
       >
         <div className="h-full px-[calc(var(--p)*0.75rem)] pt-3 sm:px-[calc(var(--p)*1.5rem)]">
           <div
@@ -107,7 +115,13 @@ export function Header() {
             <div
               aria-hidden="true"
               className="absolute inset-0 -z-10 rounded-[inherit] bg-navy-900 backdrop-blur-lg"
-              style={{ opacity: "calc(1 - var(--p) * 0.15)" }}
+              style={{
+                opacity: open
+                  ? 1
+                  : overlay
+                    ? "calc(var(--p) * 0.92)"
+                    : "calc(1 - var(--p) * 0.15)",
+              }}
             />
 
             <div

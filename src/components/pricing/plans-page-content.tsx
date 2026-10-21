@@ -136,7 +136,9 @@ export function PlansPageContent() {
         title="Monthly Business Support Plans"
         description="Six service levels for businesses at different stages — from straightforward employment and visa support to full administrative coordination."
         crumbs={[{ label: "Monthly Plans" }]}
-        backgroundImage="/images/contactcta/contactctabg.jpg"
+        backgroundImage="/images/plan/hero.jpg"
+        overlay="light"
+
       >
         <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
           <ButtonLink
