@@ -23,41 +23,45 @@ export function PageHero({
 }) {
   return (
     <section
-  data-hero
-  data-hero-overlay={backgroundImage ? "" : undefined}
-  className="relative overflow-hidden bg-navy-900 text-white"
->
-  {backgroundImage ? (
-    <div className="absolute inset-0 z-0">
-      <img
-        src={backgroundImage}
-        alt=""
-        className="h-full w-full object-cover object-center"
-        loading="eager"
-        decoding="async"
-      />
-      {overlay === "light" ? (
-        <>
-          <div className="absolute inset-0 bg-gradient-to-r from-navy-900/80 via-navy-900/55 to-navy-900/25" />
-          <div className="absolute inset-0 bg-gradient-to-t from-navy-900/50 via-transparent to-transparent" />
-        </>
+      data-hero
+      data-hero-overlay={backgroundImage ? "" : undefined}
+      className={`relative flex flex-col justify-center overflow-hidden bg-navy-900 text-white ${
+        backgroundImage
+          ? "min-h-[calc(26rem_+_5.25rem)] sm:min-h-[calc(30rem_+_5.25rem)] lg:min-h-[calc(34rem_+_5.25rem)]"
+          : "min-h-[26rem] sm:min-h-[30rem] lg:min-h-[34rem]"
+      }`}
+    >
+      {backgroundImage ? (
+        <div className="absolute inset-0 z-0">
+          <img
+            src={backgroundImage}
+            alt=""
+            className="h-full w-full object-cover object-center"
+            loading="eager"
+            decoding="async"
+          />
+          {overlay === "light" ? (
+            <>
+              <div className="absolute inset-0 bg-gradient-to-r from-navy-900/80 via-navy-900/55 to-navy-900/25" />
+              <div className="absolute inset-0 bg-gradient-to-t from-navy-900/50 via-transparent to-transparent" />
+            </>
+          ) : (
+            <div className="absolute inset-0 bg-navy-900/85" />
+          )}
+          {/* Keeps nav links readable over a bright image */}
+          <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-navy-900/70 to-transparent" />
+        </div>
       ) : (
-        <div className="absolute inset-0 bg-navy-900/85" />
+        <BrandArcs className="inset-0 size-full text-brand-400/25" />
       )}
-      {/* Keeps nav links readable over a bright image */}
-      <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-navy-900/70 to-transparent" />
-    </div>
-  ) : (
-    <BrandArcs className="inset-0 size-full text-brand-400/25" />
-  )}
 
-  <Container
-    className={`relative z-10 ${
-      backgroundImage
-        ? "pb-16 pt-[9.25rem] sm:pb-20 sm:pt-[10.25rem] lg:pb-24 lg:pt-[11.25rem]"
-        : "py-16 sm:py-20 lg:py-24"
-    }`}
-  >
+      <Container
+        className={`relative z-10 w-full ${
+          backgroundImage
+            ? "pb-16 pt-[9.25rem] sm:pb-20 sm:pt-[10.25rem] lg:pb-24 lg:pt-[11.25rem]"
+            : "py-16 sm:py-20 lg:py-24"
+        }`}
+      >
         <nav aria-label="Breadcrumb">
           <ol className="flex flex-wrap items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] text-navy-300">
             <li>

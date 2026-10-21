@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
+import Image from "next/image";
 
 import { BrandArcs } from "@/components/brand-arcs";
 import { Container } from "@/components/ui/Container";
@@ -725,10 +726,35 @@ function HeroCutter() {
 
 export function HeroSection() {
   return (
-    <section className="relative overflow-hidden bg-navy-900 text-white">
+    <section
+      data-hero
+      data-hero-overlay=""
+      className="relative overflow-hidden bg-navy-900 text-white"
+    >
+      {/* Photo + light overlay (same treatment as the inner page heroes) */}
+      <div aria-hidden="true" className="absolute inset-0 z-0">
+        <img
+          src="/images/hero/home-hero.jpg"
+          alt=""
+          loading="eager"
+          decoding="async"
+          className="h-full w-full object-cover object-center"
+          onError={(e) => {
+            e.currentTarget.style.display = "none";
+          }}
+        />
+        {/* Text side stays readable, right side lets the photo show */}
+        <div className="absolute inset-0 bg-gradient-to-r from-navy-900/85 via-navy-900/60 to-navy-900/35" />
+        {/* Darkens the bottom so the facts strip and HeroCutter blend cleanly */}
+        <div className="absolute inset-0 bg-gradient-to-t from-navy-900 via-navy-900/30 to-transparent" />
+        {/* Keeps nav links readable over a bright photo */}
+        <div className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-navy-900/70 to-transparent" />
+      </div>
+
+      {/* Brand arc line work on top of the photo */}
       <BrandArcs className="inset-0 size-full text-brand-400/30" />
 
-      <Container className="relative grid items-start gap-10 pb-14 pt-8 sm:pt-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12 lg:pb-20 lg:pt-12">
+      <Container className="relative grid items-start gap-10 pb-14 pt-[7.25rem] sm:pt-[7.75rem] lg:grid-cols-[1.05fr_0.95fr] lg:gap-12 lg:pb-20 lg:pt-[8.25rem]">
         <div>
           <div className="reveal-mask">
             <div className="hero-reveal hero-reveal-1">

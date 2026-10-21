@@ -29,7 +29,7 @@ const fieldOrder: (keyof EnquiryInput)[] = [
 ];
 
 const inputClass =
-  "mt-2 block w-full rounded-sm border bg-white px-4 py-3 text-base text-ink transition-colors placeholder:text-muted/60 focus:border-navy-900";
+  "mt-1.5 block w-full rounded-lg border bg-white px-3.5 py-2.5 text-base text-ink transition-colors placeholder:text-muted/60 focus:border-navy-900 sm:text-sm";
 
 const fallbackError = `We could not send your enquiry. Please try again, or contact us on ${site.phones[0].display} or ${site.email}.`;
 
@@ -48,14 +48,14 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="text-sm font-semibold text-navy-900">
+      <label htmlFor={id} className="text-[13px] font-semibold text-navy-900">
         {label}
         {optional && <span className="ml-1.5 font-normal text-muted">(optional)</span>}
       </label>
       {children}
       {error && (
-        <p id={`${id}-error`} className="mt-2 flex items-center gap-1.5 text-sm text-red-700">
-          <CircleAlert aria-hidden="true" className="size-4 shrink-0" />
+        <p id={`${id}-error`} className="mt-1.5 flex items-center gap-1.5 text-xs text-red-700">
+          <CircleAlert aria-hidden="true" className="size-3.5 shrink-0" />
           {error}
         </p>
       )}
@@ -145,10 +145,12 @@ export function EnquiryForm() {
     return (
       <div
         role="status"
-        className="rounded-3xl border border-line bg-white p-8 shadow-[0_24px_70px_-45px_rgba(4,45,85,0.55)] sm:p-10"
+        className="rounded-3xl border border-line bg-white p-7 shadow-[0_24px_70px_-45px_rgba(4,45,85,0.55)] sm:p-9"
       >
         <CircleCheck aria-hidden="true" className="size-10 text-emerald-700" />
-        <h3 className="mt-5 font-display text-3xl text-navy-900">Thank you — enquiry sent</h3>
+        <h3 className="mt-4 font-display text-2xl text-navy-900 sm:text-3xl">
+          Thank you — enquiry sent
+        </h3>
         <p className="mt-3 max-w-md leading-relaxed text-muted">
           Your enquiry has been delivered to the LAAMIN team. We will reply using the contact
           details you provided.
@@ -156,7 +158,7 @@ export function EnquiryForm() {
         <button
           type="button"
           onClick={() => setStatus("idle")}
-          className={buttonClasses("outline", "mt-8")}
+          className={buttonClasses("outline", "mt-6")}
         >
           Send another enquiry
         </button>
@@ -168,9 +170,9 @@ export function EnquiryForm() {
     <form
       noValidate
       onSubmit={handleSubmit}
-      className="relative overflow-hidden rounded-3xl border border-line bg-white p-6 shadow-[0_24px_70px_-45px_rgba(4,45,85,0.55)] sm:p-8"
+      className="relative overflow-hidden rounded-3xl border border-line bg-white p-5 shadow-[0_24px_70px_-45px_rgba(4,45,85,0.55)] sm:p-6 lg:p-7"
     >
-      <div className="grid gap-6 sm:grid-cols-2">
+      <div className="grid gap-x-4 gap-y-3.5 sm:grid-cols-2">
         <Field id="enquiry-fullName" label="Full name" error={errors.fullName}>
           <input
             {...fieldProps("fullName")}
@@ -255,16 +257,16 @@ export function EnquiryForm() {
             <textarea
               {...fieldProps("message")}
               required
-              rows={5}
+              rows={3}
               maxLength={3000}
               value={values.message}
               onChange={(event) => update("message", event.target.value)}
-              className={`${inputClass} ${borderFor("message")} resize-y`}
+              className={`${inputClass} ${borderFor("message")} resize-none`}
             />
           </Field>
-          <p className="mt-2 text-sm text-muted">
+          <p className="mt-1.5 text-xs leading-snug text-muted">
             Please do not include passport copies, Emirates ID details or other sensitive identity
-            documents in this form.
+            documents.
           </p>
         </div>
 
@@ -290,9 +292,9 @@ export function EnquiryForm() {
               required
               checked={values.privacy}
               onChange={(event) => update("privacy", event.target.checked)}
-              className="mt-1 size-4 shrink-0 accent-navy-900"
+              className="mt-0.5 size-4 shrink-0 accent-navy-900"
             />
-            <label htmlFor="enquiry-privacy" className="text-sm leading-relaxed text-muted">
+            <label htmlFor="enquiry-privacy" className="text-xs leading-relaxed text-muted sm:text-[13px]">
               I have read the{" "}
               <Link
                 href="/privacy-policy"
@@ -306,9 +308,9 @@ export function EnquiryForm() {
           {errors.privacy && (
             <p
               id="enquiry-privacy-error"
-              className="mt-2 flex items-center gap-1.5 text-sm text-red-700"
+              className="mt-1.5 flex items-center gap-1.5 text-xs text-red-700"
             >
-              <CircleAlert aria-hidden="true" className="size-4 shrink-0" />
+              <CircleAlert aria-hidden="true" className="size-3.5 shrink-0" />
               {errors.privacy}
             </p>
           )}
@@ -318,7 +320,7 @@ export function EnquiryForm() {
       {status === "error" && (
         <p
           role="alert"
-          className="mt-6 flex gap-3 border border-red-200 bg-red-50 p-4 text-sm leading-relaxed text-red-800"
+          className="mt-4 flex gap-3 rounded-lg border border-red-200 bg-red-50 p-3 text-sm leading-relaxed text-red-800"
         >
           <CircleAlert aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
           {submitError}
@@ -328,7 +330,7 @@ export function EnquiryForm() {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className={buttonClasses("navy", "mt-8 w-full sm:w-auto")}
+        className={buttonClasses("navy", "mt-5 w-full sm:w-auto")}
       >
         {status === "submitting" ? (
           <>

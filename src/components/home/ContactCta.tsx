@@ -75,14 +75,15 @@ function LetterReveal({
    ------------------------------------------------------------------ */
 export function ContactCta() {
   return (
-    // Base fallback is bg-navy-950, just in case the image is loading.
-    <section className="relative overflow-hidden bg-navy-950 pt-48 pb-24 text-white sm:pt-64 sm:pb-32 lg:pt-[22rem]">
+    // FIXED: Added z-10 to force this section on top of previous wrappers.
+    // FIXED: Changed mobile overlap to -mt-4 to hide the line completely.
+    <section className="relative z-10 -mt-4 overflow-hidden bg-navy-950 pt-48 pb-24 text-white sm:-mt-px sm:pt-64 sm:pb-32 lg:pt-[22rem]">
       {/* ================= BACKGROUND IMAGE & OVERLAYS ================= */}
       <div className="absolute inset-0 z-0">
         <img
           src="/images/contactcta/contactctabg.jpg"
           alt="UAE Business Background"
-          className="h-full w-full object-cover object-center"
+          className="h-full w-full border-0 object-cover object-center"
           loading="lazy"
           decoding="async"
         />
@@ -95,9 +96,9 @@ export function ContactCta() {
       </div>
 
       {/* 🌟 FOG SPREAD TRANSITION 🌟 */}
-      {/* This sits over the image to blend the white FAQ section into the dark section */}
+      {/* This sits over the image to blend the section above into the dark section */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 z-10">
-        <div className="absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-white via-white/90 via-15% to-transparent sm:h-96 lg:h-[450px]" />
+        <div className="absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-white via-white/90 to-transparent sm:h-96 lg:h-[450px]" />
         <div className="absolute inset-x-0 top-0 h-40 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.9)_0%,transparent_80%)] blur-2xl sm:h-64 lg:h-80" />
       </div>
 
