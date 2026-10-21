@@ -1,0 +1,334 @@
+/* ============================================================
+   LAAMIN LOADER
+   Timeline (ms):
+     0     background settles, bouncing square appears
+     0-1000  square bounces twice (Uiverse-style loader)
+     1000  square shrinks away
+     1050  logo mark wipes up
+     1500  wordmark slides up from behind a mask
+     1900  divider draws out
+     2000  tagline fades in
+     3000+ curtain lifts (once the page is truly ready)
+   ============================================================ */
+
+   .laamin-loader {
+    --loader-bg-center: var(--color-navy-800, #0a3b6c);
+    --loader-bg-mid: var(--color-navy-900, #042d55);
+    --loader-bg-edge: var(--color-navy-950, #021a33);
+    --loader-accent: #5fd3fb; /* matches the logo mark cyan */
+  
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    color: #fff;
+    background: radial-gradient(
+      ellipse 90% 80% at 50% 42%,
+      var(--loader-bg-center) 0%,
+      var(--loader-bg-mid) 52%,
+      var(--loader-bg-edge) 100%
+    );
+    clip-path: inset(0 0 0 0);
+    transition: clip-path 900ms cubic-bezier(0.76, 0, 0.24, 1);
+  
+    /* Failsafe: if JavaScript never runs, the loader still leaves. */
+    animation: laamin-failsafe 1ms linear 8s forwards;
+  }
+  
+  /* Curtain lifts: the bottom edge rises, revealing the page from below */
+  .laamin-loader.is-exiting {
+    clip-path: inset(0 0 100% 0);
+    pointer-events: none;
+  }
+  
+  .laamin-loader.is-exiting .laamin-loader__content {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+  
+  /* Soft cyan glow behind the logo */
+  .laamin-loader::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 44%;
+    width: min(120vw, 720px);
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(
+      circle,
+      rgb(95 211 251 / 14%) 0%,
+      transparent 62%
+    );
+    opacity: 0;
+    pointer-events: none;
+    animation: laamin-glow 1400ms ease-out 900ms forwards;
+  }
+  
+  .laamin-loader__content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: min(86vw, 420px);
+    text-align: center;
+    transition:
+      opacity 380ms ease,
+      transform 380ms ease;
+  }
+  
+  /* ---------- Symbol area (bouncer + mark share the same box) ---------- */
+  
+  .laamin-loader__symbol {
+    position: relative;
+    width: clamp(72px, 12vw, 96px);
+    /* crop the empty space above the diamond in logo-mark.png */
+    aspect-ratio: 340 / 440;
+  }
+  
+  /* ---------- Bouncing square (from the reference loader) ---------- */
+  
+  .laamin-loader__bouncer {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 34px;
+    height: 34px;
+    margin: -26px 0 0 -17px;
+    opacity: 0;
+    animation:
+      laamin-bouncer-in 200ms ease-out forwards,
+      laamin-bouncer-out 320ms cubic-bezier(0.5, 0, 0.75, 0) 1000ms forwards;
+  }
+  
+  .laamin-loader__bouncer::before {
+    /* ground shadow */
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 46px;
+    width: 100%;
+    height: 4px;
+    border-radius: 50%;
+    background: rgb(95 211 251 / 32%);
+    animation: laamin-shadow 500ms linear 2;
+  }
+  
+  .laamin-loader__bouncer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 4px;
+    background: var(--loader-accent);
+    animation: laamin-jump 500ms linear 2;
+  }
+  
+  @keyframes laamin-jump {
+    15% {
+      border-bottom-right-radius: 3px;
+    }
+    25% {
+      transform: translateY(8px) rotate(22.5deg);
+    }
+    50% {
+      transform: translateY(16px) scale(1, 0.9) rotate(45deg);
+      border-bottom-right-radius: 40px;
+    }
+    75% {
+      transform: translateY(8px) rotate(67.5deg);
+    }
+    100% {
+      transform: translateY(0) rotate(90deg);
+    }
+  }
+  
+  @keyframes laamin-shadow {
+    0%,
+    100% {
+      transform: scale(1, 1);
+    }
+    50% {
+      transform: scale(1.2, 1);
+    }
+  }
+  
+  @keyframes laamin-bouncer-in {
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes laamin-bouncer-out {
+    from {
+      opacity: 1;
+      transform: scale(1);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.2);
+    }
+  }
+  
+  /* ---------- Logo mark: wipes up from the bottom ---------- */
+  
+  .laamin-loader__mark {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: bottom;
+    user-select: none;
+    clip-path: inset(100% 0 0 0);
+    transform: translateY(10px) scale(0.96);
+    animation: laamin-mark-reveal 800ms cubic-bezier(0.16, 1, 0.3, 1) 1050ms
+      forwards;
+  }
+  
+  @keyframes laamin-mark-reveal {
+    to {
+      clip-path: inset(0 0 0 0);
+      transform: translateY(0) scale(1);
+    }
+  }
+  
+  /* ---------- Wordmark: slides up from behind a mask ---------- */
+  
+  .laamin-loader__wordmark {
+    width: min(80vw, 300px);
+    margin-top: 22px;
+    overflow: hidden;
+  }
+  
+  .laamin-loader__wordmark img {
+    display: block;
+    width: 100%;
+    height: auto;
+    user-select: none;
+    transform: translateY(110%);
+    animation: laamin-wordmark-rise 750ms cubic-bezier(0.16, 1, 0.3, 1) 1500ms
+      forwards;
+  }
+  
+  @keyframes laamin-wordmark-rise {
+    to {
+      transform: translateY(0);
+    }
+  }
+  
+  /* ---------- Divider + tagline ---------- */
+  
+  .laamin-loader__divider {
+    display: block;
+    width: 0;
+    height: 1px;
+    margin-top: 20px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--loader-accent),
+      rgb(255 255 255 / 70%),
+      var(--loader-accent),
+      transparent
+    );
+    animation: laamin-divider 600ms ease-out 1900ms forwards;
+  }
+  
+  @keyframes laamin-divider {
+    to {
+      width: 100%;
+    }
+  }
+  
+  .laamin-loader__tagline {
+    margin: 14px 0 0;
+    font-size: clamp(10px, 2.5vw, 12px);
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    line-height: 1.7;
+    text-transform: uppercase;
+    color: rgb(255 255 255 / 78%);
+    opacity: 0;
+    transform: translateY(6px);
+    animation: laamin-tagline 600ms ease-out 2000ms forwards;
+  }
+  
+  @keyframes laamin-tagline {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes laamin-glow {
+    to {
+      opacity: 1;
+    }
+  }
+  
+  @keyframes laamin-failsafe {
+    to {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+  }
+  
+  /* ---------- Lock scroll while the loader is up ---------- */
+  
+  html[data-loading="true"],
+  html[data-loading="true"] body {
+    overflow: hidden;
+  }
+  
+  /* ---------- Small screens ---------- */
+  
+  @media (max-width: 480px) {
+    .laamin-loader__tagline {
+      letter-spacing: 0.12em;
+    }
+  }
+  
+  /* ---------- Reduced motion: skip the bounce, simple fades ---------- */
+  
+  @media (prefers-reduced-motion: reduce) {
+    .laamin-loader {
+      transition-duration: 300ms;
+    }
+  
+    .laamin-loader__bouncer {
+      display: none;
+    }
+  
+    .laamin-loader__mark {
+      clip-path: none;
+      opacity: 0;
+      transform: none;
+      animation: laamin-fade 400ms ease-out 100ms forwards;
+    }
+  
+    .laamin-loader__wordmark img {
+      transform: none;
+      opacity: 0;
+      animation: laamin-fade 400ms ease-out 250ms forwards;
+    }
+  
+    .laamin-loader__divider {
+      width: 100%;
+      opacity: 0;
+      animation: laamin-fade 400ms ease-out 350ms forwards;
+    }
+  
+    .laamin-loader__tagline {
+      transform: none;
+      animation: laamin-fade 400ms ease-out 450ms forwards;
+    }
+  }
+  
+  @keyframes laamin-fade {
+    to {
+      opacity: 1;
+    }
+  }

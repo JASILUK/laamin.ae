@@ -437,3 +437,16 @@ summary::-webkit-details-marker {
     animation-duration: calc(var(--reviews-dur, 70s) * 3);
   }
 }
+
+
+/* ============================================================
+   WAIT FOR THE LOADER
+   Paste at the end of globals.css.
+   The hero entrance animations stay paused while the loader is
+   on screen, then play as the loader curtain lifts.
+   ============================================================ */
+
+   html[data-loading="true"] .hero-reveal,
+   html[data-loading="true"] .hero-panel-reveal {
+     animation-play-state: paused;
+   }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
+import LaaminLoader from "@/components/LaaminLoader";
 import { site } from "@/data/site";
 import "./globals.css";
 
@@ -53,8 +54,27 @@ const organisationJsonLd = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${body.variable} ${heading.variable} antialiased`}>
+    <html
+      lang="en"
+      className={`${body.variable} ${heading.variable} antialiased`}
+      suppressHydrationWarning
+    >
+      <head>
+        {/*
+          Runs before first paint. Marks the page as "loading" so the hero
+          animations wait until the loader has left. Without JavaScript the
+          flag is never set, so the page simply shows normally.
+        */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `document.documentElement.dataset.loading="true";`,
+          }}
+        />
+      </head>
       <body className="flex min-h-screen flex-col font-sans">
+        {/* Rendered in the server HTML, so it covers the page from the first paint */}
+        <LaaminLoader />
+
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[60] focus:bg-navy-900 focus:px-4 focus:py-3 focus:text-sm focus:text-white"
