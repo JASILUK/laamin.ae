@@ -5,6 +5,7 @@ import { Header } from "@/components/header";
 import LaaminLoader from "@/components/LaaminLoader";
 import { site } from "@/data/site";
 import "./globals.css";
+import FloatingContact from "@/components/FloatingContact";
 
 const body = Inter({
   variable: "--font-body",
@@ -86,6 +87,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <Footer />
+        <FloatingContact/>
+
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organisationJsonLd) }}

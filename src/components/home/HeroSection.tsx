@@ -47,27 +47,79 @@ const reveal = (delay: number): Variants => ({
   },
 });
 
-const iconReveal: Variants = {
-  hidden: { opacity: 0, scale: 0.5, rotate: -15 },
-  show: { opacity: 1, scale: 1, rotate: 0, transition: { type: "spring", stiffness: 220, damping: 20 } },
-};
-
-const letterStage: Variants = {
+const titleStage: Variants = {
   hidden: {},
-  show: { transition: { delayChildren: 0.18, staggerChildren: 0.02 } },
+  show: { transition: { delayChildren: 0.2, staggerChildren: 0.08 } },
 };
 
-const letterFlip: Variants = {
-  hidden: { y: "115%", opacity: 0, rotateX: -55 },
+const wordRise: Variants = {
+  hidden: { y: "105%", skewY: 6 },
+  show: { y: "0%", skewY: 0, transition: { duration: 0.85, ease: SCENE_EASE } },
+};
+
+const wipeIn: Variants = {
+  hidden: { clipPath: "inset(0 100% 0 0)", opacity: 0 },
   show: {
-    y: "0%",
+    clipPath: "inset(0 0% 0 0)",
     opacity: 1,
-    rotateX: 0,
-    transition: { duration: 0.65, ease: SCENE_EASE },
+    transition: { duration: 0.9, delay: 0.6, ease: SCENE_EASE },
   },
 };
 
-const descReveal = reveal(0.55);
+const barDraw: Variants = {
+  hidden: { scaleX: 0 },
+  show: { scaleX: 1, transition: { duration: 0.8, delay: 0.45, ease: SCENE_EASE } },
+};
+
+const ghostIn: Variants = {
+  hidden: { clipPath: "inset(100% 0 0 0)", opacity: 0 },
+  show: {
+    clipPath: "inset(0% 0 0 0)",
+    opacity: 1,
+    transition: { duration: 1, delay: 0.1, ease: SCENE_EASE },
+  },
+};
+
+const kickerIn: Variants = {
+  hidden: { clipPath: "inset(0 100% 0 0)" },
+  show: { clipPath: "inset(0 0% 0 0)", transition: { duration: 0.7, delay: 0.1, ease: SCENE_EASE } },
+};
+
+const tileIn: Variants = {
+  hidden: { clipPath: "inset(0 0 100% 0)", opacity: 0 },
+  show: {
+    clipPath: "inset(0 0 0% 0)",
+    opacity: 1,
+    transition: { duration: 0.6, ease: SCENE_EASE },
+  },
+};
+
+const rowStage: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08 } },
+};
+
+const rowLine: Variants = {
+  hidden: { scaleX: 0 },
+  show: { scaleX: 1, transition: { duration: 0.7, ease: SCENE_EASE } },
+};
+
+const rowRise: Variants = {
+  hidden: { y: "110%" },
+  show: { y: "0%", transition: { duration: 0.65, ease: SCENE_EASE } },
+};
+
+const footLine: Variants = {
+  hidden: { scaleX: 0 },
+  show: { scaleX: 1, transition: { duration: 0.9, delay: 1.15, ease: SCENE_EASE } },
+};
+
+
+const iconTile: Variants = {
+  hidden: { opacity: 0, y: 8, scale: 0.94 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.6, ease: SCENE_EASE } },
+};
+
 const footReveal = reveal(1.25);
 
 const panelVariants: Variants = {
@@ -101,18 +153,9 @@ const listStage: Variants = {
   show: { transition: { delayChildren: 0.75, staggerChildren: 0.11 } },
 };
 
-const listItem: Variants = {
-  hidden: { opacity: 0, x: -18, filter: "blur(4px)" },
-  show: { opacity: 1, x: 0, filter: "blur(0px)", transition: { duration: 0.65, ease: SCENE_EASE } },
-};
-
-const lineDraw: Variants = {
-  hidden: { scaleX: 0 },
-  show: { scaleX: 1, transition: { duration: 0.9, delay: 1.15, ease: SCENE_EASE } },
-};
-
 function SceneFrame({
   icon: Icon,
+  kicker,
   title,
   description,
   href,
@@ -122,6 +165,7 @@ function SceneFrame({
   children,
 }: {
   icon: LucideIcon;
+  kicker: string;
   title: string;
   description: string;
   href: string;
@@ -134,59 +178,78 @@ function SceneFrame({
     <motion.div
       initial={reduce ? false : "hidden"}
       animate="show"
-      className="flex h-full flex-col justify-between [perspective:800px]"
+      className="relative flex h-full flex-col justify-between"
     >
-      <div>
-        <div className="flex items-center gap-4">
+      {/* big outlined number */}
+      <motion.span
+        variants={ghostIn}
+        aria-hidden="true"
+        className="ghost-num pointer-events-none absolute -right-1 -top-3 z-0 select-none font-display text-[6.5rem] leading-none"
+      >
+        {String(position).padStart(2, "0")}
+      </motion.span>
+
+      <div className="relative z-10">
+        {/* kicker */}
+        <div className="flex items-center gap-3">
           <motion.span
-            variants={iconReveal}
-            className="relative grid size-12 shrink-0 place-items-center rounded-xl border border-brand-700/20 bg-white text-brand-700 shadow-sm shadow-navy-900/10"
+            variants={iconTile}
+            className="relative grid size-11 shrink-0 place-items-center overflow-hidden rounded-xl border border-brand-700/20 bg-white text-brand-700 shadow-sm shadow-navy-900/10"
           >
-            <Icon aria-hidden="true" className="size-6" strokeWidth={1.75} />
-            {!reduce && (
-              <motion.span
-                aria-hidden="true"
-                initial={{ opacity: 0.6, scale: 1 }}
-                animate={{ opacity: 0, scale: 1.8 }}
-                transition={{ duration: 1.4, delay: 0.4, ease: "easeOut" }}
-                className="absolute inset-0 rounded-xl border border-brand-400"
-              />
-            )}
+            <Icon
+              aria-hidden="true"
+              className={`size-5 ${reduce ? "" : "icon-draw"}`}
+              strokeWidth={1.75}
+            />
+            {!reduce && <span aria-hidden="true" className="icon-sheen" />}
           </motion.span>
 
-          <motion.h3
-            variants={letterStage}
-            className="font-display text-xl leading-tight text-navy-900 sm:text-2xl"
-            aria-label={title}
+          <motion.span
+            variants={kickerIn}
+            className="text-[11px] font-semibold uppercase tracking-[0.22em] text-brand-700"
           >
-            {title.split(" ").map((word, wi) => (
-              <span
-                key={`${word}-${wi}`}
-                aria-hidden="true"
-                className="mr-[0.26em] inline-block overflow-hidden pb-[0.14em] -mb-[0.14em] align-bottom [perspective:600px]"
-              >
-                {word.split("").map((ch, ci) => (
-                  <span key={ci} className="inline-block overflow-hidden pb-[0.1em] -mb-[0.1em] align-bottom">
-                    <motion.span variants={letterFlip} className="inline-block will-change-transform">
-                      {ch}
-                    </motion.span>
-                  </span>
-                ))}
-              </span>
-            ))}
-          </motion.h3>
+            {kicker}
+          </motion.span>
         </div>
 
-        <motion.p variants={descReveal} className="mt-4 max-w-md text-sm leading-relaxed text-muted">
+        {/* title: words rise out of a mask */}
+        <motion.h3
+          variants={titleStage}
+          aria-label={title}
+          className="mt-5 max-w-[22rem] font-display text-[1.65rem] leading-[1.12] tracking-tight text-navy-900 sm:text-[1.9rem]"
+        >
+          {title.split(" ").map((word, wi) => (
+            <span
+              key={`${word}-${wi}`}
+              aria-hidden="true"
+              className="mr-[0.28em] inline-block overflow-hidden pb-[0.12em] align-bottom"
+            >
+              <motion.span variants={wordRise} className="inline-block origin-left will-change-transform">
+                {word}
+              </motion.span>
+            </span>
+          ))}
+        </motion.h3>
+
+        <motion.span
+          variants={barDraw}
+          aria-hidden="true"
+          className="mt-3 block h-[3px] w-14 origin-left rounded-full bg-brand-400"
+        />
+
+        <motion.p
+          variants={wipeIn}
+          className="mt-4 max-w-md text-sm leading-relaxed text-muted"
+        >
           {description}
         </motion.p>
 
         <div className="mt-5">{children}</div>
       </div>
 
-      <div className="pt-6">
-        <motion.span variants={lineDraw} aria-hidden="true" className="block h-px origin-left bg-navy-900/15" />
-        <motion.div variants={footReveal} className="flex items-center justify-between pt-4">
+      <div className="relative z-10 pt-5">
+        <motion.span variants={footLine} aria-hidden="true" className="block h-px origin-left bg-navy-900/15" />
+        <motion.div variants={footReveal} className="flex items-center justify-between pt-3.5">
           <span className="text-xs tabular-nums text-muted">{formatPosition(position)}</span>
           <Link
             href={href}
@@ -212,6 +275,7 @@ function OverviewScene({ onSelect, reduce }: { onSelect: (index: number) => void
   return (
     <SceneFrame
       icon={Briefcase}
+      kicker="Overview"
       title="LAAMIN Business Services"
       description={overviewSummary}
       href="/services"
@@ -223,7 +287,7 @@ function OverviewScene({ onSelect, reduce }: { onSelect: (index: number) => void
         {services.map((service, i) => {
           const ServiceIcon = service.icon;
           return (
-            <motion.li key={service.slug} variants={listItem}>
+            <motion.li key={service.slug} variants={tileIn}>
               <button
                 type="button"
                 onClick={() => onSelect(i + 1)}
@@ -258,6 +322,7 @@ function ServiceScene({ service, position, reduce }: { service: Service; positio
   return (
     <SceneFrame
       icon={service.icon}
+      kicker={`Service ${String(position - 1).padStart(2, "0")}`}
       title={service.title}
       description={service.summary}
       href={`/services/${service.slug}`}
@@ -265,23 +330,32 @@ function ServiceScene({ service, position, reduce }: { service: Service; positio
       position={position}
       reduce={reduce}
     >
-      <p className="mb-2 text-xs font-semibold text-muted">{service.listLabel}</p>
-      <motion.ul variants={listStage} className="space-y-2">
-        {service.details.map((detail) => (
-          <motion.li
-            key={detail}
-            variants={listItem}
-            className="group/row relative isolate flex items-center gap-3 overflow-hidden rounded-lg border border-navy-900/10 bg-white/70 px-3.5 py-2.5 text-sm font-medium text-navy-900 shadow-sm shadow-navy-900/5 transition-colors duration-300 hover:border-brand-700/40"
-          >
-            <span
+      <p className="mb-1 text-xs font-semibold text-muted">{service.listLabel}</p>
+      <motion.ul variants={listStage}>
+        {service.details.map((detail, i) => (
+          <motion.li key={detail} variants={rowStage} className="group/row relative">
+            <motion.span
+              variants={rowLine}
               aria-hidden="true"
-              className="absolute inset-0 -z-10 origin-left scale-x-0 bg-brand-400/15 transition-transform duration-300 ease-out group-hover/row:scale-x-100 group-focus-visible/row:scale-x-100"
+              className="absolute inset-x-0 top-0 h-px origin-left bg-navy-900/15"
             />
-            <CheckCircle2
-              aria-hidden="true"
-              className="size-4 shrink-0 text-brand-700 transition-transform duration-300 group-hover/row:scale-110"
-            />
-            <span>{detail}</span>
+            <div className="flex items-center gap-4 py-2.5">
+              <span className="text-[11px] font-semibold tabular-nums tracking-widest text-brand-700">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <span className="overflow-hidden">
+                <motion.span
+                  variants={rowRise}
+                  className="block text-sm font-medium text-navy-900 transition-transform duration-300 group-hover/row:translate-x-1"
+                >
+                  {detail}
+                </motion.span>
+              </span>
+              <ArrowUpRight
+                aria-hidden="true"
+                className="ml-auto size-4 -translate-x-1 text-brand-700 opacity-0 transition-all duration-300 group-hover/row:translate-x-0 group-hover/row:opacity-100"
+              />
+            </div>
           </motion.li>
         ))}
       </motion.ul>
@@ -374,193 +448,231 @@ function HeroServiceDemo() {
       <ServiceScene service={services[i - 1]} position={i + 1} reduce={reduce || ghost} />
     );
 
-  return (
-    <div
-      ref={regionRef}
-      role="region"
-      aria-label="LAAMIN services overview"
-      className="hero-panel-reveal relative"
-    >
-      <motion.div
-        ref={panelRef}
-        whileHover={reduce ? undefined : { y: -4 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-        onPointerMove={onPanelPointerMove}
-        className="group/panel relative overflow-hidden rounded-2xl border border-white/70 shadow-[0_30px_70px_-30px_rgba(2,26,51,0.65)] ring-1 ring-navy-900/10"
-      >
+    return (
+      <div
+        ref={regionRef}
+        role="region"
+        aria-label="LAAMIN services overview"
+className="hero-panel-reveal relative mx-auto w-full max-w-[600px] lg:ml-auto lg:mr-8 xl:mr-16"      >
+        {/* soft light behind the screen */}
         <div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background: "linear-gradient(155deg, #fbfdff 0%, #eaf4fb 48%, #d6e9f7 100%)",
-          }}
+          className="pointer-events-none absolute inset-x-8 -top-2 bottom-12 rounded-[2rem] bg-brand-400/25 blur-2xl"
         />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -right-20 -top-24 size-80 rounded-full bg-brand-300/35 blur-3xl"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -bottom-32 -left-24 size-72 rounded-full bg-brand-400/15 blur-3xl"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-25 opacity-0 transition-opacity duration-500 group-hover/panel:opacity-100"
-          style={{
-            background:
-              "radial-gradient(360px circle at var(--mx, 50%) var(--my, 0%), rgba(43,163,214,0.12), transparent 70%)",
-          }}
-        />
-
-        <div className="relative flex items-center gap-3 border-b border-navy-900/10 bg-white/50 px-4 py-3.5">
-          <span aria-hidden="true" className="flex gap-1.5">
-            <span className="size-2.5 rounded-full bg-navy-900/20" />
-            <span className="size-2.5 rounded-full bg-navy-900/20" />
-            <span className="size-2.5 rounded-full bg-navy-900/20" />
-          </span>
-
-          <span className="text-xs font-semibold tracking-wide text-navy-800">Service overview</span>
-
-          <span className="ml-auto flex items-center gap-2">
+  
+        <motion.div
+          whileHover={reduce ? undefined : { y: -4 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="relative"
+        >
+          {/* bezel */}
+          <div className="relative rounded-[1.25rem] bg-gradient-to-b from-[#222f40] via-[#0c1622] to-[#060b12] p-2.5 shadow-[0_30px_70px_-30px_rgba(2,26,51,0.8),inset_0_1px_0_rgba(255,255,255,0.18)] ring-1 ring-white/10 sm:p-3">
+            {/* camera dot */}
             <span
               aria-hidden="true"
-              className={`size-2 rounded-full ${
-                ready ? "animate-pulse bg-brand-700" : "bg-navy-900/25"
-              }`}
+              className="absolute left-1/2 top-[3px] size-1 -translate-x-1/2 rounded-full bg-white/25"
             />
-          </span>
-        </div>
-
-        <div
-          role="tablist"
-          aria-label="LAAMIN services"
-          className="relative grid grid-cols-5 border-b border-navy-900/10"
-        >
-          {demoTabs.map((tab, i) => {
-            const active = i === index;
-            const TabIcon = tab.icon;
-
-            return (
-              <button
-                key={tab.id}
-                ref={(el) => {
-                  tabRefs.current[i] = el;
+  
+            {/* screen */}
+            <div
+              ref={panelRef}
+              onPointerMove={onPanelPointerMove}
+              className="group/panel relative overflow-hidden rounded-[0.8rem] ring-1 ring-black/60"
+            >
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0"
+                style={{
+                  background: "linear-gradient(155deg, #fbfdff 0%, #eaf4fb 48%, #d6e9f7 100%)",
                 }}
-                type="button"
-                role="tab"
-                id={`${uid}-tab-${i}`}
-                aria-selected={active}
-                aria-controls={active ? `${uid}-panel-${i}` : undefined}
-                tabIndex={active ? 0 : -1}
-                onClick={() => goTo(i, true)}
-                onKeyDown={(e) => onTabKeyDown(e, i)}
-                className={`relative flex flex-col items-center gap-1.5 border-r border-navy-900/10 px-1 py-3.5 text-center text-[10px] font-semibold leading-tight transition-colors duration-300 last:border-r-0 focus-visible:outline-offset-[-2px] sm:text-xs ${
-                  active
-                    ? "bg-white/80 text-navy-900"
-                    : "text-muted hover:bg-white/50 hover:text-navy-900"
-                }`}
-              >
-                <TabIcon
-                  aria-hidden="true"
-                  className={`size-4 transition-all duration-300 ${
-                    active ? "scale-110 text-brand-700" : "text-muted"
-                  }`}
-                  strokeWidth={1.75}
-                />
-
-                <span>{tab.label}</span>
-
-                {active && (
-                  <motion.span
-                    layoutId={`${uid}-tab-indicator`}
+              />
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -right-20 -top-24 size-80 rounded-full bg-brand-300/35 blur-3xl"
+              />
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -bottom-32 -left-24 size-72 rounded-full bg-brand-400/15 blur-3xl"
+              />
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 z-25 opacity-0 transition-opacity duration-500 group-hover/panel:opacity-100"
+                style={{
+                  background:
+                    "radial-gradient(360px circle at var(--mx, 50%) var(--my, 0%), rgba(43,163,214,0.12), transparent 70%)",
+                }}
+              />
+  
+              <div className="relative flex items-center gap-3 border-b border-navy-900/10 bg-white/50 px-4 py-3.5">
+                <span aria-hidden="true" className="flex gap-1.5">
+                  <span className="size-2.5 rounded-full bg-navy-900/20" />
+                  <span className="size-2.5 rounded-full bg-navy-900/20" />
+                  <span className="size-2.5 rounded-full bg-navy-900/20" />
+                </span>
+  
+                <span className="text-xs font-semibold tracking-wide text-navy-800">Service overview</span>
+  
+                <span className="ml-auto flex items-center gap-2">
+                  <span
                     aria-hidden="true"
-                    className="absolute inset-x-0 bottom-0 h-[3px] overflow-hidden bg-navy-900/10"
-                    transition={
-                      !mounted || reduce
-                        ? { duration: 0 }
-                        : { type: "spring", stiffness: 450, damping: 32 }
-                    }
-                  >
-                    {mounted && !reduce ? (
-                      <span
-                        key={index}
-                        className="scene-progress block h-full origin-left bg-brand-700"
-                        style={{
-                          animationDuration: `${SCENE_DURATION_MS}ms`,
-                          animationPlayState: ready ? "running" : "paused",
-                        }}
-                      />
-                    ) : (
-                      <span className="block h-full bg-brand-700" />
-                    )}
-                  </motion.span>
-                )}
-              </button>
-            );
-          })}
-        </div>
-
-        <div className="relative min-h-[380px] sm:min-h-[350px]">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0"
-            style={{
-              backgroundImage: "radial-gradient(rgba(4,45,85,0.08) 1px, transparent 1px)",
-              backgroundSize: "20px 20px",
-              maskImage: "linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)",
-              WebkitMaskImage:
-                "linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)",
-            }}
-          />
-
-          <div
-            aria-hidden="true"
-            ref={(el) => {
-              el?.setAttribute("inert", "");
-            }}
-            className="invisible pointer-events-none grid"
-          >
-            {demoTabs.map((tab, i) => (
-              <div key={tab.id} className="col-start-1 row-start-1 p-6 sm:p-7">
-                {renderScene(i, true)}
+                    className={`size-2 rounded-full ${
+                      ready ? "animate-pulse bg-brand-700" : "bg-navy-900/25"
+                    }`}
+                  />
+                </span>
               </div>
-            ))}
-          </div>
-
-          <AnimatePresence mode="popLayout" custom={reduce ? 0 : direction}>
-            {ready && (
-              <motion.div
-                key={index}
-                id={`${uid}-panel-${index}`}
-                role="tabpanel"
-                aria-labelledby={`${uid}-tab-${index}`}
-                custom={reduce ? 0 : direction}
-                variants={panelVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                className="absolute inset-0 flex flex-col justify-between p-6 sm:p-7"
+  
+              <div
+                role="tablist"
+                aria-label="LAAMIN services"
+                className="relative grid grid-cols-5 border-b border-navy-900/10"
               >
-                {renderScene(index)}
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {ready && !reduce && (
-            <motion.span
-              key={`sweep-${index}`}
-              aria-hidden="true"
-              initial={{ x: "-110%" }}
-              animate={{ x: "110%" }}
-              transition={{ duration: 1.1, delay: 0.15, ease: SCENE_EASE }}
-              className="pointer-events-none absolute inset-0 z-20 bg-gradient-to-r from-transparent via-white/70 to-transparent"
-            />
-          )}
-        </div>
-      </motion.div>
-    </div>
-  );
-}
+                {demoTabs.map((tab, i) => {
+                  const active = i === index;
+                  const TabIcon = tab.icon;
+  
+                  return (
+                    <button
+                      key={tab.id}
+                      ref={(el) => {
+                        tabRefs.current[i] = el;
+                      }}
+                      type="button"
+                      role="tab"
+                      id={`${uid}-tab-${i}`}
+                      aria-selected={active}
+                      aria-controls={active ? `${uid}-panel-${i}` : undefined}
+                      tabIndex={active ? 0 : -1}
+                      onClick={() => goTo(i, true)}
+                      onKeyDown={(e) => onTabKeyDown(e, i)}
+                      className={`relative flex flex-col items-center gap-1.5 border-r border-navy-900/10 px-1 py-3.5 text-center text-[10px] font-semibold leading-tight transition-colors duration-300 last:border-r-0 focus-visible:outline-offset-[-2px] sm:text-xs ${
+                        active
+                          ? "bg-white/80 text-navy-900"
+                          : "text-muted hover:bg-white/50 hover:text-navy-900"
+                      }`}
+                    >
+                      <TabIcon
+                        aria-hidden="true"
+                        className={`size-4 transition-all duration-300 ${
+                          active ? "scale-110 text-brand-700" : "text-muted"
+                        }`}
+                        strokeWidth={1.75}
+                      />
+  
+                      <span>{tab.label}</span>
+  
+                      {active && (
+                        <motion.span
+                          layoutId={`${uid}-tab-indicator`}
+                          aria-hidden="true"
+                          className="absolute inset-x-0 bottom-0 h-[3px] overflow-hidden bg-navy-900/10"
+                          transition={
+                            !mounted || reduce
+                              ? { duration: 0 }
+                              : { type: "spring", stiffness: 450, damping: 32 }
+                          }
+                        >
+                          {mounted && !reduce ? (
+                            <span
+                              key={index}
+                              className="scene-progress block h-full origin-left bg-brand-700"
+                              style={{
+                                animationDuration: `${SCENE_DURATION_MS}ms`,
+                                animationPlayState: ready ? "running" : "paused",
+                              }}
+                            />
+                          ) : (
+                            <span className="block h-full bg-brand-700" />
+                          )}
+                        </motion.span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+  
+              <div className="relative min-h-[380px] sm:min-h-[350px]">
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute inset-0"
+                  style={{
+                    backgroundImage: "radial-gradient(rgba(4,45,85,0.08) 1px, transparent 1px)",
+                    backgroundSize: "20px 20px",
+                    maskImage: "linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)",
+                    WebkitMaskImage:
+                      "linear-gradient(to bottom, transparent, black 20%, black 80%, transparent)",
+                  }}
+                />
+  
+                <div
+                  aria-hidden="true"
+                  ref={(el) => {
+                    el?.setAttribute("inert", "");
+                  }}
+                  className="invisible pointer-events-none grid"
+                >
+                  {demoTabs.map((tab, i) => (
+                    <div key={tab.id} className="col-start-1 row-start-1 p-6 sm:p-7">
+                      {renderScene(i, true)}
+                    </div>
+                  ))}
+                </div>
+  
+                <AnimatePresence mode="popLayout" custom={reduce ? 0 : direction}>
+                  {ready && (
+                    <motion.div
+                      key={index}
+                      id={`${uid}-panel-${index}`}
+                      role="tabpanel"
+                      aria-labelledby={`${uid}-tab-${index}`}
+                      custom={reduce ? 0 : direction}
+                      variants={panelVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      className="absolute inset-0 flex flex-col justify-between p-6 sm:p-7"
+                    >
+                      {renderScene(index)}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+  
+                {ready && !reduce && (
+                  <motion.span
+                    key={`sweep-${index}`}
+                    aria-hidden="true"
+                    initial={{ x: "-110%" }}
+                    animate={{ x: "110%" }}
+                    transition={{ duration: 1.1, delay: 0.15, ease: SCENE_EASE }}
+                    className="pointer-events-none absolute inset-0 z-20 bg-gradient-to-r from-transparent via-white/70 to-transparent"
+                  />
+                )}
+              </div>
+              {/* closes the min-h content block */}
+  
+              {/* glass reflection: covers the whole screen */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 z-30 bg-[linear-gradient(115deg,rgba(255,255,255,0.14)_0%,rgba(255,255,255,0.04)_22%,transparent_38%)] shadow-[inset_0_0_40px_rgba(2,26,51,0.18)]"
+              />
+            </div>
+            {/* closes screen */}
+          </div>
+          {/* closes bezel (this was the missing one) */}
+  
+          {/* stand */}
+          <div
+            aria-hidden="true"
+            className="mx-auto -mt-px h-6 w-28 bg-gradient-to-b from-[#0b1420] to-[#2b3949] [clip-path:polygon(14%_0,86%_0,100%_100%,0_100%)]"
+          />
+          <div
+            aria-hidden="true"
+            className="mx-auto h-1.5 w-48 rounded-full bg-gradient-to-b from-[#3a4a5d] to-[#0b1420] shadow-[0_14px_24px_-6px_rgba(2,26,51,0.8)]"
+          />
+        </motion.div>
+      </div>
+    );
+  }
 
 function FlagStack() {
   const label = reachFlags.map((f) => f.name).join(", ");

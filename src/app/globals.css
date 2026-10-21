@@ -450,3 +450,40 @@ summary::-webkit-details-marker {
    html[data-loading="true"] .hero-panel-reveal {
      animation-play-state: paused;
    }
+
+
+   /* Icon: line-draw + one-time sheen */
+.icon-draw * {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: icon-draw 0.9s cubic-bezier(0.65, 0, 0.35, 1) 0.25s both;
+}
+
+@keyframes icon-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+.icon-sheen {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(110deg, transparent 35%, rgba(127, 203, 236, 0.55) 50%, transparent 65%);
+  transform: translateX(-120%);
+  animation: icon-sheen 0.9s ease-out 0.8s forwards;
+}
+
+@keyframes icon-sheen {
+  to { transform: translateX(120%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .icon-draw * { animation: none; stroke-dashoffset: 0; }
+  .icon-sheen { display: none; }
+}
+
+/* Outlined ghost number in the corner of each scene */
+.ghost-num {
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 1px rgba(4, 45, 85, 0.14);
+}
