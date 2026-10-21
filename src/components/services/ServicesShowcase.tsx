@@ -33,11 +33,19 @@ const serviceImages: Record<string, string> = {
 function ServiceImage({ service, index }: { service: Service; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
+
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"],
   });
-  const y = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["-7%", "7%"]);
+
+  // Start at 0% so the initial transform is consistent during hydration.
+  const y = useTransform(
+    scrollYProgress,
+    [0, 1],
+    reduce ? ["0%", "0%"] : ["0%", "7%"],
+  );
+
   const Icon = service.icon;
   const src = serviceImages[service.slug];
 
@@ -57,6 +65,7 @@ function ServiceImage({ service, index }: { service: Service; index: number }) {
           className="absolute left-1/2 top-1/2 size-24 -translate-x-1/2 -translate-y-1/2 text-brand-300/30"
           strokeWidth={1}
         />
+
         {src && (
           <motion.img
             src={src}
@@ -70,6 +79,7 @@ function ServiceImage({ service, index }: { service: Service; index: number }) {
             }}
           />
         )}
+
         <div className="absolute inset-0 bg-gradient-to-t from-navy-950/60 via-transparent to-transparent" />
 
         {/* Number badge */}
@@ -140,7 +150,11 @@ function ServiceText({
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-10% 0px" }}
-        variants={{ visible: { transition: { staggerChildren: 0.07, delayChildren: 0.25 } } }}
+        variants={{
+          visible: {
+            transition: { staggerChildren: 0.07, delayChildren: 0.25 },
+          },
+        }}
         className="mt-8 border-t border-line"
       >
         {service.items.slice(0, 6).map((item) => (
@@ -148,7 +162,11 @@ function ServiceText({
             key={item}
             variants={{
               hidden: { opacity: 0, y: 14 },
-              visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.6, ease: EASE },
+              },
             }}
             className="flex gap-3.5 border-b border-line py-3.5 text-sm leading-relaxed text-ink sm:text-[0.9375rem]"
           >
@@ -191,13 +209,18 @@ function ServiceRow({
   headingLevel?: "h2" | "h3";
 }) {
   const imageRight = index % 2 === 1;
+
   return (
     <article className="grid items-center gap-10 lg:grid-cols-2 lg:gap-20">
       <div className={imageRight ? "lg:order-2" : ""}>
         <ServiceImage service={service} index={index} />
       </div>
       <div className={imageRight ? "lg:order-1" : ""}>
-        <ServiceText service={service} eyebrow={eyebrow} headingLevel={headingLevel} />
+        <ServiceText
+          service={service}
+          eyebrow={eyebrow}
+          headingLevel={headingLevel}
+        />
       </div>
     </article>
   );
@@ -246,12 +269,14 @@ export function ServicesShowcase() {
                 </span>
               </div>
             </FadeUp>
+
             <LetterReveal
               as="h2"
               text="Support for specific visa needs"
               stagger={0.02}
               className="mt-4 font-display text-3xl tracking-tight text-navy-900 text-balance sm:text-4xl lg:text-5xl"
             />
+
             <FadeUp delay={0.15}>
               <p className="mt-4 leading-relaxed text-muted sm:text-lg">
                 Explore these focused services for more information. Availability and the support

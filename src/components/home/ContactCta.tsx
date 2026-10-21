@@ -87,7 +87,7 @@ export function ContactCta({
   enquiryLabel = "Contact Our Team",
 }: ContactCtaProps = {}) {
   return (
-    <section className="relative z-20 -mt-8 overflow-hidden bg-navy-950 pt-48 pb-24 text-white sm:-mt-4 sm:pt-64 sm:pb-32 lg:pt-[22rem]">
+    <section className="relative z-20 -mt-8 overflow-hidden bg-navy-900 pt-48 pb-24 text-white sm:-mt-4 sm:pt-64 sm:pb-32 lg:pt-[22rem]">
       {/* ================= BACKGROUND IMAGE & OVERLAYS ================= */}
       <div className="absolute inset-0 z-0">
         <img
@@ -98,16 +98,22 @@ export function ContactCta({
           decoding="async"
         />
 
-        <div className="absolute inset-0 bg-navy-950/85" />
+        <div className="absolute inset-0 bg-navy-950/55" />
 
         <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/40 to-transparent opacity-90" />
       </div>
 
-      {/* 🌟 FOG SPREAD TRANSITION 🌟 */}
-      {/* The white is 100% solid at the top to completely mask the section above */}
+      {/* 🌟 SMOOTH WHITE → NAVY FOG TRANSITION 🌟 */}
+      {/* Eased multi-stop gradient: solid white at the very top (matches section above),
+          then fades gradually so there's no visible seam between the two sections */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 z-10">
-        <div className="absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-white via-white to-transparent sm:h-96 lg:h-[450px]" />
-        <div className="absolute inset-x-0 top-0 h-40 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,1)_0%,transparent_80%)] blur-2xl sm:h-64 lg:h-80" />
+        <div
+          className="h-72 sm:h-[24rem] lg:h-[30rem]"
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 8%, rgba(255,255,255,0.96) 16%, rgba(255,255,255,0.88) 25%, rgba(255,255,255,0.76) 34%, rgba(255,255,255,0.62) 43%, rgba(255,255,255,0.48) 52%, rgba(255,255,255,0.35) 61%, rgba(255,255,255,0.23) 70%, rgba(255,255,255,0.13) 79%, rgba(255,255,255,0.06) 88%, rgba(255,255,255,0.02) 95%, rgba(255,255,255,0) 100%)",
+          }}
+        />
       </div>
 
       {/* Ambient Brand Glow */}
