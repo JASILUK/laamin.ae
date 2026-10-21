@@ -73,10 +73,20 @@ function LetterReveal({
 /* ------------------------------------------------------------------
    Main Contact CTA Section
    ------------------------------------------------------------------ */
-export function ContactCta() {
+interface ContactCtaProps {
+  heading?: string;
+  text?: string;
+  enquiryHref?: string;
+  enquiryLabel?: string;
+}
+
+export function ContactCta({
+  heading = "Streamline Your UAE & Global Business Setup Today",
+  text = "Speak with our corporate advisors at City Centre Deira, Dubai. Let's discuss your requirements and find the right solution for your business.",
+  enquiryHref = "/contact",
+  enquiryLabel = "Contact Our Team",
+}: ContactCtaProps = {}) {
   return (
-    // FIXED: Added z-10 to force this section on top of previous wrappers.
-    // FIXED: Changed mobile overlap to -mt-4 to hide the line completely.
     <section className="relative z-10 -mt-4 overflow-hidden bg-navy-950 pt-48 pb-24 text-white sm:-mt-px sm:pt-64 sm:pb-32 lg:pt-[22rem]">
       {/* ================= BACKGROUND IMAGE & OVERLAYS ================= */}
       <div className="absolute inset-0 z-0">
@@ -88,15 +98,12 @@ export function ContactCta() {
           decoding="async"
         />
 
-        {/* Dark Navy Overlay (Ensures text is readable over the image) */}
         <div className="absolute inset-0 bg-navy-950/85" />
 
-        {/* Subtle gradient to fade the image into the footer seamlessly */}
         <div className="absolute inset-0 bg-gradient-to-t from-navy-950 via-navy-950/40 to-transparent opacity-90" />
       </div>
 
       {/* 🌟 FOG SPREAD TRANSITION 🌟 */}
-      {/* This sits over the image to blend the section above into the dark section */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 z-10">
         <div className="absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-white via-white/90 to-transparent sm:h-96 lg:h-[450px]" />
         <div className="absolute inset-x-0 top-0 h-40 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.9)_0%,transparent_80%)] blur-2xl sm:h-64 lg:h-80" />
@@ -120,7 +127,7 @@ export function ContactCta() {
 
           <LetterReveal
             as="h2"
-            text="Streamline Your UAE & Global Business Setup Today"
+            text={heading}
             stagger={0.015}
             baseDelay={0.1}
             className="mt-5 font-display text-3xl font-semibold tracking-tight sm:text-4xl lg:text-5xl text-balance"
@@ -128,7 +135,7 @@ export function ContactCta() {
 
           <LetterReveal
             as="p"
-            text="Speak with our corporate advisors at City Centre Deira, Dubai. Let's discuss your requirements and find the right solution for your business."
+            text={text}
             stagger={0.008}
             baseDelay={0.4}
             className="mt-5 max-w-2xl text-base leading-relaxed text-navy-200 sm:text-lg"
@@ -142,17 +149,15 @@ export function ContactCta() {
             transition={{ duration: 0.6, delay: 1, ease: EASE }}
             className="mt-10 flex w-full flex-col items-center justify-center gap-4 sm:w-auto sm:flex-row sm:gap-5"
           >
-            {/* Primary Button — wipe vars handled by ButtonLink */}
             <ButtonLink
-              href="/contact"
+              href={enquiryHref}
               variant="accent"
               className="group w-full sm:w-auto"
             >
-              Contact Our Team
+              {enquiryLabel}
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
             </ButtonLink>
 
-            {/* Secondary Button (WhatsApp) — target/rel now flow through */}
             <ButtonLink
               href={whatsappUrl}
               target="_blank"
