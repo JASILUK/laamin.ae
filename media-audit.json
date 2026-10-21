@@ -1,0 +1,366 @@
+[
+  {
+    "file": "/images/hero/home-hero.jpg",
+    "sizeMiB": 20.24,
+    "dimensions": "5824x3264",
+    "format": "jpeg",
+    "references": "NO LITERAL REFERENCE"
+  },
+  {
+    "file": "/images/plan/hero.jpg",
+    "sizeMiB": 9.07,
+    "dimensions": "7952x5304",
+    "format": "jpeg",
+    "references": "src/components/pricing/plans-page-content.tsx"
+  },
+  {
+    "file": "/images/contact/contact-hero.jpg",
+    "sizeMiB": 4.86,
+    "dimensions": "7209x4391",
+    "format": "jpeg",
+    "references": "src/app/contact/page.tsx"
+  },
+  {
+    "file": "/images/hero/home-hero2.jpg",
+    "sizeMiB": 4.68,
+    "dimensions": "5778x3844",
+    "format": "jpeg",
+    "references": "NO LITERAL REFERENCE"
+  },
+  {
+    "file": "/images/services/heroes/document-hero.jpg",
+    "sizeMiB": 3.86,
+    "dimensions": "6000x4000",
+    "format": "jpeg",
+    "references": "src/data/service-media.ts"
+  },
+  {
+    "file": "/images/hero/home-hero1.jpg",
+    "sizeMiB": 3.76,
+    "dimensions": "6000x3900",
+    "format": "jpeg",
+    "references": "NO LITERAL REFERENCE"
+  },
+  {
+    "file": "/images/services/family-visa.jpg",
+    "sizeMiB": 3.76,
+    "dimensions": "4160x6240",
+    "format": "jpeg",
+    "references": "src/components/services/ServicesShowcase.tsx; src/data/service-media.ts"
+  },
+  {
+    "file": "/images/services/heroes/pro-hero.jpg",
+    "sizeMiB": 2.7,
+    "dimensions": "6000x4000",
+    "format": "jpeg",
+    "references": "src/data/service-media.ts"
+  },
+  {
+    "file": "/images/services/document.jpg",
+    "sizeMiB": 2.32,
+    "dimensions": "3739x5608",
+    "format": "jpeg",
+    "references": "src/components/services/ServicesShowcase.tsx; src/data/service-media.ts"
+  },
+  {
+    "file": "/images/services/visa.jpg",
+    "sizeMiB": 2.31,
+    "dimensions": "4000x6000",
+    "format": "jpeg",
+    "references": "src/components/services/ServicesShowcase.tsx; src/data/service-media.ts"
+  },
+  {
+    "file": "/images/services/heroes/visa-hero.jpg",
+    "sizeMiB": 2.26,
+    "dimensions": "4250x2833",
+    "format": "jpeg",
+    "references": "src/data/service-media.ts"
+  },
+  {
+    "file": "/images/about/nelemson-guevarra-QDMSe8oXxhI-unsplash.jpg",
+    "sizeMiB": 2.18,
+    "dimensions": "5038x3359",
+    "format": "jpeg",
+    "references": "NO LITERAL REFERENCE"
+  },
+  {
+    "file": "/images/contactcta/contactctabg.jpg",
+    "sizeMiB": 2.02,
+    "dimensions": "5291x3307",
+    "format": "jpeg",
+    "references": "src/components/about/about-page-content.tsx; src/components/home/ContactCta.tsx"
+  },
+  {
+    "file": "/images/services/visa.png",
+    "sizeMiB": 1.98,
+    "dimensions": "1024x1536",
+    "format": "png",
+    "references": "NO LITERAL REFERENCE"
+  },
+  {
+    "file": "/images/services/pro.jpg",
+    "sizeMiB": 1.69,
+    "dimensions": "6720x4480",
+    "format": "jpeg",
+    "references": "src/components/services/ServicesShowcase.tsx; src/data/service-media.ts"
+  },
+  {
+    "file": "/images/services/document-clearing.png",
+    "sizeMiB": 1.49,
+    "dimensions": "1254x1254",
+    "format": "png",
+    "references": "src/components/home/ServicesEditorialSection.tsx"
+  },
+  {
+    "file": "/images/services/heroes/golden-hero.jpg",
+    "sizeMiB": 1.48,
+    "dimensions": "4885x3236",
+    "format": "jpeg",
+    "references": "src/data/service-media.ts"
+  },
+  {
+    "file": "/images/services/business-setup.png",
+    "sizeMiB": 1.41,
+    "dimensions": "1254x1254",
+    "format": "png",
+    "references": "src/components/home/ServicesEditorialSection.tsx"
+  },
+  {
+    "file": "/images/services/visa-processing.png",
+    "sizeMiB": 1.41,
+    "dimensions": "1254x1254",
+    "format": "png",
+    "references": "src/components/home/ServicesEditorialSection.tsx"
+  },
+  {
+    "file": "/images/services/golden-visa.jpg",
+    "sizeMiB": 1.39,
+    "dimensions": "6000x4000",
+    "format": "jpeg",
+    "references": "src/components/services/ServicesShowcase.tsx; src/data/service-media.ts"
+  },
+  {
+    "file": "/images/services/heroes/business-hero.jpg",
+    "sizeMiB": 1.3,
+    "dimensions": "6561x4409",
+    "format": "jpeg",
+    "references": "src/data/service-media.ts"
+  },
+  {
+    "file": "/images/services/pro-services.png",
+    "sizeMiB": 1.17,
+    "dimensions": "1254x1254",
+    "format": "png",
+    "references": "src/components/home/ServicesEditorialSection.tsx"
+  },
+  {
+    "file": "/images/services/business.jpg",
+    "sizeMiB": 0.87,
+    "dimensions": "4160x2773",
+    "format": "jpeg",
+    "references": "src/components/services/ServicesShowcase.tsx; src/data/service-media.ts"
+  },
+  {
+    "file": "/images/services/heroes/family-hero.jpg",
+    "sizeMiB": 0.78,
+    "dimensions": "4579x2576",
+    "format": "jpeg",
+    "references": "src/data/service-media.ts"
+  },
+  {
+    "file": "/images/services/hero.jpg",
+    "sizeMiB": 0.73,
+    "dimensions": "2400x1600",
+    "format": "jpeg",
+    "references": "src/app/services/page.tsx"
+  },
+  {
+    "file": "/images/about/business-support.png",
+    "sizeMiB": 0.51,
+    "dimensions": "2344x2344",
+    "format": "png",
+    "references": "src/components/about/about-page-content.tsx"
+  },
+  {
+    "file": "/images/hero/home-hero-2400.jpg",
+    "sizeMiB": 0.41,
+    "dimensions": "2400x1345",
+    "format": "jpeg",
+    "references": "src/components/home/HeroSection.tsx"
+  },
+  {
+    "file": "/images/hero/home-hero-2400.webp",
+    "sizeMiB": 0.38,
+    "dimensions": "2400x1345",
+    "format": "webp",
+    "references": "src/components/home/HeroSection.tsx"
+  },
+  {
+    "file": "/images/logo-full.png",
+    "sizeMiB": 0.06,
+    "dimensions": "1046x899",
+    "format": "png",
+    "references": "NO LITERAL REFERENCE"
+  },
+  {
+    "file": "/logo-full.png",
+    "sizeMiB": 0.06,
+    "dimensions": "1046x899",
+    "format": "png",
+    "references": "src/components/logo.tsx"
+  },
+  {
+    "file": "/images/lamin-text.png",
+    "sizeMiB": 0.03,
+    "dimensions": "1038x240",
+    "format": "png",
+    "references": "src/components/LaaminLoader.tsx"
+  },
+  {
+    "file": "/images/why-laamin/global-reach.svg",
+    "sizeMiB": 0.03,
+    "dimensions": "vector/unknown",
+    "format": "svg",
+    "references": "src/lib/data.ts"
+  },
+  {
+    "file": "/lamin-text.png",
+    "sizeMiB": 0.03,
+    "dimensions": "1038x240",
+    "format": "png",
+    "references": "src/components/home/LaaminBrandRibbon.tsx; src/components/LaaminLoader.tsx"
+  },
+  {
+    "file": "/images/howitsworks/step-01-consultation.svg",
+    "sizeMiB": 0.02,
+    "dimensions": "vector/unknown",
+    "format": "svg",
+    "references": "src/components/home/ProcessSection.tsx"
+  },
+  {
+    "file": "/images/logo-mark.png",
+    "sizeMiB": 0.02,
+    "dimensions": "340x562",
+    "format": "png",
+    "references": "src/components/LaaminLoader.tsx"
+  },
+  {
+    "file": "/images/why-laamin/personal-support.svg",
+    "sizeMiB": 0.02,
+    "dimensions": "vector/unknown",
+    "format": "svg",
+    "references": "src/lib/data.ts"
+  },
+  {
+    "file": "/logo-mark.png",
+    "sizeMiB": 0.02,
+    "dimensions": "340x562",
+    "format": "png",
+    "references": "src/components/home/LaaminBrandRibbon.tsx; src/components/LaaminLoader.tsx; src/components/logo.tsx"
+  },
+  {
+    "file": "/images/about/government-processes.svg",
+    "sizeMiB": 0.01,
+    "dimensions": "vector/unknown",
+    "format": "svg",
+    "references": "src/components/about/about-page-content.tsx"
+  },
+  {
+    "file": "/images/about/licensing.svg",
+    "sizeMiB": 0.01,
+    "dimensions": "vector/unknown",
+    "format": "svg",
+    "references": "src/components/about/about-page-content.tsx"
+  },
+  {
+    "file": "/images/faq/support-illustration.svg",
+    "sizeMiB": 0.01,
+    "dimensions": "vector/unknown",
+    "format": "svg",
+    "references": "src/components/home/FaqSection.tsx"
+  },
+  {
+    "file": "/images/howitsworks/step-02-planning.svg",
+    "sizeMiB": 0.01,
+    "dimensions": "vector/unknown",
+    "format": "svg",
+    "references": "src/components/home/ProcessSection.tsx"
+  },
+  {
+    "file": "/images/howitsworks/step-03-documentation.svg",
+    "sizeMiB": 0.01,
+    "dimensions": "vector/unknown",
+    "format": "svg",
+    "references": "src/components/home/ProcessSection.tsx"
+  },
+  {
+    "file": "/images/howitsworks/step-04-completion.svg",
+    "sizeMiB": 0.01,
+    "dimensions": "vector/unknown",
+    "format": "svg",
+    "references": "src/components/home/ProcessSection.tsx"
+  },
+  {
+    "file": "/images/why-laamin/transparent-pricing.svg",
+    "sizeMiB": 0.01,
+    "dimensions": "vector/unknown",
+    "format": "svg",
+    "references": "src/lib/data.ts"
+  },
+  {
+    "file": "/images/about/document-services.svg",
+    "sizeMiB": 0,
+    "dimensions": "vector/unknown",
+    "format": "svg",
+    "references": "src/components/about/about-page-content.tsx"
+  },
+  {
+    "file": "/images/about/undraw_signed-document_y8vk (1).svg",
+    "sizeMiB": 0,
+    "dimensions": "vector/unknown",
+    "format": "svg",
+    "references": "NO LITERAL REFERENCE"
+  },
+  {
+    "file": "/images/about/visa-documentation.svg",
+    "sizeMiB": 0,
+    "dimensions": "vector/unknown",
+    "format": "svg",
+    "references": "src/components/about/about-page-content.tsx"
+  },
+  {
+    "file": "/images/icons/gmail.svg",
+    "sizeMiB": 0,
+    "dimensions": "vector/unknown",
+    "format": "svg",
+    "references": "src/app/contact/page.tsx; src/components/about/about-page-content.tsx"
+  },
+  {
+    "file": "/images/icons/google-maps.svg",
+    "sizeMiB": 0,
+    "dimensions": "vector/unknown",
+    "format": "svg",
+    "references": "src/app/contact/page.tsx; src/components/about/about-page-content.tsx"
+  },
+  {
+    "file": "/images/icons/instagram.svg",
+    "sizeMiB": 0,
+    "dimensions": "vector/unknown",
+    "format": "svg",
+    "references": "src/app/contact/page.tsx"
+  },
+  {
+    "file": "/images/icons/phone.svg",
+    "sizeMiB": 0,
+    "dimensions": "vector/unknown",
+    "format": "svg",
+    "references": "NO LITERAL REFERENCE"
+  },
+  {
+    "file": "/images/icons/whatsapp.svg",
+    "sizeMiB": 0,
+    "dimensions": "vector/unknown",
+    "format": "svg",
+    "references": "src/app/contact/page.tsx; src/components/about/about-page-content.tsx"
+  }
+]

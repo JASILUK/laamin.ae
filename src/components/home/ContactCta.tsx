@@ -87,11 +87,11 @@ export function ContactCta({
   enquiryLabel = "Contact Our Team",
 }: ContactCtaProps = {}) {
   return (
-    <section className="relative z-10 -mt-4 overflow-hidden bg-navy-950 pt-48 pb-24 text-white sm:-mt-px sm:pt-64 sm:pb-32 lg:pt-[22rem]">
+    <section className="relative z-20 -mt-8 overflow-hidden bg-navy-950 pt-48 pb-24 text-white sm:-mt-4 sm:pt-64 sm:pb-32 lg:pt-[22rem]">
       {/* ================= BACKGROUND IMAGE & OVERLAYS ================= */}
       <div className="absolute inset-0 z-0">
         <img
-          src="/images/contactcta/contactctabg.jpg"
+          src="/images/contactcta/contactctabg.webp"
           alt="UAE Business Background"
           className="h-full w-full border-0 object-cover object-center"
           loading="lazy"
@@ -104,9 +104,10 @@ export function ContactCta({
       </div>
 
       {/* 🌟 FOG SPREAD TRANSITION 🌟 */}
+      {/* The white is 100% solid at the top to completely mask the section above */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 z-10">
-        <div className="absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-white via-white/90 to-transparent sm:h-96 lg:h-[450px]" />
-        <div className="absolute inset-x-0 top-0 h-40 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,0.9)_0%,transparent_80%)] blur-2xl sm:h-64 lg:h-80" />
+        <div className="absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-white via-white to-transparent sm:h-96 lg:h-[450px]" />
+        <div className="absolute inset-x-0 top-0 h-40 bg-[radial-gradient(ellipse_at_top,rgba(255,255,255,1)_0%,transparent_80%)] blur-2xl sm:h-64 lg:h-80" />
       </div>
 
       {/* Ambient Brand Glow */}

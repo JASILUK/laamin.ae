@@ -19,15 +19,15 @@ export default function ServicesPage() {
   title="Business Support for Every Stage"
   description="Explore business setup, government-related administration, visa and immigration support, and document services for businesses and individuals in Dubai and across the UAE."
   crumbs={[{ label: "Services" }]}
-  backgroundImage="/images/services/hero.jpg"
+  backgroundImage="/images/services/hero.webp"
   overlay="light"
 />
 
       <ServicesShowcase />
 
-      {/* Same continuous background wrapper as the home page so the
+            {/* Same continuous background wrapper as the home page so the
           ContactCta fog transition blends from white correctly */}
-      <div className="relative overflow-x-clip bg-white">
+      <div className="relative overflow-x-clip bg-white pb-0">
         <div aria-hidden className="pointer-events-none absolute inset-0">
           <div className="absolute left-1/2 top-16 h-[460px] w-[460px] -translate-x-1/2 rounded-full bg-brand-300/15 blur-3xl" />
           <div className="absolute -left-32 top-1/3 h-[360px] w-[360px] rounded-full bg-navy-300/20 blur-3xl" />

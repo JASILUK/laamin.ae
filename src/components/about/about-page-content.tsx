@@ -74,7 +74,7 @@ const focusAreas: Item[] = [
 /* Same pattern as the Home Services section: one 3D illustration per area. */
 const FOCUS_MEDIA: Record<string, { src: string; alt: string }> = {
   "business-support": {
-    src: "/images/about/business-support.png",
+    src: "/images/about/business-support.webp",
     alt: "3D illustration representing day-to-day business administrative support",
   },
   "government-processes": {
@@ -137,7 +137,7 @@ export function AboutPageContent() {
           title="About LAAMIN"
           description="A Dubai-based business support and administrative services provider, working with companies in Dubai and across the UAE."
           crumbs={[{ label: "About" }]}
-          backgroundImage="/images/contactcta/contactctabg.jpg"
+          backgroundImage="/images/contactcta/contactctabg.webp"
           overlay="light"
 
         >
@@ -412,8 +412,9 @@ export function AboutPageContent() {
           </Container>
         </section>
 
-        {/* ============================ FAQ ============================= */}
-        <div className="bg-mist/40">
+               {/* ============================ FAQ ============================= */}
+        {/* CHANGED TO bg-white SO THE WHITE CTA FOG BLENDS PERFECTLY */}
+        <div className="bg-white">
           <FAQSection page="about" />
         </div>
 

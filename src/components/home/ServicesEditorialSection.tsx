@@ -24,19 +24,19 @@ import { services, type Service } from "@/lib/data";
 
 const SERVICE_MEDIA: Record<string, { src: string; alt: string }> = {
   "business-setup-services": {
-    src: "/images/services/business-setup.png",
+    src: "/images/services/business-setup.webp",
     alt: "3D illustration representing company formation and business licensing support",
   },
   "pro-services": {
-    src: "/images/services/pro-services.png",
+    src: "/images/services/pro-services.webp",
     alt: "3D illustration representing government liaison and PRO services",
   },
   "visa-processing": {
-    src: "/images/services/visa-processing.png",
+    src: "/images/services/visa-processing.webp",
     alt: "3D illustration representing visa processing and Emirates ID support",
   },
   "document-clearing": {
-    src: "/images/services/document-clearing.png",
+    src: "/images/services/document-clearing.webp",
     alt: "3D illustration representing document clearing and attestation support",
   },
 };

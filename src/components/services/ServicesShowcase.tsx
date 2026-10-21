@@ -19,12 +19,12 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 
 /** Images live in /public/images/services/ */
 const serviceImages: Record<string, string> = {
-  "business-setup-services": "/images/services/business.jpg",
-  "pro-services": "/images/services/pro.jpg",
-  "visa-processing": "/images/services/visa.jpg",
-  "document-clearing": "/images/services/document.jpg",
-  "family-visa": "/images/services/family-visa.jpg",
-  "golden-visa": "/images/services/golden-visa.jpg",
+  "business-setup-services": "/images/services/business.webp",
+  "pro-services": "/images/services/pro.webp",
+  "visa-processing": "/images/services/visa.webp",
+  "document-clearing": "/images/services/document.webp",
+  "family-visa": "/images/services/family-visa.webp",
+  "golden-visa": "/images/services/golden-visa.webp",
 };
 
 /* ------------------------------------------------------------------

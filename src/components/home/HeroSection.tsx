@@ -845,16 +845,26 @@ export function HeroSection() {
     >
       {/* Photo + light overlay (same treatment as the inner page heroes) */}
       <div aria-hidden="true" className="absolute inset-0 z-0">
-        <img
-          src="/images/hero/home-hero.jpg"
-          alt=""
-          loading="eager"
-          decoding="async"
-          className="h-full w-full object-cover object-center"
-          onError={(e) => {
-            e.currentTarget.style.display = "none";
-          }}
-        />
+      <picture>
+  <source
+    srcSet="/images/hero/home-hero-2400.webp"
+    type="image/webp"
+  />
+  <img
+    src="/images/hero/home-hero-2400.jpg"
+    alt=""
+    loading="eager"
+    fetchPriority="high"
+    decoding="async"
+    className="h-full w-full object-cover object-center"
+    onError={(e) => {
+      e.currentTarget.style.display = "none";
+    }}
+  />
+</picture>
+
+
+
         {/* Text side stays readable, right side lets the photo show */}
         <div className="absolute inset-0 bg-gradient-to-r from-navy-900/85 via-navy-900/60 to-navy-900/35" />
         {/* Darkens the bottom so the facts strip and HeroCutter blend cleanly */}
