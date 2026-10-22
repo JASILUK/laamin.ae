@@ -134,13 +134,12 @@ export function AboutPageContent() {
       <div className="bg-white">
         {/* ============================ HERO ============================ */}
         <PageHero
-          title="About LAAMIN"
-          description="A Dubai-based business support and administrative services provider, working with companies in Dubai and across the UAE."
-          crumbs={[{ label: "About" }]}
-          backgroundImage="/images/contactcta/contactctabg.webp"
-          overlay="light"
-
-        >
+  title="About LAAMIN"
+  description="Professional business setup, PRO services, visa processing, document clearing, and UAE government transaction support, delivered through reliable service and transparent communication."
+  crumbs={[{ label: "About" }]}
+  backgroundImage="/images/contactcta/contactctabg.webp"
+  overlay="light"
+>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
             <ButtonLink
               href="/contact"
@@ -187,12 +186,14 @@ export function AboutPageContent() {
                 </FadeUp>
 
                 <FadeUp delay={0.22}>
-                  <p className="mt-6 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
-                    We assist companies with business support,
-                    government-related administrative processes, employment and
-                    visa documentation, licensing administration and document
-                    services — in Dubai and across the UAE.
-                  </p>
+                <p className="mt-6 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
+                    We are LAAMIN Business Set Up Services L.L.C., your trusted partner for
+                    business setup, PRO services, visa and immigration processing, document
+                    clearing, and UAE government transactions. We simplify complex procedures
+                    through professional guidance, reliable support, and tailored solutions,
+                    helping businesses save time, operate smoothly, and grow with confidence
+                    across the UAE.
+                    </p>
                 </FadeUp>
 
                 <FadeUp delay={0.3}>

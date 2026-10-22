@@ -221,7 +221,7 @@ export const aboutContent = {
     "Dubai-based business support for company formation, PRO services, visa processing, and document clearing, with international company formation support.",
 
   intro:
-    "LAAMIN BUSINESS SET UP SERVICES L.L.C. is a Dubai-based business support company helping businesses and individuals navigate company formation, licensing, and essential administrative procedures. Our services include business setup and licensing, PRO services, visa processing, document clearing, Family Visa assistance, Golden Visa assistance, and related company administration support across the UAE.",
+    "LAAMIN Business Set Up Services L.L.C. provides professional business setup and licensing, PRO services, visa processing, document clearing, Family Visa and Golden Visa assistance, and UAE government transaction support. Through reliable service, transparent communication, and client-focused solutions, we simplify administrative procedures, helping businesses and individuals navigate UAE requirements, operate smoothly, and grow with confidence.",
 
   global:
     "Beyond the UAE, we support company formation and business licensing in the United States, Qatar, Singapore, Saudi Arabia, Oman, the Cayman Islands, and Panama.",
