@@ -45,6 +45,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+
 # Vinext
 .vinext/
 
@@ -58,3 +59,14 @@ next-env.d.ts
 .wrangler
 .dev.vars*
 !.dev.vars.example
+
+# keep the example env file in version control
+!.env.example
+
+# Local secrets
+.dev.vars
+
+# OpenNext / Cloudflare generated files
+.open-next/
+.wrangler/
+.cloudflare/
