@@ -20,18 +20,7 @@ export function LegalPage({
       <PageHero title={title} description={description} crumbs={[{ label: title }]} />
       <section className="py-16 lg:py-24">
         <Container className="max-w-4xl">
-          {site.legalPagesAreDraft && (
-            <p
-              role="note"
-              className="mb-12 flex gap-3 border border-brand-500/50 bg-white p-5 text-sm leading-relaxed text-ink"
-            >
-              <FileWarning aria-hidden="true" className="mt-0.5 size-5 shrink-0 text-brand-700" />
-              <span>
-                <strong className="font-semibold">Draft.</strong> This page is a draft pending
-                review and approval by {site.legalName} and is not yet final.
-              </span>
-            </p>
-          )}
+
           <div className="space-y-12">
             {sections.map((section, index) => (
               <section key={section.heading} className="grid gap-4 sm:grid-cols-[3rem_1fr]">
